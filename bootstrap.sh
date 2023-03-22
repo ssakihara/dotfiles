@@ -7,9 +7,11 @@ git pull origin main;
 function doIt() {
 	rsync --exclude ".git/" \
 		--exclude ".DS_Store" \
-		--exclude ".macos" \
-    --exclude "brew.sh" \
+		--exclude "macos.sh" \
+		--exclude "brew.sh" \
+		--exclude "install.sh" \
 		--exclude "bootstrap.sh" \
+		--exclude "Brewfile" \
 		--exclude "README.md" \
 		-avh --no-perms . ~;
 	# source ~/.zshrc;
