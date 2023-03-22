@@ -1,0 +1,35 @@
+# 空行追加
+add_newline = true
+command_timeout = 5000
+
+# タイムアウト時間
+scan_timeout = 10
+
+[directory]
+truncation_length = 20
+truncate_to_repo = false
+
+# 記号の設定
+[character]
+# コマンド成功時
+success_symbol = "[▶](bold green)"
+# コマンド失敗時
+error_symbol = "[▶](bold red)"
+
+[git_branch]
+symbol = "🌱 "
+
+[nodejs]
+format = "nodejs [$version](bold green) "
+
+[php]
+disabled = true
+
+[package]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[gcloud]
+disabled = true

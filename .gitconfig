@@ -1,0 +1,29 @@
+[includeIf "gitdir:~/development/company/"]
+	path = .gitconfig_company
+[includeIf "gitdir:~/development/private/"]
+	path = .gitconfig_private
+[user]
+	useConfigOnly = true
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[push]
+	default = current
+[core]
+	precomposeunicode = true
+	quotepath = false
+	editor = vim -c \"set fenc=utf-8\"
+	ignorecase = false
+[merge]
+	ff = false
+[pull]
+	ff = only
+[init]
+	defaultBranch = main
+[alias]
+	st = status
+	sw = switch
+	b = branch
+	cm = commit
+	p = pull
