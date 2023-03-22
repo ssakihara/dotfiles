@@ -12,7 +12,7 @@ function doIt() {
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		-avh --no-perms . ~;
-	source ~/.zshrc;
+	# source ~/.zshrc;
   touch .credentials;
 }
 
