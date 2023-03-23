@@ -1,29 +1,45 @@
 [includeIf "gitdir:~/development/company/"]
-	path = .gitconfig_company
+    path = .gitconfig_company
 [includeIf "gitdir:~/development/private/"]
-	path = .gitconfig_private
+    path = .gitconfig_private
 [user]
-	useConfigOnly = true
+    useConfigOnly = true
 [color]
-	diff = auto
-	status = auto
-	branch = auto
+    diff = auto
+    status = auto
+    branch = auto
 [push]
-	default = current
+    default = current
 [core]
-	precomposeunicode = true
-	quotepath = false
-	editor = vim -c \"set fenc=utf-8\"
-	ignorecase = false
+    precomposeunicode = true
+    quotepath = false
+    editor = vim -c \"set fenc=utf-8\"
+    ignorecase = false
 [merge]
-	ff = false
+    ff = false
+    conflictstyle = diff3
+[diff]
+    colorMoved = default
 [pull]
-	ff = only
+    ff = only
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [alias]
-	st = status
-	sw = switch
-	b = branch
-	cm = commit
-	p = pull
+    st = status
+    sw = switch
+    b = branch
+    cm = commit
+    p = pull
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
+[delta]
+    plus-style = "syntax #012800"
+    minus-style = "syntax #340001"
+    syntax-theme = Monokai Extended
+    navigate = true
+    side-by-side = true
+[interactive]
+    diffFilter = delta --color-only
