@@ -7,6 +7,7 @@ bash -c "$(curl https://raw.githubusercontent.com/ssakihara/dotfiles/main/instal
 ```
 
 ## Setup
+
 ```
 ssh-keygen -t ed25519 -C "[example@example.com]"
 ```
