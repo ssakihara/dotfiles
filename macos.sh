@@ -21,7 +21,7 @@ defaults write com.apple.dock autohide -bool false
 defaults write com.apple.dock "orientation" -string "left"
 
 # 動きを高速化
-defaults write -g com.apple.trackpad.scaling 3 && \
+defaults write -g com.apple.trackpad.scaling 2 && \
 defaults write -g com.apple.mouse.scaling 1.5 && \
 defaults write -g KeyRepeat -int 2 && \
 defaults write -g InitialKeyRepeat -int 15
