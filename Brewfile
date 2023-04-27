@@ -28,6 +28,7 @@ cask "font-hackgen-nerd"
 cask "google-cloud-sdk"
 cask "google-japanese-ime"
 cask "notion"
+cask "slack"
 cask "visual-studio-code"
 cask "warp"
 
