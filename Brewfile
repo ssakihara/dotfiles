@@ -29,6 +29,7 @@ cask "google-cloud-sdk"
 cask "google-japanese-ime"
 cask "notion"
 cask "slack"
+cask "stoplight-studio"
 cask "visual-studio-code"
 cask "warp"
 
