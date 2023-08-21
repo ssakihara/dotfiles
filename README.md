@@ -11,6 +11,3 @@ bash -c "$(curl https://raw.githubusercontent.com/ssakihara/dotfiles/main/instal
 ```
 ssh-keygen -t ed25519 -C "[example@example.com]"
 ```
-## App
-
-- [stoplight](https://stoplight.io/solutions)
