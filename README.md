@@ -13,4 +13,4 @@ ssh-keygen -t ed25519 -C "[example@example.com]"
 ```
 ## App
 
-[stoplight](https://stoplight.io/solutions)
+- [stoplight](https://stoplight.io/solutions)
