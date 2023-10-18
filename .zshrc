@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -41,6 +43,7 @@ alias m="mkdir"
 alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
+alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias dc="docker-compose"
 alias -g A='| awk'
 alias -g C='| pbcopy'
@@ -94,6 +97,10 @@ export PATH="$VOLTA_HOME/bin":$PATH
 
 # Go
 export PATH="$HOME/go/bin:$PATH"
+
+# ruby
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
 # 機密情報
 source "$HOME/.credentials"
