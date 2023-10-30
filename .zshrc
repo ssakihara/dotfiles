@@ -48,6 +48,7 @@ alias dc="docker-compose"
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'
+alias flutter="fvm flutter"
 
 if [[ $(command -v exa) ]]; then
     alias e='exa --icons --git'
@@ -78,7 +79,7 @@ setopt EXTENDED_HISTORY
 export PATH="$HOME/.bin":$PATH
 
 # flutter
-export PATH="$HOME/development/flutter/bin:$PATH"
+export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # java
 export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
