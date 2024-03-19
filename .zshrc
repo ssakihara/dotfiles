@@ -1,5 +1,19 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
+dotfiles_home="$HOME/dotfiles"
+
+if test -n "$(git -C ${dotfiles_home} status --porcelain)" ||
+  ! git -C ${dotfiles_home} diff --exit-code --stat --cached origin/main > /dev/null ; then
+  echo -e "\e[36m=== DOTFILES IS DIRTY ===\e[m"
+  echo -e "\e[33mThe dotfiles have been changed.\e[m"
+  echo -e "\e[33mPlease update them with the following command.\e[m"
+  echo "  cd ${dotfiles_home}"
+  echo "  git add ."
+  echo "  git commit -m \"update dotfiles\""
+  echo "  git push origin main"
+  echo -e "\e[33mor\e[m"
+  echo "  git push origin main"
+  echo -e "\e[36m=========================\e[m"
+fi
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -45,10 +59,11 @@ alias g="git"
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias dc="docker-compose"
+alias flutter="fvm flutter"
+alias dart="fvm dart"
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'
-alias flutter="fvm flutter"
 
 if [[ $(command -v exa) ]]; then
     alias e='exa --icons --git'
@@ -105,6 +120,3 @@ eval "$(rbenv init -)"
 
 # 機密情報
 source "$HOME/.credentials"
-
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"

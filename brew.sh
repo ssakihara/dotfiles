@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Save Homebrew’s installed location.
+# Save Homebrew's installed location.
 BREW_PREFIX=$(brew --prefix)
 
 brew tap homebrew/bundle
