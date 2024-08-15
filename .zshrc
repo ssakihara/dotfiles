@@ -121,7 +121,11 @@ eval "$(rbenv init -)"
 # python3
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+export npm_config_python="$HOME/.pyenv/shims/python3"
 eval "$(pyenv init -)"
+
+# GitHub
+export NODE_AUTH_TOKEN=`gh auth token`
 
 # 機密情報
 source "$HOME/.credentials"
