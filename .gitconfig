@@ -28,7 +28,7 @@
     st = status
     sw = switch
     b = branch
-    cm = commit
+    cm = commit -m
     p = pull
 [pager]
     diff = delta
