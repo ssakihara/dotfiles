@@ -1,6 +1,6 @@
 [includeIf "gitdir:~/workspaces/github.com/"]
     path = .gitconfig_company
-[includeIf "gitdir:~/workspaces/github.com/ssakihara"]
+[includeIf "gitdir:~/workspaces/github.com/ssakihara/"]
     path = .gitconfig_private
 [user]
     useConfigOnly = true
