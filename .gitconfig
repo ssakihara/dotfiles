@@ -1,6 +1,6 @@
-[includeIf "gitdir:~/development/company/"]
+[includeIf "gitdir:~/workspaces/github.com/"]
     path = .gitconfig_company
-[includeIf "gitdir:~/development/private/"]
+[includeIf "gitdir:~/workspaces/github.com/ssakihara"]
     path = .gitconfig_private
 [user]
     useConfigOnly = true
@@ -35,11 +35,16 @@
     log = delta
     reflog = delta
     show = delta
+
 [delta]
     plus-style = "syntax #012800"
     minus-style = "syntax #340001"
     syntax-theme = Monokai Extended
     navigate = true
     side-by-side = true
+
 [interactive]
     diffFilter = delta --color-only
+
+[ghq]
+    root = ~/workspaces
