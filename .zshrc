@@ -56,7 +56,6 @@ alias d="docker"
 alias m="mkdir"
 alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
-alias gg='(){ghq get axelentermedia/$1}'
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias dc="docker-compose"
@@ -108,7 +107,6 @@ export PATH="$HOME/.bin":$PATH
 
 # flutter
 export PATH="$HOME/.pub-cache/bin:$PATH"
-export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # java
 export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
@@ -144,5 +142,3 @@ export NODE_AUTH_TOKEN=`gh auth token`
 
 # 機密情報
 source "$HOME/.credentials"
-
-source /Users/s.sakihara/.config/broot/launcher/bash/br
