@@ -56,6 +56,7 @@ alias d="docker"
 alias m="mkdir"
 alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
+alias gg='(){ghq get axelentermedia/$1}'
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias dc="docker-compose"
@@ -80,6 +81,18 @@ if [[ $(command -v eza) ]]; then
     alias l='clear && ls'
 fi
 
+# ghq
+function ghq-fzf() {
+  local src=$(ghq list | fzf --preview "bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*")
+  if [ -n "$src" ]; then
+    BUFFER="cd $(ghq root)/$src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-fzf
+bindkey '^g' ghq-fzf
+
 # zsh
 # メモリに保存される履歴の件数
 export HISTSIZE=1000
@@ -95,10 +108,12 @@ export PATH="$HOME/.bin":$PATH
 
 # flutter
 export PATH="$HOME/.pub-cache/bin:$PATH"
+export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # java
 export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
 export CPPFLAGS="-I$(brew --prefix)/opt/openjdk/include"
+export JAVA_HOME="$(brew --prefix)/opt/openjdk/bin"
 
 # gcloud
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
@@ -129,3 +144,5 @@ export NODE_AUTH_TOKEN=`gh auth token`
 
 # 機密情報
 source "$HOME/.credentials"
+
+source /Users/s.sakihara/.config/broot/launcher/bash/br
