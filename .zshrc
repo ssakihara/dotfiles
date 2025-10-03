@@ -1,19 +1,3 @@
-dotfiles_home="$HOME/dotfiles"
-
-if test -n "$(git -C ${dotfiles_home} status --porcelain)" ||
-  ! git -C ${dotfiles_home} diff --exit-code --stat --cached origin/main > /dev/null ; then
-  echo -e "\e[36m=== DOTFILES IS DIRTY ===\e[m"
-  echo -e "\e[33mThe dotfiles have been changed.\e[m"
-  echo -e "\e[33mPlease update them with the following command.\e[m"
-  echo "  cd ${dotfiles_home}"
-  echo "  git add ."
-  echo "  git commit -m \"update dotfiles\""
-  echo "  git push origin main"
-  echo -e "\e[33mor\e[m"
-  echo "  git push origin main"
-  echo -e "\e[36m=========================\e[m"
-fi
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -43,9 +27,6 @@ zinit light zsh-users/zsh-autosuggestions
 # シンタックスハイライト
 zinit light zdharma-continuum/fast-syntax-highlighting
 
-# Gitの変更状態がわかる
-zinit light supercrabtree/k
-
 # alias
 alias lg="ll | grep "
 alias ..="cd .."
@@ -56,11 +37,13 @@ alias d="docker"
 alias m="mkdir"
 alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
+alias gg='(){ghq get axelentermedia/$1}'
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias dc="docker-compose"
 alias flutter="fvm flutter"
 alias dart="fvm dart"
+alias mkubectl="minikube kubectl --"
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'
@@ -109,11 +92,14 @@ export PATH="$HOME/.bin":$PATH
 export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # java
-export PATH="$(brew --prefix)/opt/openjdk/bin:$PATH"
-export CPPFLAGS="-I$(brew --prefix)/opt/openjdk/include"
-export JAVA_HOME="$(brew --prefix)/opt/openjdk/bin"
+# export PATH="$(brew --prefix)/opt/openjdk@17/bin:$PATH"
+# export CPPFLAGS="-I$(brew --prefix)/opt/openjdk/include"
+# export JAVA_HOME="$(brew --prefix)/opt/openjdk/"
+export JAVA_HOME="$HOME/OpenJDK/jdk-18.0.2.jdk/Contents/Home"
 
 # gcloud
+export CLOUDSDK_PYTHON="$HOME/.pyenv/shims/python3"
+
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
@@ -136,9 +122,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 export npm_config_python="$HOME/.pyenv/shims/python3"
 eval "$(pyenv init -)"
-
-# GitHub
-export NODE_AUTH_TOKEN=`gh auth token`
 
 # 機密情報
 source "$HOME/.credentials"
