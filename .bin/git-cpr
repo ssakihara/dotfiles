@@ -73,7 +73,7 @@ $LOG_CONTENT
 $DIFF_CONTENT
 "
 
-echo "AI分析中... しばらくお待ち下さい..."
+echo "AIが分析中です。しばらくお待ちください..."
 
 # AI呼び出し
 AI_OUTPUT=$(gemini "$PROMPT")
@@ -85,9 +85,6 @@ CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
 # JSONパース (Cleanした変数を使用)
 PR_TITLE=$(echo "$CLEAN_JSON" | jq -r '.title')
 PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description')
-
-echo -e "生成されたタイトル: $PR_TITLE"
-echo -e "生成された概要:\n$PR_DESCRIPTION"
 
 # --- Step 7: 補足情報の入力 ---
 echo -e "\n${GREEN}[Step 7] 補足情報の確認${NC}"
