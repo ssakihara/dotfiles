@@ -78,11 +78,10 @@ echo "AIが分析中です。しばらくお待ちください..."
 # AI呼び出し
 AI_OUTPUT=$(gemini "$PROMPT")
 
-# --- 【修正箇所】出力のクリーニング処理 ---
-# ```json や ``` を削除して、純粋なJSON文字列にする
+# --- 出力のクリーニング処理 ---
 CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
 
-# JSONパース (Cleanした変数を使用)
+# JSONパース
 PR_TITLE=$(echo "$CLEAN_JSON" | jq -r '.title')
 PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description')
 
@@ -136,8 +135,15 @@ echo -e "$PR_BODY"
 echo "----------------------------------------"
 echo -e "${BLUE}========================================${NC}"
 
-read -p "作成してよろしいですか？ (y/n): " CONFIRM
-if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
+# 【修正箇所】d を入力できるように変更
+read -p "作成してよろしいですか？ (y: 作成 / d: Draftで作成 / n: キャンセル): " CONFIRM
+
+DRAFT_FLAG=""
+
+if [[ "$CONFIRM" == "d" || "$CONFIRM" == "D" ]]; then
+    echo -e "${YELLOW}Draft(下書き)モードで作成します。${NC}"
+    DRAFT_FLAG="--draft"
+elif [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
     echo "キャンセルしました。"
     exit 0
 fi
@@ -149,12 +155,14 @@ git push origin "$CURRENT_BRANCH"
 # --- Step 13 & 14: PR作成 & アサイン ---
 echo -e "\n${GREEN}[Step 13-14] PR作成とアサイン...${NC}"
 
+# 【修正箇所】$DRAFT_FLAG を引数に追加
 PR_URL=$(gh pr create \
     --base "$BASE_BRANCH" \
     --head "$CURRENT_BRANCH" \
     --title "$PR_TITLE" \
     --body "$PR_BODY" \
-    --assignee "$LOGIN_USER")
+    --assignee "$LOGIN_USER" \
+    $DRAFT_FLAG)
 
 echo -e "\n${GREEN}プルリクエストが作成されました！${NC}"
 echo "$PR_URL"
