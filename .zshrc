@@ -39,7 +39,6 @@ alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
-alias dc="docker-compose"
 alias flutter="fvm flutter"
 alias dart="fvm dart"
 alias -g A='| awk'
@@ -90,11 +89,13 @@ export PATH="$HOME/.bin":$PATH
 export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # java
+# export PATH="$(brew --prefix)/opt/openjdk@17/bin:$PATH"
+# export CPPFLAGS="-I$(brew --prefix)/opt/openjdk/include"
+# export JAVA_HOME="$(brew --prefix)/opt/openjdk/"
 export JAVA_HOME="$HOME/OpenJDK/jdk-18.0.2.jdk/Contents/Home"
 
 # gcloud
-export CLOUDSDK_PYTHON="$HOME/.pyenv/shims/python3"
-
+export CLOUDSDK_PYTHON="$HOME/.pyenv/versions/3.12.11/bin/python3"
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
@@ -112,10 +113,13 @@ export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
+# psql
+# export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
 # python3
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-export npm_config_python="$HOME/.pyenv/shims/python3"
+# export PYENV_ROOT="$HOME/.pyenv"
+# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+# export npm_config_python="$HOME/.pyenv/shims/python3"
 eval "$(pyenv init -)"
 
 # 機密情報
