@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- 設定 ---
-# Geminiへの指示（IDはBash側でつけるので、AIにはメッセージ本体だけを作らせます）
+# Claudeへの指示（IDはBash側でつけるので、AIにはメッセージ本体だけを作らせます）
 SYSTEM_PROMPT="あなたはGitのコミットメッセージ生成機です。渡されたdiffから、Conventional Commits (feat:, fix:, docs: 等) に従った要約を1行で作成してください。チケット番号は含めないでください。マークダウンや装飾は不要です。日本語で出力してください。"
 
 # 1. ステージングのチェック
@@ -15,14 +15,14 @@ CURRENT_BRANCH=$(git branch --show-current)
 # 例: feature/PROJECT-123/task -> PROJECT-123
 TICKET_ID=$(echo "$CURRENT_BRANCH" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
 
-echo "🤖 Geminiが差分を解析中..."
+echo "🤖 Claudeが差分を解析中..."
 echo "   (Branch: $CURRENT_BRANCH -> Ticket: ${TICKET_ID:-なし})"
 
 # 3. 差分の取得 (最大文字数制限)
 DIFF_CONTENT=$(git diff --cached | head -c 3000)
 
-# 4. Gemini CLI 実行
-GENERATED_MSG=$(gemini "$SYSTEM_PROMPT
+# 4. Claude CLI 実行
+GENERATED_MSG=$(claude -p "$SYSTEM_PROMPT
 ---
 $DIFF_CONTENT")
 
