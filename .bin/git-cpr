@@ -63,8 +63,8 @@ else
     echo "Base Branch: $BASE_BRANCH"
 fi
 
-# --- Step 6: Geminiによる変更内容の分析と生成 ---
-echo -e "\n${GREEN}[Step 6] Gemini AIによる変更内容の分析とドラフト生成中...${NC}"
+# --- Step 6: Claudeによる変更内容の分析と生成 ---
+echo -e "\n${GREEN}[Step 6] Claude AIによる変更内容の分析とドラフト生成中...${NC}"
 
 DIFF_CONTENT=$(git diff "$BASE_BRANCH".."$CURRENT_BRANCH")
 LOG_CONTENT=$(git log "$BASE_BRANCH".."$CURRENT_BRANCH")
@@ -93,7 +93,7 @@ $DIFF_CONTENT
 echo "AIが分析中です。しばらくお待ちください..."
 
 # AI呼び出し
-AI_OUTPUT=$(gemini "$PROMPT")
+AI_OUTPUT=$(claude -p "$PROMPT")
 
 # --- 出力のクリーニング処理 ---
 CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
@@ -127,7 +127,7 @@ LOGIN_USER=$(gh api user --jq .login)
 echo "User: $LOGIN_USER"
 
 # --- Step 10: 本文構築 ---
-PR_BODY="[これは Gemini で自動生成されました]
+PR_BODY="[これは Claude で自動生成されました]
 
 ## 関連Issue
 - #$ISSUE_NUMBER
