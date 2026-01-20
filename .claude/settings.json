@@ -1,0 +1,18 @@
+{
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Edit(**/*.{vue,ts})",
+      "Read(**/*.{vue,ts})"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Bash(curl:*)",
+      "Edit(/etc/**)"
+    ]
+  },
+  "plansDirectory": "./plans"
+}
