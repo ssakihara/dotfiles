@@ -5,14 +5,16 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)",
+      "Bash(agent-browser:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
-    "deny": [
-      "Read(./.env)",
-      "Bash(curl:*)",
-      "Edit(/etc/**)"
-    ]
+    "deny": ["Read(./.env)", "Bash(curl:*)", "Edit(/etc/**)"]
   },
   "plansDirectory": "./plans"
 }
