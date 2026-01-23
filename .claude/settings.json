@@ -11,10 +11,12 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
-    "deny": ["Read(./.env)", "Bash(curl:*)", "Edit(/etc/**)"]
+    "deny": ["Read(./.env)", "Read(**/*.env)", "Bash(curl:*)", "Edit(/etc/**)"]
   },
   "plansDirectory": "./plans"
 }
