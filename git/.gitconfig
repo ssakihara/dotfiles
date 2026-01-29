@@ -1,7 +1,7 @@
 [includeIf "gitdir:~/workspaces/github.com/"]
-    path = .gitconfig_company
+    path = ~/.gitconfig_company
 [includeIf "gitdir:~/workspaces/github.com/ssakihara/"]
-    path = .gitconfig_private
+    path = ~/.gitconfig_private
 [user]
     useConfigOnly = true
 [color]
@@ -14,6 +14,7 @@
     precomposeunicode = true
     quotepath = false
     editor = vim -c \"set fenc=utf-8\"
+    excludesfile = ~/.gitignore_global
     ignorecase = false
 [merge]
     ff = false
