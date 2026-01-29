@@ -9,7 +9,7 @@ if ! type brew >/dev/null 2>&1; then
 fi
 
 if ! type git >/dev/null 2>&1; then
-    brew install git
+    brew install git stow
 fi
 
 if [ ! -d dotfiles ]; then
@@ -18,7 +18,7 @@ fi
 
 cd dotfiles
 
-sh ./bootstrap.sh -f
+sh ./bootstrap.sh
 
 sh ./brew.sh
 
