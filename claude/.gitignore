@@ -1,0 +1,5 @@
+.claude/*
+!.claude/agents
+!.claude/rules
+!.claude/CLAUDE.md
+!.claude/settings.json
