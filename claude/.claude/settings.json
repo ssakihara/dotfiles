@@ -17,7 +17,7 @@
       "Bash(agent-browser press:*)",
       "Bash(agent-browser eval:*)",
       "Bash(agent-browser close)",
-      "Bash(npm run *)",
+      "Bash(npm run:*)",
       "Bash(npm ls:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
