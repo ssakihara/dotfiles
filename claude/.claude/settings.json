@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true
-  },
   "permissions": {
     "allow": [
       "Bash(agent-browser open http://localhost:*)",
@@ -36,6 +33,10 @@
       "Bash(curl:*)",
       "Edit(/etc/**)"
     ]
+  },
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true,
+    "typescript-lsp@claude-plugins-official": true
   },
   "plansDirectory": "./plans"
 }
