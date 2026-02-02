@@ -1,0 +1,41 @@
+{
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(agent-browser open http://localhost:*)",
+      "Bash(agent-browser click:*)",
+      "Bash(agent-browser fill:*)",
+      "Bash(agent-browser type:*)",
+      "Bash(agent-browser snapshot:*)",
+      "Bash(agent-browser screenshot:*)",
+      "Bash(agent-browser get:*)",
+      "Bash(agent-browser wait:*)",
+      "Bash(agent-browser scroll:*)",
+      "Bash(agent-browser hover:*)",
+      "Bash(agent-browser press:*)",
+      "Bash(agent-browser eval:*)",
+      "Bash(agent-browser close)",
+      "Bash(npm run *)",
+      "Bash(npm ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Edit(**/*.{vue,ts})",
+      "Read(**/*.{vue,ts})"
+    ],
+    "deny": [
+      "Bash(agent-browser open https://*)",
+      "Bash(agent-browser open http://*.*)",
+      "Read(./.env)",
+      "Read(**/*.env)",
+      "Read(**/.env.*)",
+      "Bash(curl:*)",
+      "Edit(/etc/**)"
+    ]
+  },
+  "plansDirectory": "./plans"
+}

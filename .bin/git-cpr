@@ -1,0 +1,192 @@
+#!/bin/bash
+
+# エラーが発生したら即終了
+set -e
+
+# 色の定義
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# --- 引数の解析 (Step 0) ---
+BASE_BRANCH_ARG=""
+while getopts "b:" opt; do
+  case $opt in
+    b) BASE_BRANCH_ARG="$OPTARG" ;;
+    \?) echo "無効なオプションです: -$OPTARG" >&2; exit 1 ;;
+  esac
+done
+
+echo -e "${BLUE}=== GitHub プルリクエスト作成 AIアシスタント ===${NC}"
+
+# --- Step 1: リモートリポジトリ情報の取得 ---
+echo -e "\n${GREEN}[Step 1] リポジトリ情報を取得中...${NC}"
+REMOTE_URL=$(git remote -v | grep origin | grep fetch | awk '{print $2}')
+if [[ "$REMOTE_URL" == *"@"* ]]; then
+    REPO_PATH=$(echo "$REMOTE_URL" | sed 's/.*://' | sed 's/\.git//')
+else
+    REPO_PATH=$(echo "$REMOTE_URL" | sed 's/.*github.com\///' | sed 's/\.git//')
+fi
+OWNER=$(echo "$REPO_PATH" | cut -d'/' -f1)
+REPOSITORY=$(echo "$REPO_PATH" | cut -d'/' -f2)
+echo "Owner: $OWNER, Repository: $REPOSITORY"
+
+# --- Step 2: 現在のブランチ名の取得 ---
+echo -e "\n${GREEN}[Step 2] 現在のブランチを取得中...${NC}"
+CURRENT_BRANCH=$(git branch --show-current)
+echo "Current Branch: $CURRENT_BRANCH"
+
+# --- Step 3 & 4: Issue番号の抽出・確認 ---
+echo -e "\n${GREEN}[Step 3-4] Issue番号を確認中...${NC}"
+ISSUE_NUMBER=$(echo "$CURRENT_BRANCH" | grep -oE '([A-Z]+-)?[0-9]+' | head -n1 || true)
+
+if [ -z "$ISSUE_NUMBER" ]; then
+    echo -e "${YELLOW}ブランチ名からIssue番号を特定できませんでした。${NC}"
+    read -p "Issue番号を入力してください (例: 123, PROJECT-123): " INPUT_ISSUE_NUMBER
+    ISSUE_NUMBER=$INPUT_ISSUE_NUMBER
+fi
+echo "Issue Number: #$ISSUE_NUMBER"
+
+# --- Step 5: マージ先ブランチの確認 ---
+echo -e "\n${GREEN}[Step 5] マージ先ブランチを確認中...${NC}"
+
+if [ -n "$BASE_BRANCH_ARG" ]; then
+    # 引数(-b)で指定されている場合
+    BASE_BRANCH="$BASE_BRANCH_ARG"
+    echo "Base Branch (from argument): $BASE_BRANCH"
+else
+    # 指定がない場合は入力待ち (デフォルト: main)
+    read -p "マージ先のブランチ名を入力してください (default: main): " BASE_BRANCH
+    BASE_BRANCH=${BASE_BRANCH:-main}
+    echo "Base Branch: $BASE_BRANCH"
+fi
+
+# --- Step 6: Claudeによる変更内容の分析と生成 ---
+echo -e "\n${GREEN}[Step 6] Claude AIによる変更内容の分析とドラフト生成中...${NC}"
+
+DIFF_CONTENT=$(git diff "$BASE_BRANCH".."$CURRENT_BRANCH")
+LOG_CONTENT=$(git log "$BASE_BRANCH".."$CURRENT_BRANCH")
+
+if [ -z "$DIFF_CONTENT" ]; then
+    echo -e "${RED}エラー: マージ先($BASE_BRANCH)との差分がありません。${NC}"
+    exit 1
+fi
+
+PROMPT="
+あなたは優秀なエンジニアです。以下のgit diffとgit logを分析し、GitHubのプルリクエスト用の「タイトル」と「概要」を作成してください。
+
+# 制約事項
+- 出力はJSON形式のみとしてください。キーは 'title' と 'description' です。
+- 'title': 変更内容を最も簡潔に表す一文（日本語）。
+- 'description': 変更点を日本語の箇条書きで具体的に記述。マークダウン形式可。
+- 余計な挨拶やMarkdownのコードブロック（\`\`\`jsonなど）は不要です。生のJSONテキストのみを出力してください。
+
+# Git Log
+$LOG_CONTENT
+
+# Git Diff
+$DIFF_CONTENT
+"
+
+echo "AIが分析中です。しばらくお待ちください..."
+
+# AI呼び出し
+AI_OUTPUT=$(claude -p "$PROMPT")
+
+# --- 出力のクリーニング処理 ---
+CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
+
+# JSONパース
+PR_TITLE=$(echo "$CLEAN_JSON" | jq -r '.title')
+PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description')
+
+# --- 【追加】タイトルにIssue番号を付与 ---
+if [ -n "$ISSUE_NUMBER" ]; then
+    PR_TITLE="$ISSUE_NUMBER $PR_TITLE"
+fi
+
+# --- Step 7: 補足情報の入力 ---
+echo -e "\n${GREEN}[Step 7] 補足情報の確認${NC}"
+read -p "補足事項はありますか？ (ない場合はEnter): " SUPPLEMENTARY_INFO
+SUPPLEMENTARY_INFO=${SUPPLEMENTARY_INFO:-なし}
+
+# --- Step 8: テスト結果の確認 ---
+echo -e "\n${GREEN}[Step 8] テスト実行結果の確認${NC}"
+read -p "npm test を実行し、全てのテストケースがパスしましたか？ (y/n): " TEST_RESULT
+if [[ "$TEST_RESULT" == "y" || "$TEST_RESULT" == "Y" ]]; then
+    CHECKBOX_TEST="[x]"
+else
+    CHECKBOX_TEST="[ ]"
+fi
+
+# --- Step 9: ユーザーID取得 ---
+echo -e "\n${GREEN}[Step 9] GitHubユーザーID取得${NC}"
+LOGIN_USER=$(gh api user --jq .login)
+echo "User: $LOGIN_USER"
+
+# --- Step 10: 本文構築 ---
+PR_BODY="[これは Claude で自動生成されました]
+
+## 関連Issue
+- #$ISSUE_NUMBER
+
+## 概要
+$PR_DESCRIPTION
+
+## 補足情報
+$SUPPLEMENTARY_INFO
+
+## チェックリスト
+- $CHECKBOX_TEST \`npm test\` コマンドでテストを実行し、すべてのテストケースが成功したことを確認しました。
+- [x] 関連Issueをリンクしました。
+- [ ] テストコードを1つ以上追加しました。
+
+"
+
+# --- Step 11: 最終確認 ---
+echo -e "\n${BLUE}========================================${NC}"
+echo -e "${YELLOW}以下の内容でプルリクエストを作成します:${NC}"
+echo "----------------------------------------"
+echo "Title: $PR_TITLE"
+echo "Base:  $BASE_BRANCH"
+echo "Head:  $CURRENT_BRANCH"
+echo "----------------------------------------"
+echo -e "$PR_BODY"
+echo "----------------------------------------"
+echo -e "${BLUE}========================================${NC}"
+
+read -p "作成してよろしいですか？ (y: 作成 / d: Draftで作成 / n: キャンセル): " CONFIRM
+
+DRAFT_FLAG=""
+
+if [[ "$CONFIRM" == "d" || "$CONFIRM" == "D" ]]; then
+    echo -e "${YELLOW}Draft(下書き)モードで作成します。${NC}"
+    DRAFT_FLAG="--draft"
+elif [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
+    echo "キャンセルしました。"
+    exit 0
+fi
+
+# --- Step 12: Push ---
+echo -e "\n${GREEN}[Step 12] RemoteへPush中...${NC}"
+git push origin "$CURRENT_BRANCH"
+
+# --- Step 13 & 14: PR作成 & アサイン ---
+echo -e "\n${GREEN}[Step 13-14] PR作成とアサイン...${NC}"
+
+PR_URL=$(gh pr create \
+    --base "$BASE_BRANCH" \
+    --head "$CURRENT_BRANCH" \
+    --title "$PR_TITLE" \
+    --body "$PR_BODY" \
+    --assignee "$LOGIN_USER" \
+    $DRAFT_FLAG)
+
+echo -e "\n${GREEN}プルリクエストが作成されました！${NC}"
+echo "$PR_URL"
+
+# --- Step 15: ブラウザで開く ---
+echo -e "\n${GREEN}[Step 15] ブラウザで開きます...${NC}"
+gh pr view --web

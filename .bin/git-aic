@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# --- 設定 ---
+# Claudeへの指示（IDはBash側でつけるので、AIにはメッセージ本体だけを作らせます）
+SYSTEM_PROMPT="あなたはGitのコミットメッセージ生成機です。渡されたdiffから、Conventional Commits (feat:, fix:, docs: 等) に従った要約を1行で作成してください。チケット番号は含めないでください。マークダウンや装飾は不要です。日本語で出力してください。"
+
+# 1. ステージングのチェック
+if git diff --cached --quiet; then
+    echo "エラー: ステージングされている変更がありません。"
+    exit 1
+fi
+
+# 2. ブランチ名からチケットIDを抽出 (正規表現: アルファベット-数字)
+CURRENT_BRANCH=$(git branch --show-current)
+# 例: feature/PROJECT-123/task -> PROJECT-123
+TICKET_ID=$(echo "$CURRENT_BRANCH" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
+
+echo "🤖 Claudeが差分を解析中..."
+echo "   (Branch: $CURRENT_BRANCH -> Ticket: ${TICKET_ID:-なし})"
+
+# 3. 差分の取得 (最大文字数制限)
+DIFF_CONTENT=$(git diff --cached | head -c 3000)
+
+# 4. Claude CLI 実行
+GENERATED_MSG=$(claude -p "$SYSTEM_PROMPT
+---
+$DIFF_CONTENT")
+
+# 5. 出力のクリーニング (Markdown除去など)
+CLEAN_MSG=$(echo "$GENERATED_MSG" | sed 's/```//g' | sed 's/^`//' | sed 's/`$//' | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+
+# 6. メッセージの結合
+# チケットIDがある場合: "PROJECT-123 feat: 内容"
+# チケットIDがない場合: "feat: 内容"
+if [ -n "$TICKET_ID" ]; then
+    FINAL_MSG="$TICKET_ID $CLEAN_MSG"
+else
+    FINAL_MSG="$CLEAN_MSG"
+fi
+
+# 7. コミット実行 (エディタ起動モード)
+echo "----------------------------------------"
+echo "作成されたメッセージ: $FINAL_MSG"
+echo "----------------------------------------"
+
+git commit -e -m "$FINAL_MSG"
