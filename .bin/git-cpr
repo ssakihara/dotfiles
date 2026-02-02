@@ -93,7 +93,7 @@ $DIFF_CONTENT
 echo "AIが分析中です。しばらくお待ちください..."
 
 # AI呼び出し
-AI_OUTPUT=$(claude -p "$PROMPT")
+AI_OUTPUT=$(claude --model sonnet -p "$PROMPT")
 
 # --- 出力のクリーニング処理 ---
 CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
