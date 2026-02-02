@@ -22,7 +22,7 @@ echo "   (Branch: $CURRENT_BRANCH -> Ticket: ${TICKET_ID:-なし})"
 DIFF_CONTENT=$(git diff --cached | head -c 3000)
 
 # 4. Claude CLI 実行
-GENERATED_MSG=$(claude -p "$SYSTEM_PROMPT
+GENERATED_MSG=$(claude --model sonnet -p "$SYSTEM_PROMPT
 ---
 $DIFF_CONTENT")
 
