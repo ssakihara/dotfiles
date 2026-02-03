@@ -104,7 +104,7 @@ PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description')
 
 # --- 【追加】タイトルにIssue番号を付与 ---
 if [ -n "$ISSUE_NUMBER" ]; then
-    PR_TITLE="$ISSUE_NUMBER $PR_TITLE"
+    PR_TITLE="$ISSUE_NUMBER $PR_TITLE #close"
 fi
 
 # --- Step 7: 補足情報の入力 ---
