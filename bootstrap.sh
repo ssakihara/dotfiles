@@ -4,4 +4,4 @@ cd "$(dirname "${BASH_SOURCE:-$0}")";
 
 git pull origin main;
 
-stow ghostty git starship zsh;
+stow -t ~ bin claude ghostty git starship zsh;
