@@ -250,30 +250,66 @@ const { data: user, status } = await useFetch<User>(
 
 ## Server API（Nitro）
 
-### server/api/users/[id].get.ts
+### ⚠️ 必須: Zod + h3 バリデーションユーティリティ
+
+**`server/api/` および `server/routes/` でユーザー入力を受け取る場合、必ず Zod と h3 のバリデーションユーティリティを組み合わせて使用すること。**
+
+| 入力種別 | h3 ユーティリティ | 用途 |
+|---------|------------------|------|
+| リクエストボディ | `readValidatedBody` | POST/PUT/PATCH のボディ |
+| クエリパラメータ | `getValidatedQuery` | URL の `?key=value` |
+| ルーターパラメータ | `getValidatedRouterParams` | URL の `[id]` 等 |
+
+手動バリデーション（if文やsafeParse直接呼び出し）は禁止。Zod スキーマを `server/entry/` に定義し、h3 ユーティリティと組み合わせて使用する。
+
+### server/entry/userSchema.ts（スキーマ定義）
 
 ```typescript
+import { z } from 'zod'
+
+// ルーターパラメータ用スキーマ
+export const userIdParamSchema = z.object({
+  id: z.coerce.number().int().positive('Invalid user ID'),
+})
+
+// リクエストボディ用スキーマ
+export const createUserSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  age: z.number().int().min(0).max(150).optional(),
+})
+
+// クエリパラメータ用スキーマ
+export const userListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  search: z.string().optional(),
+})
+
+// 型エクスポート
+export type UserIdParam = z.infer<typeof userIdParamSchema>
+export type CreateUserInput = z.infer<typeof createUserSchema>
+export type UserListQuery = z.infer<typeof userListQuerySchema>
+```
+
+### server/api/users/[id].get.ts（ルーターパラメータ）
+
+```typescript
+import { userIdParamSchema } from '~/server/entry/userSchema'
+
 export default defineEventHandler(async (event) => {
-  // パラメータ取得
-  const id = getRouterParam(event, 'id')
+  // getValidatedRouterParams でバリデーション（失敗時は自動で400エラー）
+  const { id } = await getValidatedRouterParams(event, userIdParamSchema.parse)
 
-  // バリデーション
-  if (!id || !/^\d+$/.test(id)) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Invalid user ID'
-    })
-  }
-
-  // DB操作（例）
+  // DB操作（id は number 型で型安全）
   const user = await db.user.findUnique({
-    where: { id: parseInt(id) }
+    where: { id }
   })
 
   if (!user) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'User not found'
+      message: 'User not found'
     })
   }
 
@@ -281,22 +317,56 @@ export default defineEventHandler(async (event) => {
 })
 ```
 
-### server/api/users/index.post.ts
+### server/api/users/index.post.ts（リクエストボディ）
 
 ```typescript
+import { createUserSchema } from '~/server/entry/userSchema'
+
 export default defineEventHandler(async (event) => {
-  // ボディ取得と型付け
-  const body = await readBody<CreateUserInput>(event)
+  // readValidatedBody でバリデーション（失敗時は自動で400エラー）
+  const data = await readValidatedBody(event, createUserSchema.parse)
 
-  // バリデーション
-  if (!body.email || !body.name) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Email and name are required'
-    })
-  }
+  // data は CreateUserInput 型で型安全
+  const user = await db.user.create({ data })
+  return user
+})
+```
 
-  const user = await db.user.create({ data: body })
+### server/api/users/index.get.ts（クエリパラメータ）
+
+```typescript
+import { userListQuerySchema } from '~/server/entry/userSchema'
+
+export default defineEventHandler(async (event) => {
+  // getValidatedQuery でバリデーション（失敗時は自動で400エラー）
+  const { page, limit, search } = await getValidatedQuery(event, userListQuerySchema.parse)
+
+  // page, limit, search は型安全
+  const users = await db.user.findMany({
+    where: search ? { name: { contains: search } } : undefined,
+    skip: (page - 1) * limit,
+    take: limit,
+  })
+
+  return users
+})
+```
+
+### 複数種類のバリデーションを組み合わせる
+
+```typescript
+import { userIdParamSchema, updateUserSchema } from '~/server/entry/userSchema'
+
+export default defineEventHandler(async (event) => {
+  // ルーターパラメータとボディを両方バリデーション
+  const { id } = await getValidatedRouterParams(event, userIdParamSchema.parse)
+  const data = await readValidatedBody(event, updateUserSchema.parse)
+
+  const user = await db.user.update({
+    where: { id },
+    data,
+  })
+
   return user
 })
 ```
@@ -525,7 +595,11 @@ await refreshNuxtData()
 
 - [ ] `useFetch`/`useAsyncData`がsetup外で使用されていないか
 - [ ] SSR環境でグローバルな`ref`/`reactive`を使用していないか（`useState`を使う）
-- [ ] サーバーAPIで入力バリデーションがあるか
+- [ ] **server/api/ および server/routes/ でユーザー入力を受け取る場合、h3 バリデーションユーティリティ + Zod を使用しているか**
+  - ボディ: `readValidatedBody(event, schema.parse)`
+  - クエリ: `getValidatedQuery(event, schema.parse)`
+  - パラメータ: `getValidatedRouterParams(event, schema.parse)`
+- [ ] Zod スキーマが `server/entry/` に定義されているか
 - [ ] 機密情報が`runtimeConfig.public`に含まれていないか
 
 ### HIGH（修正すべき）
@@ -572,6 +646,32 @@ import { useFetch } from '#app'
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   await db.user.create({ data: body }) // 直接DBへ
+})
+
+// NG: 手動if文によるバリデーション
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event)
+  if (!body.email || !body.name) {  // NG: 手動バリデーション
+    throw createError({ statusCode: 400, message: 'Invalid input' })
+  }
+})
+
+// NG: safeParse を直接使用（h3 ユーティリティを使うこと）
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event)
+  const result = createUserSchema.safeParse(body)  // NG: safeParse直接呼び出し
+  if (!result.success) {
+    throw createError({ statusCode: 400, message: result.error.errors[0].message })
+  }
+})
+
+// OK: h3 バリデーションユーティリティ + Zod
+import { createUserSchema } from '~/server/entry/userSchema'
+
+export default defineEventHandler(async (event) => {
+  // OK: readValidatedBody を使用
+  const data = await readValidatedBody(event, createUserSchema.parse)
+  // data は型安全
 })
 ```
 
