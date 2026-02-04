@@ -19,14 +19,28 @@
 
 - プロジェクトに `nuxt.config.ts` または `nuxt.config.js` が存在する
 - `.vue` ファイルを作成・編集する
-- `server/api/`、`composables/`、`pages/`、`components/` 配下のファイルを編集する
+- `server/api/`、`server/utils/`、`composables/`、`pages/`、`components/` 配下のファイルを編集する
 - Nuxt/Vue 関連のコードを書く指示を受けた
 
-**判定方法:**
+## ⛔ 禁止事項（NEVER DO THIS）
 
-1. 作業開始時に `nuxt.config.ts` の存在を確認
-2. 存在する場合、すべてのコード作成・修正は nuxt4-coder エージェント経由で行う
-3. 直接 Edit/Write ツールを使わず、必ず Task ツールで nuxt4-coder を呼び出す
+**Nuxt プロジェクトで以下のツールを直接使用することを禁止する:**
+
+- `Edit` ツールでコードファイルを直接編集
+- `Write` ツールでコードファイルを直接作成
+
+**違反した場合**: ユーザーに謝罪し、nuxt4-coder エージェントを使用してやり直すこと。
+
+## 判定フロー（毎回必ず実行）
+
+```sh
+1. コード変更の指示を受ける
+2. nuxt.config.ts の存在を確認（Glob で検索）
+3. 存在する場合 → Task ツールで nuxt4-coder を呼び出す
+4. 存在しない場合 → 直接 Edit/Write を使用可能
+```
+
+**重要**: このチェックをスキップしてはならない。
 
 ### 2. code-reviewer エージェント（MUST USE）
 
