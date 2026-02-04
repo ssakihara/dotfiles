@@ -6,6 +6,7 @@
 |---------|------|
 | `agents/code-reviewer.md` | コードレビュー、セキュリティ/品質/パフォーマンスチェック |
 | `agents/debug-browser.md` | ブラウザ操作+サーバーログ監視による自律デバッグ |
+| `agents/nuxt4-coder.md` | Nuxt 4コーディング専門。Composition API/TypeScript/Nitro、レイヤー責務(api→services→repositories)、ファイル命名規則、Vueスタイルガイド |
 
 ## Rules 一覧
 
