@@ -37,5 +37,5 @@ Fix: 具体的な修正方法と例
 変更後  // ✓
 ```
 
-詳細なセキュリティパターンは @agents/references/security-checklist.md を参照
+詳細なセキュリティパターンは @references/security-checklist.md を参照
 セキュリティ要件は @rules/security.md を参照

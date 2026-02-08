@@ -68,4 +68,4 @@ shared/
 | `server/services/` | lowerCamelCase | `userService.ts` |
 | `server/entry/` | lowerCamelCase | `userSchema.ts` |
 
-包括的なパターンと例は @agents/references/nuxt4-guide.md を参照
+包括的なパターンと例は @references/nuxt4-guide.md を参照

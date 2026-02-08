@@ -1,5 +1,6 @@
 .claude/*
 !.claude/agents
+!.claude/references
 !.claude/rules
 # !.claude/skills
 !.claude/CLAUDE.md
