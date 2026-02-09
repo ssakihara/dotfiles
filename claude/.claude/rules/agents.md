@@ -7,8 +7,15 @@
 
 判定フロー:
 1. Glob で nuxt.config.ts を確認
-2. 存在する場合 → Task ツールで nuxt4-coder を呼び出し
-3. 存在しない場合 → 直接 Edit/Write を使用可
+2. 存在する場合 → Task ツールで nuxt4-coder を呼び出し（最優先）
+3. 存在しない場合 → tsconfig.json を確認
+4. tsconfig.json が存在する場合 → Task ツールで typescript-coder を呼び出し
+5. どちらもない場合 → 直接 Edit/Write を使用可
+
+## TypeScript プロジェクト（必須）
+
+`tsconfig.json` が存在し、`nuxt.config.ts` が存在しない場合、**必ず** typescript-coder エージェントを使用すること。
+直接 Edit/Write ツールで .ts ファイルを編集してはならない。
 
 ## コードレビュー（必須）
 
