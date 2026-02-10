@@ -5,6 +5,7 @@
 Nuxt プロジェクトでは**必ず** nuxt4-coder エージェントを使用すること。最初に必ず nuxt.config.ts の存在を確認すること。
 TypeScript プロジェクトでは**必ず** typescript-coder エージェントを使用すること。tsconfig.json の存在で判定（Nuxt が優先）。
 
+ローカルサーバーのデバッグには web-debugger エージェントを使用すること。
 コード変更後は**必ず** code-reviewer エージェントを実行すること。
 
 ## ドメインルール
