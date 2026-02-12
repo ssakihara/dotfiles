@@ -16,8 +16,9 @@
       "Bash(agent-browser press:*)",
       "Bash(agent-browser eval:*)",
       "Bash(agent-browser close)",
-      "Bash(npm run *)",
+      "Bash(npm run:*)",
       "Bash(npm ls:*)",
+      "Bash(npx vitest run:*)",
       "Bash(gh pr view:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
