@@ -67,6 +67,7 @@ fi
 echo -e "\n${GREEN}[Step 6] Claude AIによる変更内容の分析とドラフト生成中...${NC}"
 
 DIFF_CONTENT=$(git diff "$BASE_BRANCH".."$CURRENT_BRANCH")
+DIFF_STAT=$(git diff --stat "$BASE_BRANCH".."$CURRENT_BRANCH")
 LOG_CONTENT=$(git log "$BASE_BRANCH".."$CURRENT_BRANCH")
 
 if [ -z "$DIFF_CONTENT" ]; then
@@ -74,7 +75,25 @@ if [ -z "$DIFF_CONTENT" ]; then
     exit 1
 fi
 
-PROMPT="
+# --- トークン上限からプロンプトの最大文字数を算出 ---
+# Sonnet: コンテキスト200Kトークン
+#   - 出力予約: 8Kトークン
+#   - CLIシステムプロンプト等のオーバーヘッド: 約20Kトークン
+#   - 実質入力上限: 172Kトークン
+# 最悪ケース(日本語等)を想定し 1文字=1トークン で換算
+MAX_PROMPT_CHARS=172000
+
+# git logが大きい場合は切り詰める（全体の10%まで）
+MAX_LOG_CHARS=$(( MAX_PROMPT_CHARS / 10 ))
+LOG_LEN=${#LOG_CONTENT}
+if [ "$LOG_LEN" -gt "$MAX_LOG_CHARS" ]; then
+    echo -e "${YELLOW}コミットログが大きいため切り詰めます (${LOG_LEN}文字 → ${MAX_LOG_CHARS}文字)${NC}"
+    LOG_CONTENT="${LOG_CONTENT:0:$MAX_LOG_CHARS}
+
+... (以降省略)"
+fi
+
+PROMPT_TEMPLATE="
 あなたは優秀なエンジニアです。以下のgit diffとgit logを分析し、GitHubのプルリクエスト用の「タイトル」と「概要」を作成してください。
 
 # 制約事項
@@ -82,26 +101,62 @@ PROMPT="
 - 'title': 変更内容を最も簡潔に表す一文（日本語）。
 - titleにissue番号は含めないでください。
 - 'description': 変更点を日本語の箇条書きで具体的に記述。マークダウン形式可。
-- 余計な挨拶やMarkdownのコードブロック（\`\`\`jsonなど）は不要です。生のJSONテキストのみを出力してください。
+- 余計な挨拶やMarkdownのコードブロック(\`\`\`jsonなど)は不要です。生のJSONテキストのみを出力してください。
 
 # Git Log
 $LOG_CONTENT
 
+# Git Diff Stat (変更ファイル一覧)
+$DIFF_STAT
+
 # Git Diff
-$DIFF_CONTENT
+"
+
+# diffに使える文字数 = 全体上限 - diff以外の文字数
+PROMPT_BASE_CHARS=${#PROMPT_TEMPLATE}
+MAX_DIFF_CHARS=$(( MAX_PROMPT_CHARS - PROMPT_BASE_CHARS ))
+
+if [ "$MAX_DIFF_CHARS" -le 0 ]; then
+    echo -e "${RED}エラー: コミットログが大きすぎてdiffを含められません。${NC}"
+    exit 1
+fi
+
+DIFF_LEN=${#DIFF_CONTENT}
+if [ "$DIFF_LEN" -gt "$MAX_DIFF_CHARS" ]; then
+    echo -e "${YELLOW}差分が大きいため切り詰めます (${DIFF_LEN}文字 → ${MAX_DIFF_CHARS}文字)${NC}"
+    DIFF_CONTENT="${DIFF_CONTENT:0:$MAX_DIFF_CHARS}
+
+... (以降省略: 差分が大きいため切り詰めました。変更ファイル一覧は Git Diff Stat を参照してください)"
+fi
+
+PROMPT="${PROMPT_TEMPLATE}${DIFF_CONTENT}
 "
 
 echo "AIが分析中です。しばらくお待ちください..."
 
-# AI呼び出し
-AI_OUTPUT=$(claude --model sonnet -p "$PROMPT")
+# AI呼び出し（エラー時は標準出力に表示して終了）
+CLAUDE_ERR=$(mktemp)
+trap 'rm -f "$CLAUDE_ERR"' EXIT
+AI_OUTPUT=$(claude --model sonnet -p "$PROMPT" 2>"$CLAUDE_ERR") || {
+    ERR_MSG=$(cat "$CLAUDE_ERR")
+    echo -e "${RED}エラー: ${ERR_MSG:-不明なエラー}のためAI呼び出しに失敗しました。${NC}"
+    exit 1
+}
 
 # --- 出力のクリーニング処理 ---
 CLEAN_JSON=$(echo "$AI_OUTPUT" | sed 's/```json//g' | sed 's/```//g')
 
 # JSONパース
-PR_TITLE=$(echo "$CLEAN_JSON" | jq -r '.title')
-PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description')
+PR_TITLE=$(echo "$CLEAN_JSON" | jq -r '.title' 2>/dev/null) || {
+    echo -e "${RED}エラー: AIの出力が不正な形式のためJSONパースに失敗しました。${NC}"
+    exit 1
+}
+PR_DESCRIPTION=$(echo "$CLEAN_JSON" | jq -r '.description' 2>/dev/null)
+
+if [ "$PR_TITLE" = "null" ] || [ -z "$PR_TITLE" ]; then
+    echo -e "${RED}エラー: AIの出力にtitleが含まれていないためタイトル取得に失敗しました。${NC}"
+    exit 1
+fi
 
 # --- 【追加】タイトルにIssue番号を付与 ---
 if [ -n "$ISSUE_NUMBER" ]; then
