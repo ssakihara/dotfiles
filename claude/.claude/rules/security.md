@@ -30,4 +30,4 @@ if (!apiKey) throw new Error('API_KEY not configured')
 4. 漏洩シークレットをローテーション
 5. コードベース全体をレビュー
 
-詳細なセキュリティパターンは @rules/references/security-patterns.md を参照
+詳細なセキュリティパターンは references/security-patterns.md を参照（必要に応じて読み込むこと）

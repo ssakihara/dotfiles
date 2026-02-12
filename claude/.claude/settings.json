@@ -18,12 +18,7 @@
       "Bash(agent-browser close)",
       "Bash(npm run *)",
       "Bash(npm ls:*)",
-      "Bash(find:*)",
-      "Bash(grep:*)",
       "Bash(gh pr view:*)",
-      "Bash(ls:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
