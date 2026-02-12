@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # --- 設定 ---
 # Claudeへの指示（IDはBash側でつけるので、AIにはメッセージ本体だけを作らせます）
@@ -18,13 +19,51 @@ TICKET_ID=$(echo "$CURRENT_BRANCH" | grep -oE '[A-Z]+-[0-9]+' | head -n 1)
 echo "🤖 Claudeが差分を解析中..."
 echo "   (Branch: $CURRENT_BRANCH -> Ticket: ${TICKET_ID:-なし})"
 
-# 3. 差分の取得 (最大文字数制限)
-DIFF_CONTENT=$(git diff --cached | head -c 3000)
+# 3. 差分の取得
+DIFF_CONTENT=$(git diff --cached)
+DIFF_STAT=$(git diff --cached --stat)
+
+# --- トークン上限からプロンプトの最大文字数を算出 ---
+# Sonnet: コンテキスト200Kトークン
+#   - 出力予約: 8Kトークン
+#   - CLIシステムプロンプト等のオーバーヘッド: 約20Kトークン
+#   - 実質入力上限: 172Kトークン
+# 最悪ケース(日本語等)を想定し 1文字=1トークン で換算
+MAX_PROMPT_CHARS=172000
+
+PROMPT_TEMPLATE="${SYSTEM_PROMPT}
+---
+# Git Diff Stat (変更ファイル一覧)
+$DIFF_STAT
+
+# Git Diff
+"
+
+# diffに使える文字数 = 全体上限 - diff以外の文字数
+PROMPT_BASE_CHARS=${#PROMPT_TEMPLATE}
+MAX_DIFF_CHARS=$(( MAX_PROMPT_CHARS - PROMPT_BASE_CHARS ))
+
+if [ "$MAX_DIFF_CHARS" -le 0 ]; then
+    echo "エラー: diff statが大きすぎてdiffを含められません。"
+    exit 1
+fi
+
+DIFF_LEN=${#DIFF_CONTENT}
+if [ "$DIFF_LEN" -gt "$MAX_DIFF_CHARS" ]; then
+    echo "⚠ 差分が大きいため切り詰めます (${DIFF_LEN}文字 → ${MAX_DIFF_CHARS}文字)"
+    DIFF_CONTENT="${DIFF_CONTENT:0:$MAX_DIFF_CHARS}
+
+... (以降省略: 差分が大きいため切り詰めました。変更ファイル一覧は Git Diff Stat を参照してください)"
+fi
 
 # 4. Claude CLI 実行
-GENERATED_MSG=$(claude --model sonnet -p "$SYSTEM_PROMPT
----
-$DIFF_CONTENT")
+CLAUDE_ERR=$(mktemp)
+trap 'rm -f "$CLAUDE_ERR"' EXIT
+GENERATED_MSG=$(claude --model sonnet -p "${PROMPT_TEMPLATE}${DIFF_CONTENT}" 2>"$CLAUDE_ERR") || {
+    ERR_MSG=$(cat "$CLAUDE_ERR")
+    echo "エラー: ${ERR_MSG:-不明なエラー}のためAI呼び出しに失敗しました。"
+    exit 1
+}
 
 # 5. 出力のクリーニング (Markdown除去など)
 CLEAN_MSG=$(echo "$GENERATED_MSG" | sed 's/```//g' | sed 's/^`//' | sed 's/`$//' | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
