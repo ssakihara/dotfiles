@@ -20,6 +20,7 @@
       "Bash(npm ls:*)",
       "Bash(npx vitest run:*)",
       "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
