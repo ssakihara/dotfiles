@@ -6,7 +6,7 @@ command_timeout = 5000
 scan_timeout = 10
 
 [directory]
-truncation_length = 20
+truncation_length = 2
 truncate_to_repo = false
 
 # 記号の設定
