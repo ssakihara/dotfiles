@@ -99,7 +99,7 @@ export PATH="$HOME/.pub-cache/bin:$PATH"
 export JAVA_HOME="$HOME/OpenJDK/jdk-18.0.2.jdk/Contents/Home"
 
 # gcloud
-export CLOUDSDK_PYTHON="$HOME/.pyenv/versions/3.12.11/bin/python3"
+export CLOUDSDK_PYTHON="$HOME/.local/bin/python3"
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
@@ -119,12 +119,6 @@ eval "$(rbenv init -)"
 
 # psql
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-
-# python3
-# export PYENV_ROOT="$HOME/.pyenv"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# export npm_config_python="$HOME/.pyenv/shims/python3"
-eval "$(pyenv init -)"
 
 # 機密情報
 source "$HOME/.credentials"
