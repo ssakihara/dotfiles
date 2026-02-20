@@ -78,6 +78,8 @@ bindkey '^g' ghq-fzf
 export HISTSIZE=1000
 # 履歴ファイルに保存される履歴の件数
 export SAVEHIST=100000
+# GSSAPI認証を無効化(psqlの起動を速くするため)
+export PGGSSENCMODE=disable
 # 重複を記録しない
 setopt hist_ignore_dups
 # 開始と終了を記録
