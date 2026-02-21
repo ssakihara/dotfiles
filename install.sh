@@ -9,7 +9,7 @@ if ! type brew >/dev/null 2>&1; then
 fi
 
 if ! type git >/dev/null 2>&1; then
-    brew install git stow
+    brew install git stow volta uv
 fi
 
 if [ ! -d dotfiles ]; then
@@ -21,5 +21,10 @@ cd dotfiles
 sh ./bootstrap.sh
 
 sh ./brew.sh
+
+volta install node@24
+volta install pnpm
+
+uv python install --default 3.14
 
 sh ./macos.sh
