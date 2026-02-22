@@ -102,8 +102,8 @@ export JAVA_HOME="$HOME/OpenJDK/jdk-18.0.2.jdk/Contents/Home"
 
 # gcloud
 export CLOUDSDK_PYTHON="$HOME/.local/bin/python3"
-source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/completion.zsh.inc"
 
 # starship
 eval "$(starship init zsh)"
