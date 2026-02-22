@@ -1,6 +1,5 @@
 tap "dart-lang/dart"
 tap "hashicorp/tap"
-tap "homebrew/bundle"
 tap "leoafarias/fvm"
 brew "bat"
 brew "broot"
