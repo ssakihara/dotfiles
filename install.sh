@@ -8,9 +8,7 @@ if ! type brew >/dev/null 2>&1; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if ! type git >/dev/null 2>&1; then
-    brew install git stow volta uv
-fi
+brew install git stow volta uv
 
 if [ ! -d dotfiles ]; then
     git clone https://github.com/ssakihara/dotfiles.git
