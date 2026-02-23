@@ -20,7 +20,26 @@ defaults write com.apple.dock autohide -bool false
 # Dockを左に
 defaults write com.apple.dock "orientation" -string "left"
 
-# 動きを高速化
+###############################################################################
+# Display & Power                                                          #
+###############################################################################
+
+# ダークモードを有効化
+defaults write -g AppleInterfaceStyle -string "Dark"
+
+# ディスプレイ/スリープ設定（開発用に遅めに設定）
+# 注意: これらの設定には管理者権限(sudo)が必要です
+# -c: 電源接続時、-b: バッテリー使用時
+# 画面は消えないようにする（システムスリープのみ10分）
+sudo pmset -c displaysleep 0 sleep 10
+
+# バッテリー使用時も画面は消えないようにする（システムスリープのみ10分）
+# 注意: この設定はバッテリー消費を増加させます。開発時の生産性重視の設定です。
+sudo pmset -b displaysleep 0 sleep 10
+
+###############################################################################
+# Speed up animations                                                        #
+###############################################################################
 defaults write -g com.apple.trackpad.scaling 2 && \
 defaults write -g com.apple.mouse.scaling 1.5 && \
 defaults write -g KeyRepeat -int 2 && \
@@ -29,9 +48,11 @@ defaults write -g InitialKeyRepeat -int 15
 # タップしたときクリック
 defaults write -g com.apple.mouse.tapBehavior -int 1
 
-# 三本指でドラッグ
+# 三本指でドラッグ (macOS Sequoia/Tahoe対応)
+# NSGlobalDomainの設定はmacOS Ventura以降で必須
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true && \
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true && \
+defaults write NSGlobalDomain com.apple.trackpad.threeFingerDragGesture -int 1
 
 # スクロールバーを常時表示する
 defaults write -g AppleShowScrollBars -string "Always"
