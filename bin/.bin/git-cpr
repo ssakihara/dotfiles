@@ -183,9 +183,7 @@ LOGIN_USER=$(gh api user --jq .login)
 echo "User: $LOGIN_USER"
 
 # --- Step 10: 本文構築 ---
-PR_BODY="[これは Claude で自動生成されました]
-
-## 関連Issue
+PR_BODY="## 関連Issue
 - #$ISSUE_NUMBER
 
 ## 概要
@@ -199,6 +197,7 @@ $SUPPLEMENTARY_INFO
 - [x] 関連Issueをリンクしました。
 - [ ] テストコードを1つ以上追加しました。
 
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
 "
 
 # --- Step 11: 最終確認 ---
