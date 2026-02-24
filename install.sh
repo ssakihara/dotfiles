@@ -2,7 +2,11 @@
 
 set -eu
 
-cd "${HOME}"
+WORKSPACES_DIR="${HOME}/workspaces/github.com/ssakihara"
+
+mkdir -p "${WORKSPACES_DIR}"
+
+cd "${WORKSPACES_DIR}"
 
 if ! type brew >/dev/null 2>&1; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
