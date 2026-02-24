@@ -41,6 +41,7 @@ alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias flutter="fvm flutter"
 alias dart="fvm dart"
+alias cclaude="ccr code"
 alias dclaude="docker sandbox run claude"
 alias -g A='| awk'
 alias -g C='| pbcopy'
