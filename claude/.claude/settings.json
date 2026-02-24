@@ -2,19 +2,6 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(agent-browser open http://localhost:*)",
-      "Bash(agent-browser click:*)",
-      "Bash(agent-browser fill:*)",
-      "Bash(agent-browser type:*)",
-      "Bash(agent-browser snapshot:*)",
-      "Bash(agent-browser screenshot:*)",
-      "Bash(agent-browser get:*)",
-      "Bash(agent-browser wait:*)",
-      "Bash(agent-browser scroll:*)",
-      "Bash(agent-browser hover:*)",
-      "Bash(agent-browser press:*)",
-      "Bash(agent-browser eval:*)",
-      "Bash(agent-browser close)",
       "Bash(npm run:*)",
       "Bash(npm ls:*)",
       "Bash(npx vitest run:*)",
@@ -24,8 +11,6 @@
       "Read(**/*.{vue,ts})"
     ],
     "deny": [
-      "Bash(agent-browser open https://*)",
-      "Bash(agent-browser open http://*.*)",
       "Read(./.env)",
       "Read(**/*.env)",
       "Read(**/.env.*)",
