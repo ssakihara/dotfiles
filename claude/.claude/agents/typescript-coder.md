@@ -52,11 +52,11 @@ package.json
 
 | 種類 | 形式 | 例 |
 |------|--------|---------|
-| モジュール | lowerCamelCase | `userService.ts` |
-| 型定義 | lowerCamelCase | `userTypes.ts` |
-| テスト | lowerCamelCase + suffix | `userService.test.ts` |
-| 定数 | lowerCamelCase | `httpStatus.ts` |
-| ユーティリティ | lowerCamelCase | `stringUtils.ts` |
+| モジュール | kebab-case | `user-service.ts` |
+| 型定義 | kebab-case | `user-types.ts` |
+| テスト | kebab-case + suffix | `user-service.test.ts` |
+| 定数 | kebab-case | `http-status.ts` |
+| ユーティリティ | kebab-case | `string-utils.ts` |
 
 ## 検証ステップ
 

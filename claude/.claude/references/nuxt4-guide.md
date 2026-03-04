@@ -68,7 +68,7 @@ const state = useState('key', () => null)
 ## Composables
 
 ```typescript
-// composables/useUser.ts
+// composables/use-user.ts
 export function useUser() {
   const user = useState<User | null>('user', () => null)
   const isLoggedIn = computed(() => user.value !== null)
@@ -120,7 +120,7 @@ const { data: user } = await useFetch<User>(
 ### Zod + h3 によるバリデーション
 
 ```typescript
-// server/entry/userSchema.ts
+// server/entry/user-schema.ts
 import { z } from 'zod'
 
 export const userIdParamSchema = z.object({
@@ -137,7 +137,7 @@ export type CreateUserInput = z.infer<typeof createUserSchema>
 
 ```typescript
 // server/api/users/[id].get.ts
-import { userIdParamSchema } from '~/server/entry/userSchema'
+import { userIdParamSchema } from '~/server/entry/user-schema'
 
 export default defineEventHandler(async (event) => {
   const { id } = await getValidatedRouterParams(event, userIdParamSchema.parse)

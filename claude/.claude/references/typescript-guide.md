@@ -274,7 +274,7 @@ export function deleteUser(id: UserId): Promise<Result<void>> { /* ... */ }
 
 ```typescript
 // src/index.ts - 公開APIのみエクスポート
-export { createUser, deleteUser } from './userService'
+export { createUser, deleteUser } from './user-service'
 export { type User, type UserId } from './types/user'
 export { AppError, NotFoundError } from './errors'
 ```
@@ -337,7 +337,7 @@ type Status = 'active' | 'inactive'
 
 ```typescript
 import { describe, expect, it, vi } from 'vitest'
-import { createUser } from './userService'
+import { createUser } from './user-service'
 
 describe('createUser', () => {
   it('should create a valid user', async () => {

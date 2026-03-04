@@ -27,8 +27,8 @@ Nuxt 4のベストプラクティスに従ってコードを生成する。
 ```
 app/
 ├── pages/           # ファイルベースルーティング（kebab-case）
-├── components/      # 自動インポート（PascalCase）
-├── composables/     # ビジネスロジック（use*.ts、lowerCamelCase）
+├── components/      # 自動インポート（kebab-case）
+├── composables/     # ビジネスロジック（use-*.ts、kebab-case）
 ├── layouts/
 ├── middleware/
 └── utils/
@@ -61,11 +61,11 @@ shared/
 
 | 場所 | 形式 | 例 |
 |----------|--------|---------|
-| `app/composables/` | lowerCamelCase | `useUserAuth.ts` |
-| `app/components/` | PascalCase | `UserCard.vue` |
+| `app/composables/` | kebab-case | `use-user-auth.ts` |
+| `app/components/` | kebab-case | `user-card.vue` |
 | `app/pages/` | kebab-case | `user-profile.vue` |
 | `server/api/` | kebab-case | `get-users.post.ts` |
-| `server/services/` | lowerCamelCase | `userService.ts` |
-| `server/entry/` | lowerCamelCase | `userSchema.ts` |
+| `server/services/` | kebab-case | `user-service.ts` |
+| `server/entry/` | kebab-case | `user-schema.ts` |
 
 包括的なパターンと例は @references/nuxt4-guide.md を参照
