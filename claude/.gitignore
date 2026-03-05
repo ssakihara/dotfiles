@@ -1,5 +1,6 @@
 .claude/*
 !.claude/agents
+!.claude/hooks
 !.claude/references
 !.claude/rules
 # !.claude/skills
