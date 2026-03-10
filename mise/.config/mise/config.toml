@@ -1,0 +1,7 @@
+[tools]
+node = "24"
+"npm:@musistudio/claude-code-router" = "latest"
+"npm:@playwright/cli" = "latest"
+"npm:firebase-tools" = "latest"
+"npm:portless" = "latest"
+pnpm = "latest"
