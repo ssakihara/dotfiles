@@ -5,3 +5,6 @@ if [ "$(uname -m)" = "arm64" ]; then
 else
   eval "$(/usr/local/bin/brew shellenv)"
 fi
+
+# mise
+eval "$(mise activate zsh --shims)"

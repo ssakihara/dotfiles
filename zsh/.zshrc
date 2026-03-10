@@ -121,6 +121,9 @@ eval "$(starship init zsh)"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin":$PATH
 
+# mise
+eval "$(mise activate zsh)"
+
 # Go
 export PATH="$HOME/go/bin:$PATH"
 
