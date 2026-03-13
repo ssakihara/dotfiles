@@ -57,5 +57,6 @@
     "typescript-lsp@claude-plugins-official": true
   },
   "language": "japanese",
-  "plansDirectory": "./plans"
+  "plansDirectory": "./plans",
+  "voiceEnabled": true
 }
