@@ -4,3 +4,4 @@
 */._*
 settings.local.json
 plans/
+.playwright-cli
