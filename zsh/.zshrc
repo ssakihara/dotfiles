@@ -83,6 +83,26 @@ function y() {
   rm -f -- "$tmp"
 }
 
+rm() {
+  # 1. 引数からオプション（-rfなど）を除去してファイル名だけを抽出
+  local targets=()
+  for arg in "$@"; do
+    [[ "$arg" == -* ]] && continue
+    targets+=("$arg")
+  done
+
+  # 2. 削除対象が指定されていない場合は何もせず終了
+  [[ ${#targets[@]} -eq 0 ]] && return 0
+
+  # 3. trashコマンドが存在するか確認して実行
+  if command -v trash > /dev/null 2>&1; then
+    command trash "${targets[@]}"
+  else
+    echo "エラー: 'trash' コマンドが見つかりません。'brew install trash' でインストールしてください。" >&2
+    return 1
+  fi
+}
+
 # zsh
 # メモリに保存される履歴の件数
 export HISTSIZE=1000
