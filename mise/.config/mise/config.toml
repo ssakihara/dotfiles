@@ -1,5 +1,5 @@
 [tools]
-node = "24"
+node = "22.20.0"
 "npm:@googleworkspace/cli" = "latest"
 "npm:@musistudio/claude-code-router" = "latest"
 "npm:@playwright/cli" = "latest"
