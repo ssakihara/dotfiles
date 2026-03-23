@@ -58,5 +58,8 @@
   },
   "language": "japanese",
   "plansDirectory": "./plans",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "env": {
+    "CLAUDE_CODE_NEW_INIT": "1"
+  }
 }
