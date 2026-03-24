@@ -28,10 +28,11 @@ model: sonnet
 ```
 src/
 ├── index.ts           # エントリポイント（名前付きエクスポート）
-├── types/             # 型定義
-├── utils/             # ユーティリティ
 ├── errors/            # カスタムエラー
-└── __tests__/         # テスト
+├── services/          # ビジネスロジック
+├── repositories/      # DB操作
+├── entry/             # スキーマ/バリデーション定義
+└── utils/             # ユーティリティ
 
 tsconfig.json
 vitest.config.ts
