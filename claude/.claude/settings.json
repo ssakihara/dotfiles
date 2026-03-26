@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_NEW_INIT": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(npm run:*)",
@@ -16,7 +19,7 @@
       "Read(**/.env.*)",
       "Bash(curl:*)",
       "Edit(/etc/**)"
-    ]
+    ],
   },
   "hooks": {
     "Notification": [
@@ -58,8 +61,5 @@
   },
   "language": "japanese",
   "plansDirectory": "./plans",
-  "voiceEnabled": true,
-  "env": {
-    "CLAUDE_CODE_NEW_INIT": "1"
-  }
+  "voiceEnabled": true
 }
