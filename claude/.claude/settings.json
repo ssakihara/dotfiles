@@ -19,7 +19,7 @@
       "Read(**/.env.*)",
       "Bash(curl:*)",
       "Edit(/etc/**)"
-    ],
+    ]
   },
   "hooks": {
     "Notification": [
