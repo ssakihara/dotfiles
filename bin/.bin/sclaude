@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+
+# https://github.com/ssakihara/claude-sandbox
+
+IMAGE_NAME="claude-sandbox"
+SANDBOX_DIR="$HOME/workspaces/github-private/ssakihara/claude-sandbox"
+
+# イメージが未ビルドなら自動ビルド
+if ! docker image inspect "$IMAGE_NAME" &>/dev/null; then
+  echo "イメージが見つかりません。ビルドします..."
+  docker build -t "$IMAGE_NAME" "$SANDBOX_DIR"
+fi
+
+# カレントディレクトリをプロジェクトルートとして使用
+PROJECT_DIR="$(pwd)"
+
+# ボリューム名をプロジェクトごとに分離（パスをハッシュ化）
+PROJECT_HASH=$(echo -n "$PROJECT_DIR" | md5sum | cut -c1-8)
+NODE_MODULES_VOL="claude-sandbox-nm-${PROJECT_HASH}"
+
+# オプショナルなマウントを構築
+OPTIONAL_MOUNTS=()
+for file in .gitconfig .gitconfig_company .gitconfig_private; do
+  [ -f "$HOME/$file" ] && OPTIONAL_MOUNTS+=(-v "$HOME/$file:/tmp/claude-host/$file:ro")
+done
+for item in CLAUDE.md agents rules references scripts settings.json; do
+  [ -e "$HOME/.claude/$item" ] && OPTIONAL_MOUNTS+=(-v "$HOME/.claude/$item:/tmp/claude-host/$item:ro")
+done
+
+docker run -it --rm \
+  --security-opt no-new-privileges:true \
+  --cap-drop ALL \
+  -v "$PROJECT_DIR":/workspace \
+  -v "$NODE_MODULES_VOL":/workspace/node_modules \
+  "${OPTIONAL_MOUNTS[@]}" \
+  -v claude-data:/home/node/.claude \
+  -v gh-config:/home/node/.config/gh \
+  "$IMAGE_NAME" \
+  claude --permission-mode auto "${@}"
