@@ -45,16 +45,15 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true,
-    "typescript-lsp@claude-plugins-official": true
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/statusline.mjs"
   },
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
   "language": "japanese",
   "plansDirectory": "./plans",
-  "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "voiceEnabled": true
 }
