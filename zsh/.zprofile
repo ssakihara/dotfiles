@@ -8,3 +8,6 @@ fi
 
 # mise
 eval "$(mise activate zsh --shims)"
+
+# Added by Obsidian
+export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
