@@ -13,6 +13,7 @@
       "Bash(obsidian append:*)",
       "Bash(obsidian create:*)",
       "Bash(obsidian search:*)",
+      "Bash(obsidian read:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
