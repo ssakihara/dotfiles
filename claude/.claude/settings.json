@@ -10,7 +10,7 @@
       "Bash(npx vitest run:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
-      "Bash(obsidian search:*)",
+      "Bash(obsidian:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})"
     ],
@@ -52,7 +52,16 @@
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "common-skills@aem-ssakihara": true
+  },
+  "extraKnownMarketplaces": {
+    "aem-ssakihara": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/s.sakihara/workspaces/github.com/axelentermedia/ssakihara/claude"
+      }
+    }
   },
   "language": "japanese",
   "plansDirectory": "./plans",
