@@ -46,51 +46,101 @@ obsidian search:context query="検索キーワード"
 - ビルドやテストの実行手順で試行錯誤したか?
 - このタスクは未完了で、次回セッションに引き継ぐ必要があるか?
 
-## ディレクトリ構造
+## IMPORTANT: ディレクトリ構造
 
-メモは**プロジェクトごとのディレクトリ**に格納すること。ディレクトリ名はプロジェクト名（リポジトリ名）とする。
+**Vault直下にノートを作成することは禁止。** 必ず `プロジェクト名/` または `general/` ディレクトリ配下に作成すること。
+
+nameパラメータは必ず `ディレクトリ名/ノート名` の**1階層のみ**とすること（スラッシュはちょうど1つ）。
+**ノート名は英語・kebab-caseで命名すること。** ノートの内容（content）は日本語で記述する。
+
+- ✅ `name="payment-notification-service/api-design"`
+- ✅ `name="general/docker-tips"`
+- ✅ `name="project-a/payment-api-quirks"`
+- ❌ `name="payment-notification-service/設計メモ"` ← **禁止: 日本語のノート名**
+- ❌ `name="general/Docker Tips"` ← **禁止: kebab-caseでない**
+- ❌ `name="payment-notification-service設計メモ"` ← **禁止: Vault直下に作成されてしまう**
+- ❌ `name="設計メモ"` ← **禁止: ディレクトリ指定がない**
+- ❌ `name="payment-notification-service/design/api-spec"` ← **禁止: 多階層になっている**
+
+サブディレクトリで分類したくなった場合は、ノート名やタグで区別すること（例: `name="project-a/payment-api-spec"` + `#api-quirk`）。
+
+プロジェクト名の判定:
+1. 現在の作業ディレクトリのリポジトリ名を使用する
+2. リポジトリ外の場合やプロジェクト横断的な知見は `general/` を使用する
 
 ```
 Vault/
 ├── project-a/                ← プロジェクト（リポジトリ）単位
-│   ├── トピック1.md
-│   ├── トピック2.md
+│   ├── api-design.md
+│   ├── auth-session-migration.md
 │   └── ...
 ├── project-b/
 │   └── ...
 └── general/                  ← プロジェクト横断的な知見
-    └── ...
+    └── docker-tips.md
 ```
 
 ノート名にはプロジェクト名を含めない（ディレクトリで識別するため）。
 
-## メモのフォーマット
+## メモのフォーマット（ADRスタイル統一）
+
+全メモを以下のADRライクな構造で統一する。メモの種類に応じてセクションの解釈を読み替えること。
+
+| セクション | 設計判断 | トラブルシューティング | 知見・メモ |
+|---|---|---|---|
+| **Status** | proposed/accepted/deprecated | resolved/investigating | active/outdated |
+| **Context** | 背景・課題・制約 | 発生した問題・症状 | 状況・前提条件 |
+| **Decision** | 採用した選択肢と理由 | 原因と解決策 | 要点・結論 |
+| **Consequences** | 影響・トレードオフ・残課題 | 再発防止策・注意点 | 関連情報・今後の影響 |
 
 ```bash
-# プロジェクト知見の作成（プロジェクトディレクトリ配下に作成）
-obsidian create name="プロジェクト名/トピック名" content="$(cat <<'EOF'
-## 概要
-何についてのメモか
+# 設計判断の例
+obsidian create name="project-a/state-management" content="$(cat <<'EOF'
+## Status
+accepted
 
-## 詳細
-- 具体的な内容
-- 判断理由や背景
+## Context
+状態管理ライブラリの選定が必要。候補はVuex, Pinia, 独自composable。
+Vuexは公式に非推奨となっている。
 
-## 関連
-- 関連ファイル: `path/to/file.ts`
-- 関連イシュー: #123
+## Decision
+Piniaを採用。
+- Vuex: 公式非推奨、TypeScript対応が弱い
+- 独自composable: 小規模なら可だが、共有状態が増えると管理が困難
+- Pinia: Vue公式推奨、TypeScriptフルサポート、DevTools対応
 
-#プロジェクト名 #カテゴリタグ
+## Consequences
+- 既存のVuexストアは段階的に移行が必要
+- `defineStore` のID命名規約を別途決める必要あり
+
+#project/project-a #design-decision
 EOF
 )"
 
-# プロジェクト横断的な知見
-obsidian create name="general/トピック名" content="..."
+# トラブルシューティングの例
+obsidian create name="project-a/usefetch-cookie-issue" content="$(cat <<'EOF'
+## Status
+resolved
+
+## Context
+Nuxt useFetchでSSR時にAPIサーバーへcookieが送信されず、認証エラーが発生。
+
+## Decision
+useRequestHeaders でcookieを取得し、useFetchのheadersに明示的に渡す。
+`const headers = useRequestHeaders(['cookie'])`
+
+## Consequences
+- SSRで認証が必要な全てのuseFetchに同パターンを適用する必要がある
+- composableに共通化すると保守しやすい
+
+#project/project-a #troubleshooting
+EOF
+)"
 
 # 既存ノートへの追記（知見が増えた場合）
-obsidian append file="プロジェクト名/トピック名" content="$(cat <<'EOF'
+obsidian append file="project-a/state-management" content="$(cat <<'EOF'
 
-## 追記 (YYYY-MM-DD)
+## Update (YYYY-MM-DD)
 新たに判明した内容
 EOF
 )"
