@@ -50,19 +50,23 @@ obsidian search:context query="検索キーワード"
 
 **Vault直下にノートを作成することは禁止。** 必ず `プロジェクト名/` または `general/` ディレクトリ配下に作成すること。
 
-nameパラメータは必ず `ディレクトリ名/ノート名` の**1階層のみ**とすること（スラッシュはちょうど1つ）。
+**IMPORTANT: `obsidian create` では `name` パラメータにスラッシュを含めることができない。** スラッシュを含めるとパース失敗し `Untitled` で作成されてしまう。
+ディレクトリ付きノートの作成には必ず **`path` パラメータ**を使い、**`.md` 拡張子を付ける**こと。
+
+pathパラメータは必ず `ディレクトリ名/ノート名.md` の**1階層のみ**とすること（スラッシュはちょうど1つ）。
 **ノート名は英語・kebab-caseで命名すること。** ノートの内容（content）は日本語で記述する。
 
-- ✅ `name="payment-notification-service/api-design"`
-- ✅ `name="general/docker-tips"`
-- ✅ `name="project-a/payment-api-quirks"`
-- ❌ `name="payment-notification-service/設計メモ"` ← **禁止: 日本語のノート名**
-- ❌ `name="general/Docker Tips"` ← **禁止: kebab-caseでない**
-- ❌ `name="payment-notification-service設計メモ"` ← **禁止: Vault直下に作成されてしまう**
-- ❌ `name="設計メモ"` ← **禁止: ディレクトリ指定がない**
-- ❌ `name="payment-notification-service/design/api-spec"` ← **禁止: 多階層になっている**
+- ✅ `path="payment-notification-service/api-design.md"`
+- ✅ `path="general/docker-tips.md"`
+- ✅ `path="project-a/payment-api-quirks.md"`
+- ❌ `name="project-a/api-design"` ← **禁止: nameにスラッシュを含めるとUntitledになる**
+- ❌ `path="payment-notification-service/設計メモ.md"` ← **禁止: 日本語のノート名**
+- ❌ `path="general/Docker Tips.md"` ← **禁止: kebab-caseでない**
+- ❌ `path="payment-notification-service設計メモ.md"` ← **禁止: Vault直下に作成されてしまう**
+- ❌ `path="設計メモ.md"` ← **禁止: ディレクトリ指定がない**
+- ❌ `path="payment-notification-service/design/api-spec.md"` ← **禁止: 多階層になっている**
 
-サブディレクトリで分類したくなった場合は、ノート名やタグで区別すること（例: `name="project-a/payment-api-spec"` + `#api-quirk`）。
+サブディレクトリで分類したくなった場合は、ノート名やタグで区別すること（例: `path="project-a/payment-api-spec.md"` + `#api-quirk`）。
 
 プロジェクト名の判定:
 1. 現在の作業ディレクトリのリポジトリ名を使用する
@@ -95,7 +99,7 @@ Vault/
 
 ```bash
 # 設計判断の例
-obsidian create name="project-a/state-management" content="$(cat <<'EOF'
+obsidian create path="project-a/state-management.md" content="$(cat <<'EOF'
 ## Status
 accepted
 
@@ -118,7 +122,7 @@ EOF
 )"
 
 # トラブルシューティングの例
-obsidian create name="project-a/usefetch-cookie-issue" content="$(cat <<'EOF'
+obsidian create path="project-a/usefetch-cookie-issue.md" content="$(cat <<'EOF'
 ## Status
 resolved
 
@@ -162,8 +166,8 @@ EOF
 ## よく使うコマンド
 
 ```bash
-# ノートの作成
-obsidian create name="ノート名" content="内容"
+# ノートの作成（ディレクトリ付きは必ずpathを使用）
+obsidian create path="ディレクトリ名/ノート名.md" content="内容"
 
 # ノートの読み取り
 obsidian read file="ノート名"
