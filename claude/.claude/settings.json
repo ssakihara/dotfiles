@@ -28,7 +28,8 @@
       "Bash(agent-browser close:*)",
       "Bash(agent-browser open:*)",
       "Edit(**/*.{vue,ts})",
-      "Read(**/*.{vue,ts})"
+      "Read(**/*.{vue,ts})",
+      "Read(~/.agent-browser/tmp/screenshots/screenshot-*.png)"
     ],
     "deny": [
       "Read(./.env)",
