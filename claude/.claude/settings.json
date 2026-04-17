@@ -27,6 +27,7 @@
       "Bash(agent-browser errors:*)",
       "Bash(agent-browser close:*)",
       "Bash(agent-browser open:*)",
+      "Bash(agent-browser click:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})",
       "Read(~/.agent-browser/tmp/screenshots/screenshot-*.png)"
