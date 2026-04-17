@@ -38,15 +38,15 @@ Firebase認証を使用するプロジェクトでは、認証情報がIndexedDB
 ### 手順
 
 1. **既存セッションをクリア**してからプロファイル付きで起動する（`--profile` は起動時にしか適用されないため）
-   ```bash
-   agent-browser close --all
-   agent-browser --profile ./.browser-data open URL
-   ```
+  ```bash
+  agent-browser close --all
+  agent-browser --profile ./.browser-data open URL
+  ```
 2. ページ読み込み後にスクリーンショットで認証状態を確認する
 3. **ログイン画面が表示された場合**: 認証プロファイルが未作成または期限切れ。ユーザーに手動ログインを依頼して終了する
-   - ユーザーは `agent-browser --profile ./.browser-data --headed open URL` で直接ブラウザを開き、手動でログインする
-   - `--headed` フラグが必須（これがないとヘッドレスモードで起動し、ユーザーが操作できるブラウザウィンドウが表示されない）
-   - ログイン後にブラウザを閉じれば、次回以降は認証状態が保持される
+  - ユーザーは `agent-browser --profile ./.browser-data --headed open URL` で直接ブラウザを開き、手動でログインする
+  - `--headed` フラグが必須（これがないとヘッドレスモードで起動し、ユーザーが操作できるブラウザウィンドウが表示されない）
+  - ログイン後にブラウザを閉じれば、次回以降は認証状態が保持される
 
 ### 注意事項
 
