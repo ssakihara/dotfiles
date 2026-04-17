@@ -16,18 +16,7 @@
       "Bash(obsidian read:*)",
       "Bash(obsidian help)",
       "Bash(obsidian --help)",
-      "Bash(agent-browser snapshot:*)",
-      "Bash(agent-browser eval:*)",
-      "Bash(agent-browser screenshot:*)",
-      "Bash(agent-browser find:*)",
-      "Bash(agent-browser reload:*)",
-      "Bash(agent-browser wait:*)",
-      "Bash(agent-browser get:*)",
-      "Bash(agent-browser console:*)",
-      "Bash(agent-browser errors:*)",
-      "Bash(agent-browser close:*)",
-      "Bash(agent-browser open:*)",
-      "Bash(agent-browser click:*)",
+      "Bash(agent-browser:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})",
       "Read(~/.agent-browser/tmp/screenshots/screenshot-*.png)"
@@ -82,6 +71,7 @@
     }
   },
   "language": "japanese",
+  "effortLevel": "medium",
   "plansDirectory": "./plans",
   "voiceEnabled": true,
   "autoMemoryEnabled": false
