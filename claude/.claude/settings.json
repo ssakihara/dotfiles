@@ -59,16 +59,7 @@
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "common-skills@aem-ssakihara": true
-  },
-  "extraKnownMarketplaces": {
-    "aem-ssakihara": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/s.sakihara/workspaces/github.com/axelentermedia/ssakihara/claude"
-      }
-    }
+    "typescript-lsp@claude-plugins-official": true
   },
   "language": "japanese",
   "effortLevel": "medium",
