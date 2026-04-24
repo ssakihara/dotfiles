@@ -1,5 +1,5 @@
 ---
-name: agent-browser
+name: web-debuger
 description: agent-browserでブラウザ自動化。Webテスト、デバッグ、フォーム操作、スクリーンショット、データ抽出を実行。IndexedDB対応。
 tools:
   - Read
