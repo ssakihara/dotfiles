@@ -21,6 +21,27 @@ function dot(pct) {
   return `${gradient(pct)}●${R} ${BOLD}${p}%${R}`;
 }
 
+const RESET_FORMATTER = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Asia/Tokyo',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+
+/**
+ * Unix epoch秒のリセット時刻を JST の `MM/DD HH:MM` 形式で返す
+ * @param {unknown} resetsAt Unix epoch秒
+ * @returns {string|null} フォーマット済み文字列。不正値の場合は null
+ */
+function formatResetTime(resetsAt) {
+  if (typeof resetsAt !== 'number' || !Number.isFinite(resetsAt)) return null;
+  const parts = RESET_FORMATTER.formatToParts(new Date(resetsAt * 1000));
+  const get = (type) => parts.find((p) => p.type === type)?.value ?? '';
+  return `${get('month')}/${get('day')} ${get('hour')}:${get('minute')}`;
+}
+
 let input = '';
 process.stdin.setEncoding('utf-8');
 process.stdin.on('data', (chunk) => { input += chunk; });
@@ -34,7 +55,11 @@ process.stdin.on('end', () => {
   if (ctx != null) parts.push(`ctx ${dot(ctx)}`);
 
   const five = data.rate_limits?.five_hour?.used_percentage;
-  if (five != null) parts.push(`5h ${dot(five)}`);
+  if (five != null) {
+    const resetAt = formatResetTime(data.rate_limits?.five_hour?.resets_at);
+    const suffix = resetAt ? ` ${DIM}(reset ${resetAt})${R}` : '';
+    parts.push(`5h ${dot(five)}${suffix}`);
+  }
 
   const week = data.rate_limits?.seven_day?.used_percentage;
   if (week != null) parts.push(`7d ${dot(week)}`);
