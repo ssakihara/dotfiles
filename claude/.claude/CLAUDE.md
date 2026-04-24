@@ -17,6 +17,10 @@ rules/agents.md のエージェント選択ルールに必ず従うこと。
 rules/obsidian-knowledge.md のナレッジ管理ルールに必ず従うこと。
 タスク開始時の検索、メモの記録タイミング、タスク完了前のセルフチェックはすべて必須である。
 
+## IMPORTANT: 課題作成テンプレート
+
+Backlog 課題や GitHub Issue を作成する際は、rules/issue-template.md のテンプレートに必ず従うこと。
+
 ### コメント
 
 - 関数を作成した場合はどのような処理を行う関数なのか簡潔にJSDOC形式で記載すること
