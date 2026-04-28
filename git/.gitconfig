@@ -12,6 +12,7 @@
     branch = auto
 [push]
     default = current
+    autoSetupRemote = true
 [core]
     precomposeunicode = true
     quotepath = false
