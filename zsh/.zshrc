@@ -43,7 +43,6 @@ alias flutter="fvm flutter"
 alias dart="fvm dart"
 alias aclaude="claude --enable-auto-mode"
 alias cclaude="ccr code"
-alias dclaude="docker sandbox run claude"
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'
@@ -123,12 +122,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # flutter
 export PATH="$HOME/.pub-cache/bin:$PATH"
-
-# java
-# export PATH="$(brew --prefix)/opt/openjdk@17/bin:$PATH"
-# export CPPFLAGS="-I$(brew --prefix)/opt/openjdk/include"
-# export JAVA_HOME="$(brew --prefix)/opt/openjdk/"
-export JAVA_HOME="$HOME/OpenJDK/jdk-18.0.2.jdk/Contents/Home"
 
 # gcloud
 export CLOUDSDK_PYTHON="$HOME/.gcloud-env/bin/python"

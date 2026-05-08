@@ -59,11 +59,12 @@
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
   },
   "language": "japanese",
   "effortLevel": "medium",
   "plansDirectory": "./plans",
-  "voiceEnabled": true,
-  "autoMemoryEnabled": false
+  "autoMemoryEnabled": false,
+  "voiceEnabled": true
 }
