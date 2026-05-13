@@ -1,0 +1,136 @@
+#!/bin/bash
+set -e
+
+# upstream リモートの最新を取り込んで PR を作成する
+# 使い方: git sync-upstream
+#
+# 前提:
+#   - リモート "upstream" が登録済み (git remote add upstream <URL>)
+#   - gh コマンドにログイン済み
+# 動作:
+#   1. upstream / origin を fetch
+#   2. 差分がなければ終了
+#   3. sync/upstream-YYYYMMDD ブランチを作成 (衝突時は -2, -3 ... を付与)
+#   4. upstream のデフォルトブランチを merge
+#   5. push して PR を作成
+
+UPSTREAM_REMOTE="upstream"
+ORIGIN_REMOTE="origin"
+
+DATE_STR=$(date +%Y%m%d)
+DATE_DISP=$(date +%Y/%m/%d)
+
+# 1. リポジトリ内かつ作業ツリーがクリーンか確認
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "エラー: gitリポジトリ内で実行してください。"
+    exit 1
+fi
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "エラー: 作業ツリーに未コミットの変更があります。コミットまたは stash してから再実行してください。"
+    exit 1
+fi
+
+# 2. upstream リモートの存在確認
+if ! git remote get-url "${UPSTREAM_REMOTE}" >/dev/null 2>&1; then
+    echo "エラー: リモート '${UPSTREAM_REMOTE}' が登録されていません。"
+    echo "       先に追加してください: git remote add ${UPSTREAM_REMOTE} <URL>"
+    exit 1
+fi
+UPSTREAM_URL=$(git remote get-url "${UPSTREAM_REMOTE}")
+echo "🔗 ${UPSTREAM_REMOTE}: ${UPSTREAM_URL}"
+
+# 3. fetch
+echo "📥 ${UPSTREAM_REMOTE} と ${ORIGIN_REMOTE} を fetch..."
+git fetch "${UPSTREAM_REMOTE}"
+git fetch "${ORIGIN_REMOTE}" --prune
+
+# 4. upstream / origin のデフォルトブランチを解決
+# refs/remotes/<remote>/HEAD が無い場合は git remote set-head で設定
+if ! git symbolic-ref --quiet "refs/remotes/${UPSTREAM_REMOTE}/HEAD" >/dev/null 2>&1; then
+    git remote set-head "${UPSTREAM_REMOTE}" --auto >/dev/null
+fi
+UPSTREAM_BRANCH=$(git symbolic-ref "refs/remotes/${UPSTREAM_REMOTE}/HEAD" | sed "s|^refs/remotes/${UPSTREAM_REMOTE}/||")
+echo "🌿 ${UPSTREAM_REMOTE} のデフォルトブランチ: ${UPSTREAM_BRANCH}"
+
+if ! git symbolic-ref --quiet "refs/remotes/${ORIGIN_REMOTE}/HEAD" >/dev/null 2>&1; then
+    git remote set-head "${ORIGIN_REMOTE}" --auto >/dev/null
+fi
+ORIGIN_BRANCH=$(git symbolic-ref "refs/remotes/${ORIGIN_REMOTE}/HEAD" | sed "s|^refs/remotes/${ORIGIN_REMOTE}/||")
+
+# origin のリポジトリ (owner/name) を抽出 (fork先にPRを作るため --repo に渡す)
+ORIGIN_URL=$(git remote get-url "${ORIGIN_REMOTE}")
+ORIGIN_REPO=$(echo "${ORIGIN_URL}" | sed -E 's#.*github\.com[:/]([^/]+/[^/]+)$#\1#' | sed -E 's/\.git$//')
+
+# 5. 差分確認
+TOTAL_COMMITS=$(git rev-list --count "HEAD..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
+if [ "${TOTAL_COMMITS}" -eq 0 ]; then
+    echo "✓ 取り込む差分はありません。終了します。"
+    exit 0
+fi
+
+echo "📝 取り込み対象: ${TOTAL_COMMITS} 件"
+echo
+COMMITS_SUMMARY=$(git log --oneline "HEAD..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
+echo "${COMMITS_SUMMARY}"
+echo
+
+# 6. ブランチ作成 (衝突時は連番を付与)
+BRANCH="sync/upstream-${DATE_STR}"
+SUFFIX=2
+while git show-ref --verify --quiet "refs/heads/${BRANCH}" \
+  || git show-ref --verify --quiet "refs/remotes/${ORIGIN_REMOTE}/${BRANCH}"; do
+    BRANCH="sync/upstream-${DATE_STR}-${SUFFIX}"
+    SUFFIX=$((SUFFIX + 1))
+done
+
+echo "🌱 ブランチ作成: ${BRANCH}"
+git checkout -b "${BRANCH}"
+
+# 7. merge
+echo "🔀 ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} を merge..."
+if ! git merge "${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}" --no-edit; then
+    REPO_NAME=$(basename "${UPSTREAM_URL}" .git)
+    echo
+    echo "⚠ コンフリクトが発生しました。解消後、以下を手動で実行してください:"
+    echo
+    echo "  # コンフリクト解消後"
+    echo "  git add <解消したファイル>"
+    echo "  git merge --continue"
+    echo "  git push -u ${ORIGIN_REMOTE} ${BRANCH}"
+    echo "  gh pr create --repo ${ORIGIN_REPO} --base ${ORIGIN_BRANCH} --head ${BRANCH} --title \"${REPO_NAME}の変更を取り込み (${DATE_DISP})\""
+    echo
+    exit 1
+fi
+
+echo "✓ マージ完了"
+
+# 8. push
+echo "📤 ${ORIGIN_REMOTE} に push..."
+git push -u "${ORIGIN_REMOTE}" "${BRANCH}"
+
+# 9. PR 作成
+REPO_NAME=$(basename "${UPSTREAM_URL}" .git)
+echo "🚀 Pull Request を作成..."
+
+PR_BODY=$(cat <<EOF
+## 取り込み内容
+
+upstream (\`${REPO_NAME}\`) の最新変更を取り込みます。
+
+### 取り込み対象コミット (${TOTAL_COMMITS} 件)
+
+\`\`\`
+${COMMITS_SUMMARY}
+\`\`\`
+EOF
+)
+
+PR_URL=$(gh pr create \
+    --repo "${ORIGIN_REPO}" \
+    --base "${ORIGIN_BRANCH}" \
+    --head "${BRANCH}" \
+    --title "${REPO_NAME}の変更を取り込み (${DATE_DISP})" \
+    --body "${PR_BODY}")
+
+echo "✓ PR作成完了: ${PR_URL}"
