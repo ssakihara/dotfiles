@@ -116,6 +116,7 @@ setopt EXTENDED_HISTORY
 
 # 自作コマンド
 export PATH="$HOME/.bin":$PATH
+export PATH="$HOME/bin:$PATH"
 
 # Claude Code
 export PATH="$HOME/.local/bin:$PATH"
