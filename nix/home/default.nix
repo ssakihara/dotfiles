@@ -30,4 +30,9 @@
     source = ../../bin/.bin/git-sync-upstream;
     executable = true;
   };
+
+  xdg.configFile."mise/config.toml".source = ../../mise/.config/mise/config.toml;
+
+  home.file.".zshrc".source = ../../zsh/.zshrc;
+  home.file.".zprofile".source = ../../zsh/.zprofile;
 }
