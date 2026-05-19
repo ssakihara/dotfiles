@@ -14,12 +14,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh)" -- mbp
 ```
 
-事前に SSH 鍵を作成:
-
-```sh
-ssh-keygen -t ed25519 -C "example@example.com"
-```
-
 ## Daily operations
 
 すべての変更は `flake.nix` / `./nix/` 配下の編集 → 反映の流れで行う。
