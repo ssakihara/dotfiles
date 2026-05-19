@@ -50,7 +50,8 @@ nix-collect-garbage -d
 ├── nix/
 │   ├── darwin/
 │   │   ├── default.nix   # nix-darwin 本体 (システム設定)
-│   │   └── homebrew.nix  # nix-darwin の homebrew モジュール (brew / cask)
+│   │   ├── homebrew.nix  # nix-darwin の homebrew モジュール (brew / cask)
+│   │   └── macos.nix     # `defaults` / `pmset` / DNS など macOS の挙動設定
 │   └── home/
 │       └── default.nix   # home-manager 設定 (~/ 配下の dotfile)
 ├── claude/.claude/       # Claude Code 用 (stow 管理)
@@ -61,8 +62,7 @@ nix-collect-garbage -d
 ├── ghostty/              # ghostty config
 ├── editorconfig/         # editorconfig
 ├── mise/                 # mise config (mise 本体は brew)
-├── install.sh            # 新規 mac 用ブートストラップ
-└── macos.sh              # `defaults write` 系の macOS 設定
+└── install.sh            # 新規 mac 用ブートストラップ
 ```
 
 ## Notes

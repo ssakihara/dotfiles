@@ -2,6 +2,7 @@
 {
   imports = [
     ./homebrew.nix
+    ./macos.nix
   ];
 
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -30,4 +31,7 @@
   environment.interactiveShellInit = ''
     export PATH="/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.nix-profile/bin:$PATH"
   '';
+
+  # sudo を Touch ID で認証可能にする (/etc/pam.d/sudo_local を生成)
+  security.pam.services.sudo_local.touchIdAuth = true;
 }

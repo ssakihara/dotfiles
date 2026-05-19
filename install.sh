@@ -39,14 +39,11 @@ if [ ! -d "${DOTFILES_DIR}" ]; then
 fi
 cd "${DOTFILES_DIR}"
 
-# 6. nix-darwin で OS / packages / dotfile を一括適用
+# 6. nix-darwin で OS / packages / dotfile / macOS 設定を一括適用
 sudo nix run --extra-experimental-features "nix-command flakes" \
     nix-darwin -- switch --flake ".#${HOST}"
 
-# 7. macOS 個別設定
-sh ./macos.sh
-
-# 8. 動的書き込みが多い ~/.claude は stow で配置
+# 7. 動的書き込みが多い ~/.claude は stow で配置
 "$(/run/current-system/sw/bin/which stow || which stow)" -t ~ claude
 
 echo ""
