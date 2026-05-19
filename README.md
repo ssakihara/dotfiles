@@ -54,12 +54,12 @@ nix-collect-garbage -d
 │   └── home/
 │       └── default.nix   # home-manager 設定 (~/ 配下の dotfile)
 ├── claude/.claude/       # Claude Code 用 (stow 管理)
-├── bin/.bin/             # 自作スクリプト (home-manager 配下)
-├── git/                  # .gitconfig 系
-├── zsh/                  # .zshrc / .zprofile
+├── bin/                  # 自作スクリプト (~/.bin/ へ home-manager 配下)
+├── git/                  # gitconfig 系 (~/.gitconfig 等へ)
+├── zsh/                  # zshrc / zprofile
 ├── starship/             # starship.toml
 ├── ghostty/              # ghostty config
-├── editorconfig/         # .editorconfig
+├── editorconfig/         # editorconfig
 ├── mise/                 # mise config (mise 本体は brew)
 ├── install.sh            # 新規 mac 用ブートストラップ
 └── macos.sh              # `defaults write` 系の macOS 設定
