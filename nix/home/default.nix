@@ -47,4 +47,5 @@
   home.file.".claude/references".source = ../../claude/references;
   home.file.".claude/rules".source = ../../claude/rules;
   home.file.".claude/scripts".source = ../../claude/scripts;
+  home.file.".claude/assets".source = ../../claude/assets;
 }
