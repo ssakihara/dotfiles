@@ -132,10 +132,6 @@ source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/completion.
 # starship
 eval "$(starship init zsh)"
 
-# volta
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin":$PATH
-
 # mise
 eval "$(mise activate zsh)"
 
