@@ -2,6 +2,13 @@
 {
   # 値は基本的に現在の Mac の `defaults read` から取得したものを反映。
   # nix-darwin の `system.defaults` でカバーできない項目は activationScripts で実行する。
+
+  # CapsLock を Control にリマップ (内蔵キーボード・接続中の外付け含め全デバイス対象)
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
+
   system.defaults = {
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
