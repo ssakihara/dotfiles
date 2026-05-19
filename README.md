@@ -39,23 +39,25 @@ nix-collect-garbage -d
 
 ```
 .
-├── flake.nix             # Flake エントリポイント
+├── flake.nix             # Flake エントリポイント (username をここで一元定義)
 ├── flake.lock
 ├── nix/
 │   ├── darwin/
-│   │   ├── default.nix   # nix-darwin 本体 (システム設定)
-│   │   ├── homebrew.nix  # nix-darwin の homebrew モジュール (brew / cask)
-│   │   └── macos.nix     # `defaults` / `pmset` / DNS など macOS の挙動設定
+│   │   ├── default.nix   # nix-darwin 本体 (システム設定 / users / 環境変数)
+│   │   ├── homebrew.nix  # nix-darwin の homebrew モジュール (tap / brew / cask / mas)
+│   │   ├── macos.nix     # `defaults` / `pmset` / DNS など macOS の挙動設定
+│   │   └── ssh.nix       # ~/.ssh 権限正規化 / id_ed25519 自動生成
 │   └── home/
-│       └── default.nix   # home-manager 設定 (~/ 配下の dotfile)
-├── claude/.claude/       # Claude Code 用 (stow 管理)
-├── bin/                  # 自作スクリプト (~/.bin/ へ home-manager 配下)
-├── git/                  # gitconfig 系 (~/.gitconfig 等へ)
+│       └── default.nix   # home-manager 設定 (~/ 配下の dotfile を symlink)
+├── claude/.claude/       # Claude Code の git 管理対象 (home-manager で symlink)
+├── bin/                  # 自作スクリプト (~/.bin/ 配下)
+├── git/                  # gitconfig 系 (~/.gitconfig 等)
 ├── zsh/                  # zshrc / zprofile
 ├── starship/             # starship.toml
 ├── ghostty/              # ghostty config
 ├── editorconfig/         # editorconfig
 ├── mise/                 # mise config (mise 本体は brew)
+├── docs/                 # 補助ドキュメント
 └── install.sh            # 新規 mac 用ブートストラップ
 ```
 
