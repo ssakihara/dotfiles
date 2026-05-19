@@ -41,10 +41,10 @@
   # Claude Code: git 管理対象だけを symlink。
   # ~/.claude 自体は普通のディレクトリのまま残し、その配下に動的書き込み
   # (history.jsonl / sessions/ / projects/ など) が共存できるようにする。
-  home.file.".claude/CLAUDE.md".source = ../../claude/.claude/CLAUDE.md;
-  home.file.".claude/settings.json".source = ../../claude/.claude/settings.json;
-  home.file.".claude/agents".source = ../../claude/.claude/agents;
-  home.file.".claude/references".source = ../../claude/.claude/references;
-  home.file.".claude/rules".source = ../../claude/.claude/rules;
-  home.file.".claude/scripts".source = ../../claude/.claude/scripts;
+  home.file.".claude/CLAUDE.md".source = ../../claude/CLAUDE.md;
+  home.file.".claude/settings.json".source = ../../claude/settings.json;
+  home.file.".claude/agents".source = ../../claude/agents;
+  home.file.".claude/references".source = ../../claude/references;
+  home.file.".claude/rules".source = ../../claude/rules;
+  home.file.".claude/scripts".source = ../../claude/scripts;
 }

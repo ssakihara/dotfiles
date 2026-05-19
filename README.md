@@ -49,7 +49,7 @@ nix-collect-garbage -d
 │   │   └── ssh.nix       # ~/.ssh 権限正規化 / id_ed25519 自動生成
 │   └── home/
 │       └── default.nix   # home-manager 設定 (~/ 配下の dotfile を symlink)
-├── claude/.claude/       # Claude Code の git 管理対象 (home-manager で symlink)
+├── claude/               # Claude Code の git 管理対象 (home-manager が ~/.claude/ に symlink)
 ├── bin/                  # 自作スクリプト (~/.bin/ 配下)
 ├── git/                  # gitconfig 系 (~/.gitconfig 等)
 ├── zsh/                  # zshrc / zprofile
