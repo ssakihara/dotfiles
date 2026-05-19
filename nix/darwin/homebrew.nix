@@ -27,6 +27,7 @@
       "broot"
       "cloud-sql-proxy"
       "cloudflared"
+      "detect-secrets"
       "eza"
       "fd"
       "ffmpeg"
@@ -36,6 +37,7 @@
       "ghq"
       "git"
       "git-delta"
+      "git-filter-repo"
       "helm"
       "hey"
       "icu4c@76"
@@ -85,6 +87,9 @@
       "visual-studio-code"
     ];
 
-    masApps = { };
+    masApps = {
+      RunCat = 1429033973;
+      Xcode = 497799835;
+    };
   };
 }
