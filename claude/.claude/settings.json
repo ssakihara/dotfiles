@@ -27,7 +27,8 @@
       "Read(**/.env.*)",
       "Bash(curl:*)",
       "Edit(/etc/**)"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "Notification": [
@@ -66,5 +67,6 @@
   "effortLevel": "medium",
   "plansDirectory": "./plans",
   "autoMemoryEnabled": false,
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }

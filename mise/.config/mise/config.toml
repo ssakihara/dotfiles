@@ -1,8 +1,9 @@
 [tools]
-node = "22.20.0"
+node = "24.13.1"
 "npm:@antfu/ni" = "latest"
 "npm:@googleworkspace/cli" = "latest"
 "npm:@musistudio/claude-code-router" = "latest"
 "npm:firebase-tools" = "latest"
+"npm:pnpm" = "latest"
 "npm:portless" = "latest"
 pnpm = "latest"
