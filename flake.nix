@@ -15,9 +15,13 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager }: {
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager }:
+  let
+    username = "s.sakihara";
+  in {
     darwinConfigurations."ssakihara" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
+      specialArgs = { inherit username; };
       modules = [
         ./nix/darwin
         home-manager.darwinModules.home-manager
@@ -25,7 +29,8 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "hm-backup";
-          home-manager.users."s.sakihara" = import ./nix/home;
+          home-manager.extraSpecialArgs = { inherit username; };
+          home-manager.users.${username} = import ./nix/home;
         }
       ];
     };

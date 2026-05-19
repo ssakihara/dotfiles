@@ -57,7 +57,6 @@
       "ruby-build"
       "rbenv"
       "starship"
-      "stow"
       "the_silver_searcher"
       "uv"
       "watch"

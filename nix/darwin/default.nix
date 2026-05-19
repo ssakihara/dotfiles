@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   imports = [
     ./homebrew.nix
@@ -14,15 +14,15 @@
   system.stateVersion = 5;
 
   # homebrew や system.defaults の所有者として扱うユーザー
-  system.primaryUser = "s.sakihara";
+  system.primaryUser = username;
 
   # Determinate Nix を明示的に許可
   ids.gids.nixbld = 30000;
 
   # home-manager が homeDirectory を取得するためにユーザー定義が必要
-  users.users."s.sakihara" = {
-    name = "s.sakihara";
-    home = "/Users/s.sakihara";
+  users.users.${username} = {
+    name = username;
+    home = "/Users/${username}";
   };
 
   # ~/.zprofile の `brew shellenv` が macOS の path_helper を呼び、

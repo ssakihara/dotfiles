@@ -43,8 +43,5 @@ cd "${DOTFILES_DIR}"
 sudo nix run --extra-experimental-features "nix-command flakes" \
     nix-darwin -- switch --flake ".#${HOST}"
 
-# 7. 動的書き込みが多い ~/.claude は stow で配置
-"$(/run/current-system/sw/bin/which stow || which stow)" -t ~ claude
-
 echo ""
 echo "Setup complete. Open a new terminal to load the updated environment."

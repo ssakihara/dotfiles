@@ -68,5 +68,5 @@ nix-collect-garbage -d
 ## Notes
 
 - 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理しており、nix 管理対象外。
-- `~/.claude/` は Claude Code が動的に書き込むため stow のままにしている。
+- `~/.claude/` は実ディレクトリ。動的書き込みファイル (history.jsonl / sessions/ / projects/ など) はそのまま配置し、git 管理対象 (CLAUDE.md / agents/ / rules/ など) のみ home-manager で symlink している。
 - nix-darwin の `homebrew` モジュールは Homebrew 本体をインストールしないため `/opt/homebrew` を再利用する。`install.sh` 内で Homebrew 本体のセットアップを先に行うようになっている。
