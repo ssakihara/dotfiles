@@ -158,8 +158,8 @@ if [ "$PR_TITLE" = "null" ] || [ -z "$PR_TITLE" ]; then
     exit 1
 fi
 
-# --- 【追加】タイトルにIssue番号を付与 ---
-if [ -n "$ISSUE_NUMBER" ]; then
+# --- 【追加】タイトルに課題キーを付与（数字のみの場合は付与しない） ---
+if [ -n "$ISSUE_NUMBER" ] && [[ "$ISSUE_NUMBER" =~ ^[A-Z]+-[0-9]+$ ]]; then
     PR_TITLE="$ISSUE_NUMBER $PR_TITLE #close"
 fi
 
