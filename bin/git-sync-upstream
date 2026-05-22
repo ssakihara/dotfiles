@@ -2,7 +2,12 @@
 set -e
 
 # upstream リモートの最新を取り込んで PR を作成する
-# 使い方: git sync-upstream
+# 使い方: git sync-upstream --upstream-branch <branch> --origin-branch <branch>
+#         git sync-upstream -u <branch> -o <branch>
+#
+# 引数（必須）:
+#   -u, --upstream-branch <branch>  upstream 側の取り込み元ブランチ
+#   -o, --origin-branch   <branch>  origin 側の PR ベースブランチ
 #
 # 前提:
 #   - リモート "upstream" が登録済み (git remote add upstream <URL>)
@@ -11,11 +16,63 @@ set -e
 #   1. upstream / origin を fetch
 #   2. 差分がなければ終了
 #   3. sync/upstream-YYYYMMDD ブランチを作成 (衝突時は -2, -3 ... を付与)
-#   4. upstream のデフォルトブランチを merge
-#   5. push して PR を作成
+#   4. 指定した upstream ブランチを merge
+#   5. push して指定した origin ブランチへ PR を作成
 
 UPSTREAM_REMOTE="upstream"
 ORIGIN_REMOTE="origin"
+
+UPSTREAM_BRANCH=""
+ORIGIN_BRANCH=""
+
+usage() {
+    cat <<EOF
+使い方: git sync-upstream --upstream-branch <branch> --origin-branch <branch>
+
+必須引数:
+  -u, --upstream-branch <branch>  upstream 側の取り込み元ブランチ
+  -o, --origin-branch   <branch>  origin 側の PR ベースブランチ
+  -h, --help                      このヘルプを表示
+EOF
+}
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -u|--upstream-branch)
+            if [ -z "${2:-}" ]; then
+                echo "エラー: $1 にはブランチ名が必要です。" >&2
+                usage >&2
+                exit 1
+            fi
+            UPSTREAM_BRANCH="$2"
+            shift 2
+            ;;
+        -o|--origin-branch)
+            if [ -z "${2:-}" ]; then
+                echo "エラー: $1 にはブランチ名が必要です。" >&2
+                usage >&2
+                exit 1
+            fi
+            ORIGIN_BRANCH="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "エラー: 不明な引数: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+if [ -z "${UPSTREAM_BRANCH}" ] || [ -z "${ORIGIN_BRANCH}" ]; then
+    echo "エラー: --upstream-branch と --origin-branch は必須です。" >&2
+    usage >&2
+    exit 1
+fi
 
 DATE_STR=$(date +%Y%m%d)
 DATE_DISP=$(date +%Y/%m/%d)
@@ -45,18 +102,18 @@ echo "📥 ${UPSTREAM_REMOTE} と ${ORIGIN_REMOTE} を fetch..."
 git fetch "${UPSTREAM_REMOTE}"
 git fetch "${ORIGIN_REMOTE}" --prune
 
-# 4. upstream / origin のデフォルトブランチを解決
-# refs/remotes/<remote>/HEAD が無い場合は git remote set-head で設定
-if ! git symbolic-ref --quiet "refs/remotes/${UPSTREAM_REMOTE}/HEAD" >/dev/null 2>&1; then
-    git remote set-head "${UPSTREAM_REMOTE}" --auto >/dev/null
+# 4. 指定ブランチの存在確認
+if ! git show-ref --verify --quiet "refs/remotes/${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}"; then
+    echo "エラー: ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} が見つかりません。" >&2
+    exit 1
 fi
-UPSTREAM_BRANCH=$(git symbolic-ref "refs/remotes/${UPSTREAM_REMOTE}/HEAD" | sed "s|^refs/remotes/${UPSTREAM_REMOTE}/||")
-echo "🌿 ${UPSTREAM_REMOTE} のデフォルトブランチ: ${UPSTREAM_BRANCH}"
+echo "🌿 ${UPSTREAM_REMOTE} 取り込み元: ${UPSTREAM_BRANCH}"
 
-if ! git symbolic-ref --quiet "refs/remotes/${ORIGIN_REMOTE}/HEAD" >/dev/null 2>&1; then
-    git remote set-head "${ORIGIN_REMOTE}" --auto >/dev/null
+if ! git show-ref --verify --quiet "refs/remotes/${ORIGIN_REMOTE}/${ORIGIN_BRANCH}"; then
+    echo "エラー: ${ORIGIN_REMOTE}/${ORIGIN_BRANCH} が見つかりません。" >&2
+    exit 1
 fi
-ORIGIN_BRANCH=$(git symbolic-ref "refs/remotes/${ORIGIN_REMOTE}/HEAD" | sed "s|^refs/remotes/${ORIGIN_REMOTE}/||")
+echo "🌿 ${ORIGIN_REMOTE} PRベース: ${ORIGIN_BRANCH}"
 
 # origin のリポジトリ (owner/name) を抽出 (fork先にPRを作るため --repo に渡す)
 ORIGIN_URL=$(git remote get-url "${ORIGIN_REMOTE}")
