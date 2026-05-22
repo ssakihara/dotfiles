@@ -107,6 +107,22 @@
     /usr/bin/sudo -u "$primaryUser" /usr/bin/defaults -currentHost write \
       NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
 
+    # Spotlight を完全停止して Raycast に完全移行
+    # 1) 全ボリュームのメタデータインデックスを OFF (mds/mdworker の負荷ゼロ化)
+    /usr/sbin/mdutil -a -i off || true
+    # 2) Spotlight UI (⌘Space) のサービス自体を無効化
+    /bin/launchctl disable "system/com.apple.Spotlight" || true
+    # 3) ⌘Space のシステムショートカットを無効化し、Raycast に譲る
+    #    symbolichotkeys ID 64 = Show Spotlight search, ID 65 = Show Finder search
+    /usr/bin/sudo -u "$primaryUser" /usr/bin/defaults write \
+      com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
+      '{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }'
+    /usr/bin/sudo -u "$primaryUser" /usr/bin/defaults write \
+      com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 \
+      '{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }'
+    # symbolichotkeys の変更を OS に再読込させる
+    /usr/bin/sudo -u "$primaryUser" /usr/bin/killall cfprefsd >/dev/null 2>&1 || true
+
     # 全ての defaults を書き終えた最後に、影響アプリをまとめて 1 回だけ再起動
     /usr/bin/sudo -u "$primaryUser" /usr/bin/killall Dock Finder SystemUIServer \
       >/dev/null 2>&1 || true
