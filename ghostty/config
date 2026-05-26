@@ -3,4 +3,6 @@ font-size = 16
 mouse-hide-while-typing = true
 theme = GitHub Dark High Contrast
 window-decoration = true
-split-divider-color = #444444
+split-divider-color = #888888
+unfocused-split-opacity = 0.6
+unfocused-split-fill = #000000
