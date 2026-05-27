@@ -183,8 +183,16 @@ LOGIN_USER=$(gh api user --jq .login)
 echo "User: $LOGIN_USER"
 
 # --- Step 10: 本文構築 ---
+# 課題キーが数字のみ(GitHub issue)の場合は Closes #N で自動クローズ、
+# それ以外(Backlogキー等)は従来どおりリンクのみ記載する
+if [[ "$ISSUE_NUMBER" =~ ^[0-9]+$ ]]; then
+    RELATED_ISSUE_LINE="Closes #$ISSUE_NUMBER"
+else
+    RELATED_ISSUE_LINE="#$ISSUE_NUMBER"
+fi
+
 PR_BODY="## 関連Issue
-- #$ISSUE_NUMBER
+$RELATED_ISSUE_LINE
 
 ## 概要
 $PR_DESCRIPTION
