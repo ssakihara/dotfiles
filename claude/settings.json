@@ -68,5 +68,6 @@
   "plansDirectory": "./plans",
   "autoMemoryEnabled": false,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "model": "claude-opus-4-6"
 }

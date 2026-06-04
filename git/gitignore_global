@@ -6,3 +6,4 @@ settings.local.json
 plans/
 .playwright-cli
 .browser-data
+node_modules/
