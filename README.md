@@ -8,11 +8,7 @@
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh)"
 ```
 
-別ホスト名を使う場合は引数で指定:
-
-```sh
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh)" -- mbp
-```
+`darwinConfigurations` は `default` キーに統一されているため、Mac の LocalHostName が何であっても追加引数なしで構築できる。
 
 ## Daily operations
 
@@ -20,7 +16,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/
 
 ```sh
 # 設定変更の反映
-sudo darwin-rebuild switch --flake .#$(scutil --get LocalHostName)
+sudo darwin-rebuild switch --flake .#default
 
 # 入力 (nixpkgs / nix-darwin / home-manager) の更新
 nix flake update
@@ -65,3 +61,4 @@ nix-collect-garbage -d
 
 - 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理しており、nix 管理対象外。
 - nix-darwin の `homebrew` モジュールは Homebrew 本体をインストールしないため `/opt/homebrew` を再利用する。`install.sh` 内で Homebrew 本体のセットアップを先に行うようになっている。
+- `darwinConfigurations` のキーは Mac の LocalHostName ではなく `default` 固定にしている。`darwin-rebuild` を直接叩く場合も `.#default` を指定すること（`scutil --get LocalHostName` の値とは無関係）。

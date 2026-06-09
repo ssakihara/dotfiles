@@ -4,7 +4,6 @@ set -eu
 
 WORKSPACES_DIR="${HOME}/workspaces/github.com/ssakihara"
 DOTFILES_DIR="${WORKSPACES_DIR}/dotfiles"
-HOST="${1:-$(scutil --get LocalHostName)}"
 
 mkdir -p "${WORKSPACES_DIR}"
 
@@ -40,8 +39,9 @@ fi
 cd "${DOTFILES_DIR}"
 
 # 6. nix-darwin で OS / packages / dotfile / macOS 設定を一括適用
+#    darwinConfigurations は default キーに統一しているため、ホスト名に依存しない
 sudo nix run --extra-experimental-features "nix-command flakes" \
-    nix-darwin -- switch --flake ".#${HOST}"
+    nix-darwin -- switch --flake ".#default"
 
 echo ""
 echo "Setup complete. Open a new terminal to load the updated environment."

@@ -19,7 +19,7 @@
   let
     username = "s.sakihara";
   in {
-    darwinConfigurations."ssakihara" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations.default = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       specialArgs = { inherit username; };
       modules = [
