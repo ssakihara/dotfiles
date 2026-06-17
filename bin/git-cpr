@@ -52,26 +52,32 @@ echo "Issue Number: #$ISSUE_NUMBER"
 # --- Step 5: マージ先ブランチの確認 ---
 echo -e "\n${GREEN}[Step 5] マージ先ブランチを確認中...${NC}"
 
+DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name 2>/dev/null || echo "main")
+
 if [ -n "$BASE_BRANCH_ARG" ]; then
-    # 引数(-b)で指定されている場合
     BASE_BRANCH="$BASE_BRANCH_ARG"
     echo "Base Branch (from argument): $BASE_BRANCH"
 else
-    # 指定がない場合は入力待ち (デフォルト: main)
-    read -p "マージ先のブランチ名を入力してください (default: main): " BASE_BRANCH
-    BASE_BRANCH=${BASE_BRANCH:-main}
+    read -p "マージ先のブランチ名を入力してください (default: $DEFAULT_BRANCH): " BASE_BRANCH
+    BASE_BRANCH=${BASE_BRANCH:-$DEFAULT_BRANCH}
     echo "Base Branch: $BASE_BRANCH"
 fi
 
 # --- Step 6: Claudeによる変更内容の分析と生成 ---
 echo -e "\n${GREEN}[Step 6] Claude AIによる変更内容の分析とドラフト生成中...${NC}"
 
-DIFF_CONTENT=$(git diff "$BASE_BRANCH".."$CURRENT_BRANCH")
-DIFF_STAT=$(git diff --stat "$BASE_BRANCH".."$CURRENT_BRANCH")
-LOG_CONTENT=$(git log "$BASE_BRANCH".."$CURRENT_BRANCH")
+echo "リモート情報を取得中..."
+git fetch origin "$BASE_BRANCH" 2>/dev/null || {
+    echo -e "${RED}エラー: リモートブランチ origin/$BASE_BRANCH の取得に失敗しました。${NC}"
+    exit 1
+}
+
+DIFF_CONTENT=$(git diff "origin/$BASE_BRANCH".."$CURRENT_BRANCH")
+DIFF_STAT=$(git diff --stat "origin/$BASE_BRANCH".."$CURRENT_BRANCH")
+LOG_CONTENT=$(git log "origin/$BASE_BRANCH".."$CURRENT_BRANCH")
 
 if [ -z "$DIFF_CONTENT" ]; then
-    echo -e "${RED}エラー: マージ先($BASE_BRANCH)との差分がありません。${NC}"
+    echo -e "${RED}エラー: マージ先(origin/$BASE_BRANCH)との差分がありません。${NC}"
     exit 1
 fi
 
