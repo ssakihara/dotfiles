@@ -170,7 +170,7 @@ SUPPLEMENTARY_INFO=${SUPPLEMENTARY_INFO:-なし}
 
 # --- Step 8: テスト結果の確認 ---
 echo -e "\n${GREEN}[Step 8] テスト実行結果の確認${NC}"
-read -p "npm test を実行し、全てのテストケースがパスしましたか？ (y/n): " TEST_RESULT
+read -p "テストコマンドを実行し、全てのテストケースがパスしましたか？ (y/n): " TEST_RESULT
 if [[ "$TEST_RESULT" == "y" || "$TEST_RESULT" == "Y" ]]; then
     CHECKBOX_TEST="[x]"
 else
@@ -201,7 +201,7 @@ $PR_DESCRIPTION
 $SUPPLEMENTARY_INFO
 
 ## チェックリスト
-- $CHECKBOX_TEST \`npm test\` コマンドでテストを実行し、すべてのテストケースが成功したことを確認しました。
+- $CHECKBOX_TEST テストコマンドを実行し、すべてのテストケースが成功したことを確認しました。
 - [x] 関連Issueをリンクしました。
 - [ ] テストコードを1つ以上追加しました。
 
