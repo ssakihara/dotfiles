@@ -2,13 +2,55 @@
 
 `nix-darwin` + `home-manager` + Flakes で macOS の OS 設定・Homebrew パッケージ・ユーザー dotfile を宣言的に管理する。
 
-## Installation
+## Setup (新規 Mac)
+
+### 1. Xcode Command Line Tools
 
 ```sh
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh)"
+xcode-select --install
 ```
 
-`darwinConfigurations` は `default` キーに統一されているため、Mac の LocalHostName が何であっても追加引数なしで構築できる。
+### 2. Homebrew
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+インストール後、表示される Next steps に従って PATH を通す:
+
+```sh
+echo >> ~/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+```
+
+### 3. Nix (Determinate Installer)
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --determinate
+```
+
+インストール後、新しいターミナルを開くか、以下を実行して現在のシェルに Nix を読み込む:
+
+```sh
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+```
+
+### 4. Flakes 有効化
+
+```sh
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+```
+
+### 5. dotfiles の clone と適用
+
+```sh
+mkdir -p ~/workspaces/github.com/ssakihara
+git clone https://github.com/ssakihara/dotfiles.git ~/workspaces/github.com/ssakihara/dotfiles
+cd ~/workspaces/github.com/ssakihara/dotfiles
+nix run nix-darwin -- switch --flake .#default
+```
 
 ## Daily operations
 
@@ -16,16 +58,16 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/
 
 ```sh
 # 設定変更の反映
-sudo darwin-rebuild switch --flake .#default
+darwin-rebuild switch --flake .#default
 
 # 入力 (nixpkgs / nix-darwin / home-manager) の更新
 nix flake update
 
 # 1 世代前にロールバック
-sudo darwin-rebuild --rollback
+darwin-rebuild --rollback
 
 # 世代一覧
-sudo darwin-rebuild --list-generations
+darwin-rebuild --list-generations
 
 # 古い世代の削除
 nix-collect-garbage -d
@@ -53,12 +95,11 @@ nix-collect-garbage -d
 ├── ghostty/              # ghostty config
 ├── editorconfig/         # editorconfig
 ├── mise/                 # mise config (mise 本体は brew)
-├── docs/                 # 補助ドキュメント
-└── install.sh            # 新規 mac 用ブートストラップ
+└── docs/                 # 補助ドキュメント
 ```
 
 ## Notes
 
 - 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理しており、nix 管理対象外。
-- nix-darwin の `homebrew` モジュールは Homebrew 本体をインストールしないため `/opt/homebrew` を再利用する。`install.sh` 内で Homebrew 本体のセットアップを先に行うようになっている。
+- nix-darwin の `homebrew` モジュールは Homebrew 本体をインストールしないため `/opt/homebrew` を再利用する。Homebrew 本体は Setup 手順で事前にインストールしておくこと。
 - `darwinConfigurations` のキーは Mac の LocalHostName ではなく `default` 固定にしている。`darwin-rebuild` を直接叩く場合も `.#default` を指定すること（`scutil --get LocalHostName` の値とは無関係）。
