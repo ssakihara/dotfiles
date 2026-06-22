@@ -64,7 +64,7 @@ else
 fi
 
 # --- Step 6: Claudeによる変更内容の分析と生成 ---
-echo -e "\n${GREEN}[Step 6] Claude AIによる変更内容の分析とドラフト生成中...${NC}"
+echo -e "\n${GREEN}[Step 6] Claude による変更内容の分析とドラフト生成中...${NC}"
 
 echo "リモート情報を取得中..."
 git fetch origin "$BASE_BRANCH" 2>/dev/null || {
