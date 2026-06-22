@@ -98,6 +98,16 @@ nix-collect-garbage -d
 └── docs/                 # 補助ドキュメント
 ```
 
+## Skills
+
+```sh
+gh skill install vercel-labs/agent-browser skills/agent-browser --agent claude-code --scope user
+gh skill install cli/cli skills/gh --agent claude-code --scope user
+gh skill install kepano/obsidian-skills skills/obsidian-bases --agent claude-code --scope user
+gh skill install kepano/obsidian-skills skills/obsidian-cli --agent claude-code --scope user
+gh skill install kepano/obsidian-skills skills/obsidian-markdown --agent claude-code --scope user
+```
+
 ## Notes
 
 - 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理しており、nix 管理対象外。
