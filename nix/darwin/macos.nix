@@ -62,17 +62,59 @@
     # nix-darwin の専用 attribute が無い項目はここで書く
     CustomUserPreferences = {
       NSGlobalDomain = {
+        AppleEnableSwipeNavigateWithScrolls = true;
         "com.apple.mouse.scaling" = 1.5;
+        "com.apple.swipescrolldirection" = true;
+        "com.apple.trackpad.forceClick" = true;
       };
       "com.apple.finder" = {
         WarnOnEmptyTrash = false;
       };
       "com.apple.AppleMultitouchTrackpad" = {
+        ActuateDetents = 1;
+        DragLock = 0;
+        Dragging = 0;
+        FirstClickThreshold = 1;
+        ForceSuppressed = 0;
+        SecondClickThreshold = 1;
+        TrackpadCornerSecondaryClick = 2;
+        TrackpadFiveFingerPinchGesture = 2;
+        TrackpadFourFingerHorizSwipeGesture = 2;
+        TrackpadFourFingerPinchGesture = 2;
+        TrackpadFourFingerVertSwipeGesture = 2;
+        TrackpadHandResting = 1;
+        TrackpadHorizScroll = 1;
+        TrackpadMomentumScroll = 1;
+        TrackpadPinch = 1;
+        TrackpadRotate = 1;
+        TrackpadScroll = 1;
         TrackpadThreeFingerHorizSwipeGesture = 1;
+        TrackpadThreeFingerTapGesture = 0;
+        TrackpadThreeFingerVertSwipeGesture = 1;
+        TrackpadTwoFingerDoubleTapGesture = 1;
+        TrackpadTwoFingerFromRightEdgeSwipeGesture = 3;
+        USBMouseStopsTrackpad = 0;
       };
       "com.apple.driver.AppleBluetoothMultitouch.trackpad" = {
+        DragLock = 0;
+        Dragging = 0;
         TrackpadCornerSecondaryClick = 2;
+        TrackpadFiveFingerPinchGesture = 2;
+        TrackpadFourFingerHorizSwipeGesture = 2;
+        TrackpadFourFingerPinchGesture = 2;
+        TrackpadFourFingerVertSwipeGesture = 2;
+        TrackpadHandResting = 1;
+        TrackpadHorizScroll = 1;
+        TrackpadMomentumScroll = 1;
+        TrackpadPinch = 1;
+        TrackpadRotate = 1;
+        TrackpadScroll = 1;
         TrackpadThreeFingerHorizSwipeGesture = 1;
+        TrackpadThreeFingerTapGesture = 0;
+        TrackpadThreeFingerVertSwipeGesture = 1;
+        TrackpadTwoFingerDoubleTapGesture = 1;
+        TrackpadTwoFingerFromRightEdgeSwipeGesture = 3;
+        USBMouseStopsTrackpad = 0;
       };
       "com.apple.desktopservices" = {
         DSDontWriteNetworkStores = true;
