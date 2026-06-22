@@ -67,8 +67,12 @@
       "com.apple.finder" = {
         WarnOnEmptyTrash = false;
       };
+      "com.apple.AppleMultitouchTrackpad" = {
+        TrackpadThreeFingerHorizSwipeGesture = 1;
+      };
       "com.apple.driver.AppleBluetoothMultitouch.trackpad" = {
         TrackpadCornerSecondaryClick = 2;
+        TrackpadThreeFingerHorizSwipeGesture = 1;
       };
       "com.apple.desktopservices" = {
         DSDontWriteNetworkStores = true;
