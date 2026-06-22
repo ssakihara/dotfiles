@@ -23,15 +23,8 @@ echo -e "${BLUE}=== GitHub プルリクエスト作成 AIアシスタント ===$
 
 # --- Step 1: リモートリポジトリ情報の取得 ---
 echo -e "\n${GREEN}[Step 1] リポジトリ情報を取得中...${NC}"
-REMOTE_URL=$(git remote -v | grep origin | grep fetch | awk '{print $2}')
-if [[ "$REMOTE_URL" == *"@"* ]]; then
-    REPO_PATH=$(echo "$REMOTE_URL" | sed 's/.*://' | sed 's/\.git//')
-else
-    REPO_PATH=$(echo "$REMOTE_URL" | sed 's/.*github.com\///' | sed 's/\.git//')
-fi
-OWNER=$(echo "$REPO_PATH" | cut -d'/' -f1)
-REPOSITORY=$(echo "$REPO_PATH" | cut -d'/' -f2)
-echo "Owner: $OWNER, Repository: $REPOSITORY"
+REPO_FULL_NAME=$(gh repo view --json nameWithOwner --jq '.nameWithOwner')
+echo "Repository: $REPO_FULL_NAME"
 
 # --- Step 2: 現在のブランチ名の取得 ---
 echo -e "\n${GREEN}[Step 2] 現在のブランチを取得中...${NC}"
@@ -192,7 +185,7 @@ echo "User: $LOGIN_USER"
 # 課題キーが数字のみ(GitHub issue)の場合は Closes #N で自動クローズ、
 # それ以外(Backlogキー等)は従来どおりリンクのみ記載する
 if [[ "$ISSUE_NUMBER" =~ ^[0-9]+$ ]]; then
-    RELATED_ISSUE_LINE="Closes $OWNER/$REPOSITORY#$ISSUE_NUMBER"
+    RELATED_ISSUE_LINE="Closes $REPO_FULL_NAME#$ISSUE_NUMBER"
 else
     RELATED_ISSUE_LINE="$ISSUE_NUMBER"
 fi
