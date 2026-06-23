@@ -120,7 +120,7 @@ ORIGIN_URL=$(git remote get-url "${ORIGIN_REMOTE}")
 ORIGIN_REPO=$(echo "${ORIGIN_URL}" | sed -E 's#.*github\.com[:/]([^/]+/[^/]+)$#\1#' | sed -E 's/\.git$//')
 
 # 5. 差分確認
-TOTAL_COMMITS=$(git rev-list --count "HEAD..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
+TOTAL_COMMITS=$(git rev-list --count "${ORIGIN_REMOTE}/${ORIGIN_BRANCH}..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
 if [ "${TOTAL_COMMITS}" -eq 0 ]; then
     echo "✓ 取り込む差分はありません。終了します。"
     exit 0
@@ -128,7 +128,7 @@ fi
 
 echo "📝 取り込み対象: ${TOTAL_COMMITS} 件"
 echo
-COMMITS_SUMMARY=$(git log --oneline "HEAD..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
+COMMITS_SUMMARY=$(git log --oneline "${ORIGIN_REMOTE}/${ORIGIN_BRANCH}..${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")
 echo "${COMMITS_SUMMARY}"
 echo
 
@@ -142,7 +142,7 @@ while git show-ref --verify --quiet "refs/heads/${BRANCH}" \
 done
 
 echo "🌱 ブランチ作成: ${BRANCH}"
-git checkout -b "${BRANCH}"
+git checkout -b "${BRANCH}" "${ORIGIN_REMOTE}/${ORIGIN_BRANCH}"
 
 # 7. merge
 echo "🔀 ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} を merge..."
