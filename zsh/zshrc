@@ -145,5 +145,8 @@ eval "$(rbenv init -)"
 # psql
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
+# カスタム関数
+source "$HOME/.zsh_functions/ghw.zsh"
+
 # 機密情報
 source "$HOME/.credentials"

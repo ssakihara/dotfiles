@@ -58,7 +58,7 @@ nix run nix-darwin -- switch --flake .#default
 
 ```sh
 # 設定変更の反映
-darwin-rebuild switch --flake .#default
+sudo darwin-rebuild switch --flake .#default
 
 # 入力 (nixpkgs / nix-darwin / home-manager) の更新
 nix flake update

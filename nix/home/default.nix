@@ -37,6 +37,7 @@
 
   home.file.".zshrc".source = ../../zsh/zshrc;
   home.file.".zprofile".source = ../../zsh/zprofile;
+  home.file.".zsh_functions/ghw.zsh".source = ../../zsh/zsh_functions/ghw.zsh;
 
   # Claude Code: git 管理対象だけを symlink。
   # ~/.claude 自体は普通のディレクトリのまま残し、その配下に動的書き込み
