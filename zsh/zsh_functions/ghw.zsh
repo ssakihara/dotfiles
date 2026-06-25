@@ -58,6 +58,28 @@ ghw() {
   fi
 
   if [[ ${#match_paths[@]} -eq 0 ]]; then
+    if [[ ("$type" == "pull" || "$type" == "pulls") && -n "$pr_branch" ]]; then
+      echo "worktreeが見つかりません。git gtr new で作成します: $pr_branch"
+      git -C "$repo_dir" gtr new "$pr_branch" --yes || return 1
+
+      local new_path=""
+      while IFS= read -r line; do
+        if [[ "$line" =~ ^worktree\ (.+) ]]; then
+          current_path="${match[1]}"
+        elif [[ "$line" =~ ^branch\ refs/heads/(.+) && "${match[1]}" == "$pr_branch" ]]; then
+          new_path="$current_path"
+          break
+        fi
+      done < <(git -C "$repo_dir" worktree list --porcelain 2>/dev/null)
+
+      if [[ -n "$new_path" ]]; then
+        echo "→ $pr_branch"
+        cd "$new_path"
+        return 0
+      fi
+      echo "error: worktreeの作成後にパスを取得できませんでした" >&2
+      return 1
+    fi
     echo "error: #$number に対応するworktreeが見つかりません ($repo)" >&2
     return 1
   fi
