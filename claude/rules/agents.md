@@ -7,9 +7,9 @@
 
 判定フロー:
 1. Glob で nuxt.config.ts を確認
-2. 存在する場合 → Task ツールで nuxt4-coder を呼び出し（最優先）
+2. 存在する場合 → Agent ツールで nuxt4-coder を呼び出し（最優先）
 3. 存在しない場合 → tsconfig.json を確認
-4. tsconfig.json が存在する場合 → Task ツールで typescript-coder を呼び出し
+4. tsconfig.json が存在する場合 → Agent ツールで typescript-coder を呼び出し
 5. どちらもない場合 → 直接 Edit/Write を使用可
 
 ## TypeScript プロジェクト（必須）
@@ -19,8 +19,8 @@
 
 ## ローカル動作検証（必須）
 
-Webアプリケーションのローカル動作検証には、**必ず** web-debuger エージェントを使用すること。
-ブラウザを手動で開いて確認するのではなく、web-debuger で自動化すること。
+Webアプリケーションのローカル動作検証には、**必ず** web-debugger エージェントを使用すること。
+ブラウザを手動で開いて確認するのではなく、web-debugger で自動化すること。
 
 対象:
 - ページの表示確認・UI検証

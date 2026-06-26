@@ -160,20 +160,12 @@ GitHub ではテキストラベルの代わりに、チームの saved reply バ
 
 `相対パス:行番号` は本文に書かない（インラインコメントは GitHub 上で対象行に表示されるため不要）。
 
-投稿例:
-
-```markdown
-![must-badge](https://img.shields.io/badge/review-must-red)
-外部 API 呼び出し全般を `timeout` 付きに修正してほしいです。
-IdP がハングするとリクエストが無期限にブロックされるためです。
-```
-
-### API 手順・注意点
+### API 注意点
 
 - `POST /repos/{owner}/{repo}/pulls/{number}/reviews` で `event` を省略すると PENDING（下書き）レビューになる。
-- `comments[]` の `line` / `side` 指定が `position`（diff 内位置）として解釈されるケースがある。`GET /pulls/{number}/files` レスポンス各ファイルの `patch` フィールドから position を計算して検証するのが確実。
+- `comments[]` の `line` / `side` 指定が `position`（diff 内位置）として解釈されるケースがある。`GET /pulls/{number}/files` の `patch` から position を計算して検証すること。
 - pending review は1ユーザーにつき1件まで。修正は DELETE → 再作成が簡単。
-- ローカルの行番号はリファクタ等で PR の diff とズレることがある。コメント投稿前に必ず `GET /pulls/{number}/files` の `patch` で行位置を確認する。
+- コメント投稿前に必ず `GET /pulls/{number}/files` の `patch` で行位置を確認する。
 
 ## 実行ポリシー
 
