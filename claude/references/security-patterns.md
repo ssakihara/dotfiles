@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
   await db.user.create({ data: body })
 })
 
-// ✓ Zod + h3 バリデーション
+// ✓ Zod + safeParse バリデーション（readValidatedBody / .parse() は使わない）
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -96,8 +96,16 @@ const userSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const data = await readValidatedBody(event, userSchema.parse)
-  await db.user.create({ data })
+  const rawBody = await readBody(event)
+  const result = userSchema.safeParse(rawBody)
+  if (!result.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Validation Error',
+      data: result.error.flatten(),
+    })
+  }
+  await db.user.create({ data: result.data })
 })
 ```
 

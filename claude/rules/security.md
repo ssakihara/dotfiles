@@ -24,10 +24,7 @@ if (!apiKey) throw new Error('API_KEY not configured')
 
 ## セキュリティ問題発見時
 
-1. 作業停止
-2. code-reviewer エージェントで調査
-3. CRITICAL問題を修正
-4. 漏洩シークレットをローテーション
-5. コードベース全体をレビュー
+rules/code-review.md の「セキュリティ重大問題検出時」の手順に従うこと。
+作業を停止してユーザーに報告し、独断で修正を進めない。
 
 詳細なセキュリティパターンは references/security-patterns.md を参照（必要に応じて読み込むこと）
