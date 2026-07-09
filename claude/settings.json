@@ -5,6 +5,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(rg:*)",
       "Bash(npm run:*)",
       "Bash(npm ls:*)",
       "Bash(pnpm run:*)",
@@ -28,6 +29,7 @@
       "Bash(curl:*)",
       "Bash(pnpm i)",
       "Bash(pnpm install)",
+      "Bash(grep:*)",
       "Edit(/etc/**)"
     ],
     "defaultMode": "acceptEdits"
