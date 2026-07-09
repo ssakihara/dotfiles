@@ -120,3 +120,34 @@ const sql = `SELECT
 FROM users
 WHERE id = $1`;
 ```
+
+## 動的に組み立てる部分のスタイル
+
+`.join()` 等で動的にSQL条件を組み立てる場合、結合文字列に改行やインデント用のスペースを含めない。
+`' AND '` のようにスペース区切りで結合すること。
+キーワード後の改行・インデントの規約は**テンプレートリテラルに直書きするSQLにのみ適用**し、動的に組み立てる部分には適用しない。
+
+理由:
+
+- 結合文字列に改行やインデントを埋め込むと、呼び出し側のインデント深度に依存した整形になり壊れやすい
+- 実行時のSQLの見た目を整える効果は薄く、コードの可読性を下げる
+
+```typescript
+// ✅ Good: スペース区切りで結合する
+const whereClause = conditions.join(' AND ');
+const orderByClause = sortColumns.join(', ');
+
+const sql = `
+  SELECT
+    id,
+    name
+  FROM
+    users
+  WHERE ${whereClause}
+  ORDER BY ${orderByClause}
+`;
+
+// ❌ Bad: 結合文字列に改行・インデントを含める
+const whereClause = conditions.join('\n      AND ');
+const orderByClause = sortColumns.join(',\n      ');
+```
