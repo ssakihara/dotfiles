@@ -1,3 +1,59 @@
+# ghw の cd 後に、リモートと差分がある全ローカルブランチを fast-forward 更新する
+_ghw_sync_branches() {
+  local repo_dir="$1"
+
+  echo "fetch: リモートとの差分を確認中..."
+  if ! git -C "$repo_dir" fetch --all --prune --quiet 2>/dev/null; then
+    echo "warning: fetch に失敗したためブランチ更新をスキップします" >&2
+    return 0
+  fi
+
+  # ブランチ名 → チェックアウト中の worktree パス
+  local -A branch_wt=()
+  local current_path=""
+  local line
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^worktree\ (.+) ]]; then
+      current_path="${match[1]}"
+    elif [[ "$line" =~ ^branch\ refs/heads/(.+) ]]; then
+      branch_wt[${match[1]}]="$current_path"
+    fi
+  done < <(git -C "$repo_dir" worktree list --porcelain 2>/dev/null)
+
+  local branch upstream behind ahead wt
+  while read -r branch upstream; do
+    [[ -z "$upstream" ]] && continue
+    behind=$(git -C "$repo_dir" rev-list --count "$branch..$upstream" 2>/dev/null) || continue
+    (( behind == 0 )) && continue
+    ahead=$(git -C "$repo_dir" rev-list --count "$upstream..$branch" 2>/dev/null) || continue
+    if (( ahead > 0 )); then
+      echo "skip: $branch はリモートと分岐しています (ahead $ahead / behind $behind)"
+      continue
+    fi
+
+    wt="${branch_wt[$branch]:-}"
+    if [[ -n "$wt" ]]; then
+      if [[ -n "$(git -C "$wt" status --porcelain 2>/dev/null)" ]]; then
+        echo "skip: $branch は未コミットの変更があります ($wt)"
+        continue
+      fi
+      if git -C "$wt" merge --ff-only --quiet "$upstream" 2>/dev/null; then
+        echo "pull: $branch (${behind} commits)"
+      else
+        echo "skip: $branch の更新に失敗しました"
+      fi
+    else
+      # チェックアウトされていないブランチは、fetch 済みの upstream から
+      # 自リポジトリ(.)への refspec 指定で fast-forward 更新する
+      if git -C "$repo_dir" fetch . "$upstream:$branch" --quiet 2>/dev/null; then
+        echo "pull: $branch (${behind} commits)"
+      else
+        echo "skip: $branch の更新に失敗しました"
+      fi
+    fi
+  done < <(git -C "$repo_dir" for-each-ref refs/heads --format='%(refname:short) %(upstream:short)')
+}
+
 # ghw - GitHub Issue/PR URL から対応する git worktree に cd する
 ghw() {
   local url="$1"
@@ -75,6 +131,7 @@ ghw() {
       if [[ -n "$new_path" ]]; then
         echo "→ $pr_branch"
         cd "$new_path"
+        _ghw_sync_branches "$repo_dir"
         return 0
       fi
       echo "error: worktreeの作成後にパスを取得できませんでした" >&2
@@ -87,6 +144,7 @@ ghw() {
   if [[ ${#match_paths[@]} -eq 1 ]]; then
     echo "→ ${match_branches[1]}"
     cd "${match_paths[1]}"
+    _ghw_sync_branches "$repo_dir"
   else
     local selected
     selected=$(for i in {1..${#match_paths[@]}}; do
@@ -95,6 +153,7 @@ ghw() {
 
     if [[ -n "$selected" ]]; then
       cd "$selected"
+      _ghw_sync_branches "$repo_dir"
     fi
   fi
 }
