@@ -6,3 +6,4 @@ window-decoration = true
 split-divider-color = #888888
 unfocused-split-opacity = 0.6
 unfocused-split-fill = #000000
+keybind = super+enter=unbind

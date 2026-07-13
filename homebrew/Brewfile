@@ -1,0 +1,19 @@
+# GUI アプリ (cask) は brew bundle で管理する。
+# mise 2026.7.5 の [bootstrap.packages] は cask を brew に委譲せず自前実装で
+# 再インストールしようとし、installer 型 cask (gcloud-cli) も非対応のため。
+# formulae / tap / mas は mise.toml の [bootstrap.*] 側で管理する。
+cask "appcleaner"
+cask "bitwarden"
+cask "copilot-cli"
+cask "dbeaver-community"
+cask "docker-desktop"
+cask "font-hack-nerd-font"
+cask "font-hackgen"
+cask "font-hackgen-nerd"
+cask "gcloud-cli"
+cask "ghostty"
+cask "google-japanese-ime"
+cask "imageoptim"
+cask "obsidian"
+cask "raycast"
+cask "visual-studio-code"
