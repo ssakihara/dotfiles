@@ -21,6 +21,12 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 \
   '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>'
 
+# symbolichotkeys の配送は WindowServer 側が担うため、plist を書くだけでは
+# 実行中のセッションに反映されない。activateSettings で再読込を通知する
+# (私有フレームワーク内のツールのため、将来の macOS で消えても止まらないようガード)
+activateSettings="/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings"
+[ -x "$activateSettings" ] && "$activateSettings" -u || true
+
 # sudo を Touch ID で認証可能にする (macOS ネイティブの sudo_local 機構)
 if ! sudo grep -qs '^auth.*pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null; then
   printf 'auth       sufficient     pam_tid.so\n' | sudo tee /etc/pam.d/sudo_local >/dev/null
