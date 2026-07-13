@@ -1,7 +1,6 @@
 { pkgs, username, ... }:
 {
   imports = [
-    ./homebrew.nix
     ./macos.nix
     ./ssh.nix
   ];

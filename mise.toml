@@ -1,3 +1,63 @@
 # dotfiles bootstrap 設定 (mise bootstrap で適用)
 # グローバルの [tools] は mise/global.toml (~/.config/mise/config.toml) 側で管理する。
 # このファイルはリポジトリ内での mise 実行時に auto-discovery される前提の設計。
+
+# 宣言外のパッケージは自動削除しない (prune は手動運用: mise bootstrap packages prune)
+[bootstrap.brew.taps]
+"coderabbitai/tap" = "https://github.com/coderabbitai/homebrew-tap.git"
+"hashicorp/tap" = "https://github.com/hashicorp/homebrew-tap.git"
+"leoafarias/fvm" = "https://github.com/leoafarias/homebrew-fvm.git"
+
+[bootstrap.packages]
+# --- formulae ---
+"brew:agent-browser" = "latest"
+"brew:bat" = "latest"
+"brew:broot" = "latest"
+"brew:cloud-sql-proxy" = "latest"
+"brew:cloudflared" = "latest"
+"brew:detect-secrets" = "latest"
+"brew:eza" = "latest"
+"brew:fd" = "latest"
+"brew:ffmpeg" = "latest"
+"brew:fzf" = "latest"
+"brew:genact" = "latest"
+"brew:gh" = "latest"
+"brew:ghq" = "latest"
+"brew:git" = "latest"
+"brew:git-delta" = "latest"
+"brew:git-filter-repo" = "latest"
+"brew:helm" = "latest"
+"brew:hey" = "latest"
+"brew:icu4c@76" = "latest"
+"brew:jq" = "latest"
+"brew:k6" = "latest"
+"brew:kubernetes-cli" = "latest"
+"brew:lefthook" = "latest"
+"brew:libmagic" = "latest"
+"brew:libpq" = "latest"
+"brew:mas" = "latest"
+"brew:mise" = "latest"
+"brew:neovim" = "latest"
+"brew:nkf" = "latest"
+"brew:openjdk@21" = "latest"
+"brew:pkgconf" = "latest"
+"brew:python@3.12" = "latest"
+"brew:rbenv" = "latest"
+"brew:ruby-build" = "latest"
+"brew:starship" = "latest"
+"brew:the_silver_searcher" = "latest"
+"brew:uv" = "latest"
+"brew:watch" = "latest"
+"brew:yazi" = "latest"
+"brew:yq" = "latest"
+"brew:zplug" = "latest"
+"brew:coderabbitai/tap/git-gtr" = "latest"
+"brew:hashicorp/tap/terraform" = "latest"
+"brew:leoafarias/fvm/fvm" = "latest"
+# --- Mac App Store ---
+"mas:1429033973" = "latest" # RunCat
+"mas:497799835" = "latest" # Xcode
+
+# cask は brew bundle に委譲 (理由は homebrew/Brewfile 冒頭コメント参照)
+[bootstrap.hooks.post-packages]
+run = "HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle install --file=homebrew/Brewfile"
