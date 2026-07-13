@@ -19,6 +19,11 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 \
   '{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }'
 
+# sudo を Touch ID で認証可能にする (macOS ネイティブの sudo_local 機構)
+if ! sudo grep -qs '^auth.*pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null; then
+  printf 'auth       sufficient     pam_tid.so\n' | sudo tee /etc/pam.d/sudo_local >/dev/null
+fi
+
 # 電源管理: ディスプレイは常時 ON、システムスリープは AC 接続時はしない、
 # バッテリー使用時のみ 5 分でスリープ
 sudo /usr/bin/pmset -c displaysleep 0 sleep 0

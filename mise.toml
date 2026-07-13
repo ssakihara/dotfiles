@@ -203,3 +203,36 @@ run = "HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle install --file=homebrew/Brewfile
 
 [bootstrap.hooks.post-defaults]
 run = "./scripts/macos-extra.sh"
+
+[bootstrap.user]
+login_shell = "/bin/zsh"
+
+# CapsLock を Control にリマップ (ログイン毎に hidutil で適用。マッピングは再起動で揮発するため)
+# 0x700000039 = CapsLock, 0x7000000E0 = Left Control
+[bootstrap.macos.launchd.agents.remap-capslock]
+program = "/usr/bin/hidutil"
+args = [
+  "property",
+  "--set",
+  '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x7000000E0}]}',
+]
+run_at_load = true
+
+# bootstrap 実行毎に走るため冪等に保つこと
+[tasks.bootstrap]
+run = """
+#!/bin/bash
+set -euo pipefail
+
+# ~/.ssh ディレクトリと鍵の権限を正規化し、id_ed25519 が未生成なら作成する
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+key=~/.ssh/id_ed25519
+if [ ! -e "$key" ]; then
+  ssh-keygen -t ed25519 -N "" -C "$USER@$(hostname -s)" -f "$key"
+fi
+chmod 600 ~/.ssh/id_* 2>/dev/null || true
+chmod 600 ~/.ssh/*_rsa 2>/dev/null || true
+chmod 644 ~/.ssh/*.pub 2>/dev/null || true
+[ -f ~/.ssh/config ] && chmod 600 ~/.ssh/config || true
+"""

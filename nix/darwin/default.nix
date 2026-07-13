@@ -1,16 +1,5 @@
 { pkgs, username, ... }:
 {
-  imports = [
-    ./ssh.nix
-  ];
-
-  # CapsLock を Control にリマップ。Phase 4 で mise の launchd agent (hidutil) に
-  # 置き換えるまで nix に残す (macos.nix から一時退避)
-  system.keyboard = {
-    enableKeyMapping = true;
-    remapCapsLockToControl = true;
-  };
-
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   # Nix 本体は Determinate / 公式インストーラ管理のため、nix-darwin に管理させない
@@ -37,7 +26,4 @@
   environment.interactiveShellInit = ''
     export PATH="/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.nix-profile/bin:$PATH"
   '';
-
-  # sudo を Touch ID で認証可能にする (/etc/pam.d/sudo_local を生成)
-  security.pam.services.sudo_local.touchIdAuth = true;
 }
