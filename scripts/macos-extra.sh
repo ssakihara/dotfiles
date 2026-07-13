@@ -42,6 +42,9 @@ sudo /usr/sbin/mdutil -a -i off || true
 sudo /bin/launchctl disable "system/com.apple.Spotlight" || true
 /bin/launchctl disable "gui/$(id -u)/com.apple.Spotlight" || true
 
-# 全ての defaults を書き終えた最後に、影響アプリをまとめて 1 回だけ再起動
+# 全ての defaults を書き終えた最後に、影響アプリをまとめて 1 回だけ再起動。
+# Spotlight は起動時にしかホットキー設定を読まないため、再起動させないと
+# symbolichotkeys の無効化が実行中のプロセスに反映されない
 /usr/bin/killall cfprefsd >/dev/null 2>&1 || true
+/usr/bin/killall Spotlight >/dev/null 2>&1 || true
 /usr/bin/killall Dock Finder SystemUIServer >/dev/null 2>&1 || true
