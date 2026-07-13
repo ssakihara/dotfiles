@@ -33,9 +33,12 @@ sudo /usr/bin/pmset -b displaysleep 0 sleep 5
 sudo /usr/sbin/networksetup -setdnsservers Wi-Fi \
   2001:4860:4860::8844 2001:4860:4860::8888 8.8.4.4 8.8.8.8 || true
 
-# Spotlight を完全停止して Raycast に完全移行
+# Spotlight を完全停止して Raycast に完全移行。
+# system ドメインの無効化だけではユーザーセッション側の Spotlight.app が
+# ログイン毎に起動して ⌘Space を掴むため、gui ドメインの無効化が必須
 sudo /usr/sbin/mdutil -a -i off || true
 sudo /bin/launchctl disable "system/com.apple.Spotlight" || true
+/bin/launchctl disable "gui/$(id -u)/com.apple.Spotlight" || true
 
 # 全ての defaults を書き終えた最後に、影響アプリをまとめて 1 回だけ再起動
 /usr/bin/killall cfprefsd >/dev/null 2>&1 || true
