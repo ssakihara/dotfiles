@@ -1,6 +1,6 @@
 # dotfiles
 
-`nix-darwin` + `home-manager` + Flakes で macOS の OS 設定・Homebrew パッケージ・ユーザー dotfile を宣言的に管理する。
+`mise bootstrap` + Homebrew で macOS の OS 設定・パッケージ・ユーザー dotfile を宣言的に管理する。
 
 ## Setup (新規 Mac)
 
@@ -19,82 +19,87 @@ xcode-select --install
 インストール後、表示される Next steps に従って PATH を通す:
 
 ```sh
-echo >> ~/.zprofile
-echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 ```
 
-### 3. Nix (Determinate Installer)
+### 3. mise
 
 ```sh
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --determinate
+brew install mise
 ```
 
-インストール後、新しいターミナルを開くか、以下を実行して現在のシェルに Nix を読み込む:
-
-```sh
-. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-```
-
-### 4. Flakes 有効化
-
-```sh
-mkdir -p ~/.config/nix
-echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
-```
-
-### 5. dotfiles の clone と適用
+### 4. dotfiles の clone と適用
 
 ```sh
 mkdir -p ~/workspaces/github.com/ssakihara
 git clone https://github.com/ssakihara/dotfiles.git ~/workspaces/github.com/ssakihara/dotfiles
 cd ~/workspaces/github.com/ssakihara/dotfiles
-nix run nix-darwin -- switch --flake .#default
+mise trust
+mise bootstrap
 ```
+
+`mise bootstrap` が以下を一括で行う:
+
+- Homebrew formulae / tap / Mac App Store アプリのインストール (`[bootstrap.packages]`)
+- cask のインストール (`homebrew/Brewfile` を post-packages hook で `brew bundle`)
+- dotfile の symlink (`[dotfiles]`)
+- macOS defaults の書き込み (`[bootstrap.macos.defaults]` + `scripts/macos-extra.sh`)
+- CapsLock→Control リマップの launchd agent 登録
+- SSH 鍵の初期生成と権限正規化 (`[tasks.bootstrap]`)
+
+注意:
+
+- Mac App Store アプリ (mas) のインストールには事前に App Store へのサインインが必要。
+- `scripts/macos-extra.sh` が電源管理・DNS・Spotlight 停止のため sudo パスワードを要求する。
+- 完了後は新しいターミナルを開いて反映を確認する。
 
 ## Daily operations
 
-すべての変更は `flake.nix` / `./nix/` 配下の編集 → 反映の流れで行う。
+すべての変更は `mise.toml` / `homebrew/Brewfile` / 各設定ファイルの編集 → `mise bootstrap` の流れで行う。
 
 ```sh
-# 設定変更の反映
-sudo darwin-rebuild switch --flake .#default
+# 宣言と実マシンの差分確認 (差分があると非ゼロ終了)
+mise bootstrap status --missing
 
-# 入力 (nixpkgs / nix-darwin / home-manager) の更新
-nix flake update
+# 宣言に合わせて全体を収束 (冪等なので何度でも実行可)
+mise bootstrap
 
-# 1 世代前にロールバック
-darwin-rebuild --rollback
+# 特定パートのみ適用 (packages / dotfiles / macos 等)
+mise bootstrap --only packages
 
-# 世代一覧
-darwin-rebuild --list-generations
+# formula / mas の追加 (mise.toml の [bootstrap.packages] に追記して)
+mise bootstrap packages apply
 
-# 古い世代の削除
-nix-collect-garbage -d
+# cask の追加 (homebrew/Brewfile に追記して)
+mise bootstrap --only packages
+
+# 宣言から外したパッケージの削除 (手動運用)
+mise bootstrap packages prune
+
+# パッケージの一括アップグレード (手動運用)
+mise bootstrap packages upgrade
 ```
+
+dotfile は symlink でリポジトリ実体に直結しているため、リポジトリ内のファイル編集が即座に反映される（再適用は不要）。
 
 ## Layout
 
 ```
 .
-├── flake.nix             # Flake エントリポイント (username をここで一元定義)
-├── flake.lock
-├── nix/
-│   ├── darwin/
-│   │   ├── default.nix   # nix-darwin 本体 (システム設定 / users / 環境変数)
-│   │   ├── homebrew.nix  # nix-darwin の homebrew モジュール (tap / brew / cask / mas)
-│   │   ├── macos.nix     # `defaults` / `pmset` / DNS など macOS の挙動設定
-│   │   └── ssh.nix       # ~/.ssh 権限正規化 / id_ed25519 自動生成
-│   └── home/
-│       └── default.nix   # home-manager 設定 (~/ 配下の dotfile を symlink)
-├── claude/               # Claude Code の git 管理対象 (home-manager が ~/.claude/ に symlink)
+├── mise.toml             # bootstrap 定義のエントリポイント (packages / dotfiles / defaults / launchd / tasks)
+├── homebrew/
+│   └── Brewfile          # GUI アプリ (cask)。brew bundle で適用 (理由はファイル冒頭コメント参照)
+├── scripts/
+│   └── macos-extra.sh    # mise 非対応の macOS 設定 (array/dict/ByHost/sudo 系/killall)
+├── claude/               # Claude Code の git 管理対象 (~/.claude/ 配下に個別 symlink)
 ├── bin/                  # 自作スクリプト (~/.bin/ 配下)
 ├── git/                  # gitconfig 系 (~/.gitconfig 等)
-├── zsh/                  # zshrc / zprofile
+├── zsh/                  # zshrc / zprofile / zsh_functions
 ├── starship/             # starship.toml
 ├── ghostty/              # ghostty config
 ├── editorconfig/         # editorconfig
-├── mise/                 # mise config (mise 本体は brew)
+├── mise/
+│   └── global.toml       # mise グローバル設定 (~/.config/mise/config.toml へ symlink)
 └── docs/                 # 補助ドキュメント
 ```
 
@@ -110,6 +115,9 @@ gh skill install kepano/obsidian-skills skills/obsidian-markdown --agent claude-
 
 ## Notes
 
-- 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理しており、nix 管理対象外。
-- nix-darwin の `homebrew` モジュールは Homebrew 本体をインストールしないため `/opt/homebrew` を再利用する。Homebrew 本体は Setup 手順で事前にインストールしておくこと。
-- `darwinConfigurations` のキーは Mac の LocalHostName ではなく `default` 固定にしている。`darwin-rebuild` を直接叩く場合も `.#default` を指定すること（`scutil --get LocalHostName` の値とは無関係）。
+- 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理する。
+  mise のグローバルツールは `mise/global.toml` の `[tools]` で宣言する。
+- リポジトリ側のグローバル設定を `mise/config.toml` ではなく `global.toml` と命名しているのは、mise がリポジトリ内の `mise/config.toml` をローカル設定として auto-discovery してしまうため。
+- cask を `[bootstrap.packages]` ではなく Brewfile で管理しているのは、mise (2026.7.5 時点) の cask 実装が brew でインストール済みの cask を認識できず、installer 型 cask にも非対応のため。
+- `[bootstrap.macos.defaults]` の値は現在の Mac の `defaults read` から取得したものを反映している。
+  mise で宣言できない設定 (array / dict / `-currentHost` / sudo が必要なもの) は `scripts/macos-extra.sh` に集約している。
