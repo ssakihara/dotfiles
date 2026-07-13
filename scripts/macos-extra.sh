@@ -14,10 +14,12 @@ defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryCli
 
 # Spotlight の ⌘Space ショートカットを無効化し、Raycast に譲る (dict 型のため mise 非対応)
 # symbolichotkeys ID 64 = Show Spotlight search, ID 65 = Show Finder search
+# NeXT 形式 '{ enabled = 0; }' は数値が文字列で書き込まれ Tahoe 以降の Spotlight に
+# 無視されるため、型が明示できる XML plist 形式で書き込むこと
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 \
-  '{ enabled = 0; value = { parameters = (32, 49, 1048576); type = standard; }; }'
+  '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>'
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 \
-  '{ enabled = 0; value = { parameters = (32, 49, 1572864); type = standard; }; }'
+  '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>'
 
 # sudo を Touch ID で認証可能にする (macOS ネイティブの sudo_local 機構)
 if ! sudo grep -qs '^auth.*pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null; then
