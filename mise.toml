@@ -58,6 +58,33 @@
 "mas:1429033973" = "latest" # RunCat
 "mas:497799835" = "latest" # Xcode
 
+# source はこの mise.toml があるディレクトリ (リポジトリルート) 基準で解決される
+[dotfiles]
+"~/.editorconfig" = { source = "editorconfig/editorconfig", mode = "symlink" }
+"~/.config/starship.toml" = { source = "starship/starship.toml", mode = "symlink" }
+"~/.config/ghostty/config" = { source = "ghostty/config", mode = "symlink" }
+"~/.gitconfig" = { source = "git/gitconfig", mode = "symlink" }
+"~/.gitconfig_company" = { source = "git/gitconfig_company", mode = "symlink" }
+"~/.gitconfig_private" = { source = "git/gitconfig_private", mode = "symlink" }
+"~/.gitignore_global" = { source = "git/gitignore_global", mode = "symlink" }
+"~/.bin/git-aic" = { source = "bin/git-aic", mode = "symlink" }
+"~/.bin/git-cpr" = { source = "bin/git-cpr", mode = "symlink" }
+"~/.bin/git-sync-upstream" = { source = "bin/git-sync-upstream", mode = "symlink" }
+# mise は <repo>/mise/config.toml を auto-discovery してしまうため global.toml と命名している
+"~/.config/mise/config.toml" = { source = "mise/global.toml", mode = "symlink" }
+"~/.zshrc" = { source = "zsh/zshrc", mode = "symlink" }
+"~/.zprofile" = { source = "zsh/zprofile", mode = "symlink" }
+"~/.zsh_functions/ghw.zsh" = { source = "zsh/zsh_functions/ghw.zsh", mode = "symlink" }
+# ~/.claude 自体は実ディレクトリのまま残し、git 管理対象だけを個別 symlink する
+# (history.jsonl / sessions/ / projects/ などの動的書き込みと共存させるため)
+"~/.claude/CLAUDE.md" = { source = "claude/CLAUDE.md", mode = "symlink" }
+"~/.claude/settings.json" = { source = "claude/settings.json", mode = "symlink" }
+"~/.claude/agents" = { source = "claude/agents", mode = "symlink" }
+"~/.claude/references" = { source = "claude/references", mode = "symlink" }
+"~/.claude/rules" = { source = "claude/rules", mode = "symlink" }
+"~/.claude/scripts" = { source = "claude/scripts", mode = "symlink" }
+"~/.claude/assets" = { source = "claude/assets", mode = "symlink" }
+
 # cask は brew bundle に委譲 (理由は homebrew/Brewfile 冒頭コメント参照)
 [bootstrap.hooks.post-packages]
 run = "HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle install --file=homebrew/Brewfile"
