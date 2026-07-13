@@ -1,9 +1,15 @@
 { pkgs, username, ... }:
 {
   imports = [
-    ./macos.nix
     ./ssh.nix
   ];
+
+  # CapsLock を Control にリマップ。Phase 4 で mise の launchd agent (hidutil) に
+  # 置き換えるまで nix に残す (macos.nix から一時退避)
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
 
   nixpkgs.hostPlatform = "aarch64-darwin";
 
