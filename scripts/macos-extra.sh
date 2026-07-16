@@ -44,7 +44,7 @@ sudo /usr/sbin/networksetup -setdnsservers Wi-Fi \
 # Spotlight を完全停止して Raycast に完全移行。
 # system ドメインの無効化だけではユーザーセッション側の Spotlight.app が
 # ログイン毎に起動して ⌘Space を掴むため、gui ドメインの無効化が必須
-sudo /usr/sbin/mdutil -a -i off || true
+sudo /usr/bin/mdutil -a -i off || true
 sudo /bin/launchctl disable "system/com.apple.Spotlight" || true
 /bin/launchctl disable "gui/$(id -u)/com.apple.Spotlight" || true
 
