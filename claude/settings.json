@@ -20,7 +20,11 @@
       "Bash(agent-browser:*)",
       "Edit(**/*.{vue,ts})",
       "Read(**/*.{vue,ts})",
-      "Read(~/.agent-browser/tmp/screenshots/screenshot-*.png)"
+      "Read(~/.agent-browser/tmp/screenshots/screenshot-*.png)",
+      "Read(~/.claude/agents/**)",
+      "Read(~/.claude/references/**)",
+      "Read(~/.claude/rules/**)",
+      "Read(~/.claude/skills/**)"
     ],
     "deny": [
       "Read(./.env)",
