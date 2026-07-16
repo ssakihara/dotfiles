@@ -55,7 +55,7 @@
 "brew:hashicorp/tap/terraform" = "latest"
 "brew:leoafarias/fvm/fvm" = "latest"
 # --- Mac App Store ---
-"mas:1429033973" = "latest" # RunCat
+"mas:6757801838" = "latest" # RunCat Neo
 "mas:497799835" = "latest" # Xcode
 
 # source はこの mise.toml があるディレクトリ (リポジトリルート) 基準で解決される
