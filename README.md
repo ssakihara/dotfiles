@@ -2,45 +2,30 @@
 
 `mise bootstrap` + Homebrew で macOS の OS 設定・パッケージ・ユーザー dotfile を宣言的に管理する。
 
-## Setup (新規 Mac)
-
-### 1. Xcode Command Line Tools
+## Setup (新規 Mac / Apple Silicon)
 
 ```sh
-xcode-select --install
+curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh | bash
 ```
 
-### 2. Homebrew
+`install.sh` が以下を順に行う:
+
+1. Homebrew のインストール (Xcode Command Line Tools もあわせて導入される)
+2. dotfiles の clone (`~/workspaces/github.com/ssakihara/dotfiles`)
+3. mise のインストール (Homebrew 経由)
+4. `mise trust` と `mise bootstrap` の実行
+
+clone 先やリポジトリ URL は環境変数で上書きできる:
 
 ```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/ssakihara/dotfiles/main/install.sh | DOTFILES_DIR=~/src/dotfiles bash
 ```
 
-インストール後、表示される Next steps に従って PATH を通す:
-
-```sh
-eval "$(/opt/homebrew/bin/brew shellenv zsh)"
-```
-
-### 3. mise
-
-```sh
-brew install mise
-```
-
-### 4. dotfiles の clone と適用
-
-```sh
-mkdir -p ~/workspaces/github.com/ssakihara
-git clone https://github.com/ssakihara/dotfiles.git ~/workspaces/github.com/ssakihara/dotfiles
-cd ~/workspaces/github.com/ssakihara/dotfiles
-mise trust
-mise bootstrap
-```
+すでに mise が入っているマシンでは、リポジトリ内で `mise bootstrap` を実行するだけで再セットアップできる。
 
 `mise bootstrap` が以下を一括で行う:
 
-- Homebrew formulae / tap / Mac App Store アプリのインストール (`[bootstrap.packages]`)
+- Homebrew formulae / tap のインストール (`[bootstrap.packages]`)
 - cask のインストール (`homebrew/Brewfile` を post-packages hook で `brew bundle`)
 - dotfile の symlink (`[dotfiles]`)
 - macOS defaults の書き込み (`[bootstrap.macos.defaults]` + `scripts/macos-extra.sh`)
@@ -49,9 +34,16 @@ mise bootstrap
 
 注意:
 
-- Mac App Store アプリ (mas) のインストールには事前に App Store へのサインインが必要。
 - `scripts/macos-extra.sh` が電源管理・DNS・Spotlight 停止のため sudo パスワードを要求する。
 - 完了後は新しいターミナルを開いて反映を確認する。
+
+### App Store アプリ (手動インストール)
+
+App Store アプリは無料でも Apple アカウントへのサインインと入手時の認証が必須で、CLI (mas) も非公開 API 依存で自動化に不向きなため、宣言管理の対象外とする。
+`mise bootstrap` 完了後、App Store から以下を手動でインストールする:
+
+- [RunCat Neo](https://apps.apple.com/app/id6757801838)
+- [Xcode](https://apps.apple.com/app/id497799835)
 
 ## Daily operations
 
@@ -67,7 +59,7 @@ mise bootstrap
 # 特定パートのみ適用 (packages / dotfiles / macos 等)
 mise bootstrap --only packages
 
-# formula / mas の追加 (mise.toml の [bootstrap.packages] に追記して)
+# formula の追加 (mise.toml の [bootstrap.packages] に追記して)
 mise bootstrap packages apply
 
 # cask の追加 (homebrew/Brewfile に追記して)
@@ -86,6 +78,7 @@ dotfile は symlink でリポジトリ実体に直結しているため、リポ
 
 ```
 .
+├── install.sh            # 新規 Mac 用 seed スクリプト (Homebrew/mise 導入 → mise bootstrap)
 ├── mise.toml             # bootstrap 定義のエントリポイント (packages / dotfiles / defaults / launchd / tasks)
 ├── homebrew/
 │   └── Brewfile          # GUI アプリ (cask)。brew bundle で適用 (理由はファイル冒頭コメント参照)

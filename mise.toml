@@ -35,7 +35,6 @@
 "brew:lefthook" = "latest"
 "brew:libmagic" = "latest"
 "brew:libpq" = "latest"
-"brew:mas" = "latest"
 "brew:mise" = "latest"
 "brew:neovim" = "latest"
 "brew:nkf" = "latest"
@@ -54,9 +53,7 @@
 "brew:coderabbitai/tap/git-gtr" = "latest"
 "brew:hashicorp/tap/terraform" = "latest"
 "brew:leoafarias/fvm/fvm" = "latest"
-# --- Mac App Store ---
-"mas:6757801838" = "latest" # RunCat Neo
-"mas:497799835" = "latest" # Xcode
+# App Store アプリは宣言管理しない (無料でも要サインインで自動化できないため手動インストール。README 参照)
 
 # source はこの mise.toml があるディレクトリ (リポジトリルート) 基準で解決される
 [dotfiles]
