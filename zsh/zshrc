@@ -41,6 +41,7 @@ alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias flutter="fvm flutter"
 alias dart="fvm dart"
+alias claude='claude --mcp-config="$HOME/.claude/mcp.json"'
 alias aclaude="claude --enable-auto-mode"
 alias cclaude="ccr code"
 alias -g A='| awk'

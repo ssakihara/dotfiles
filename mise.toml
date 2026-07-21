@@ -79,6 +79,7 @@
 # (history.jsonl / sessions/ / projects/ などの動的書き込みと共存させるため)
 "~/.claude/CLAUDE.md" = { source = "claude/CLAUDE.md", mode = "symlink" }
 "~/.claude/settings.json" = { source = "claude/settings.json", mode = "symlink" }
+"~/.claude/mcp.json" = { source = "claude/mcp.json", mode = "symlink" }
 "~/.claude/keybindings.json" = { source = "claude/keybindings.json", mode = "symlink" }
 "~/.claude/agents" = { source = "claude/agents", mode = "symlink" }
 "~/.claude/references" = { source = "claude/references", mode = "symlink" }

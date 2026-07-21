@@ -1,0 +1,58 @@
+{
+  "mcpServers": {
+    "backlog": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--pull",
+        "always",
+        "-i",
+        "--rm",
+        "-e",
+        "BACKLOG_DOMAIN",
+        "-e",
+        "BACKLOG_API_KEY",
+        "-e",
+        "PREFIX",
+        "-e",
+        "ENABLE_TOOLSETS",
+        "ghcr.io/nulab/backlog-mcp-server"
+      ],
+      "env": {
+        "PREFIX": "backlog_",
+        "ENABLE_TOOLSETS": "project,issue,wiki"
+      }
+    },
+    "pms": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--pull",
+        "always",
+        "-i",
+        "--rm",
+        "-e",
+        "PGSCHEMA",
+        "-e",
+        "PGDATABASE",
+        "-e",
+        "PGHOST",
+        "-e",
+        "PGPORT",
+        "-e",
+        "PGUSER",
+        "-e",
+        "PGPASSWORD",
+        "ghcr.io/ssakihara/postgres-mcp-server:latest"
+      ],
+      "env": {
+        "PGDATABASE": "postgres",
+        "PGHOST": "host.docker.internal",
+        "PGPORT": "5432",
+        "PGUSER": "postgres"
+      }
+    }
+  }
+}
