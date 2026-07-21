@@ -1,0 +1,4 @@
+# mise が Python インストール時に pip で自動インストールするパッケージ一覧
+# (mise settings: python.default_packages_file のデフォルト参照先)
+# gcloud compute ssh の NumPy 警告対策 (CLOUDSDK_PYTHON が mise の Python を参照)
+numpy

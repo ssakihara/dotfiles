@@ -126,7 +126,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.pub-cache/bin:$PATH"
 
 # gcloud
-export CLOUDSDK_PYTHON="$HOME/.gcloud-env/bin/python"
+export CLOUDSDK_PYTHON="$HOME/.local/share/mise/installs/python/3.14/bin/python"
 source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/completion.zsh.inc"
 

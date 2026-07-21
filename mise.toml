@@ -72,6 +72,7 @@
 "~/.bin/git-sync-upstream" = { source = "bin/git-sync-upstream", mode = "symlink" }
 # mise は <repo>/mise/config.toml を auto-discovery してしまうため global.toml と命名している
 "~/.config/mise/config.toml" = { source = "mise/global.toml", mode = "symlink" }
+"~/.default-python-packages" = { source = "mise/default-python-packages", mode = "symlink" }
 "~/.zshrc" = { source = "zsh/zshrc", mode = "symlink" }
 "~/.zprofile" = { source = "zsh/zprofile", mode = "symlink" }
 "~/.zsh_functions/ghw.zsh" = { source = "zsh/zsh_functions/ghw.zsh", mode = "symlink" }
