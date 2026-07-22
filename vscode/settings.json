@@ -1,0 +1,251 @@
+{
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "better-comments.tags": [
+    {
+      "backgroundColor": "transparent",
+      "color": "#FF00FF",
+      "strikethrough": false,
+      "tag": "CHANGED"
+    },
+    {
+      "backgroundColor": "transparent",
+      "color": "green",
+      "strikethrough": false,
+      "tag": "FIXME"
+    },
+    {
+      "backgroundColor": "transparent",
+      "color": "#C0C0C0",
+      "strikethrough": false,
+      "tag": "NOTE"
+    },
+    {
+      "backgroundColor": "transparent",
+      "color": "#2C7CFF",
+      "strikethrough": false,
+      "tag": "REVIEW"
+    },
+    {
+      "backgroundColor": "transparent",
+      "color": "#FF5F17",
+      "strikethrough": false,
+      "tag": "TODO"
+    },
+    {
+      "backgroundColor": "transparent",
+      "color": "red",
+      "strikethrough": false,
+      "tag": "WARNING"
+    }
+  ],
+  "breadcrumbs.enabled": true,
+  "chat.disableAIFeatures": true,
+  "css.validate": false,
+  "debug.allowBreakpointsEverywhere": true,
+  "debug.inlineValues": "on",
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  "debug.onTaskErrors": "showErrors",
+  "debug.openDebug": "openOnSessionStart",
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": false,
+  "docker.extension.enableComposeLanguageServer": false,
+  "editor.accessibilitySupport": "off",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.colorDecorators": false,
+  "editor.cursorBlinking": "phase",
+  "editor.cursorWidth": 3,
+  "editor.detectIndentation": false,
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace, 'Hack Nerd Font'",
+  "editor.fontSize": 14,
+  "editor.guides.bracketPairs": true,
+  "editor.guides.bracketPairsHorizontal": true,
+  "editor.guides.indentation": false,
+  "editor.inlineSuggest.enabled": true,
+  "editor.insertSpaces": false,
+  "editor.letterSpacing": -0.4,
+  "editor.lineHeight": 1.48,
+  "editor.minimap.enabled": false,
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.showSlider": "always",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.renderControlCharacters": true,
+  "editor.renderLineHighlight": "all",
+  "editor.renderWhitespace": "all",
+  "editor.roundedSelection": false,
+  "editor.snippetSuggestions": "top",
+  "editor.suggest.showWords": false,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.tabSize": 2,
+  "editor.tokenColorCustomizations": {
+    "comments": "#999"
+  },
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "editor.wordSeparators": "`~!@#%^&*()=+[{]}\\|;:'\",.<>/?",
+  "editor.wordWrap": "on",
+  "emmet.showSuggestionsAsSnippets": true,
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.variables": {
+    "lang": "ja"
+  },
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.ignoreRecommendations": true,
+  "files.associations": {
+    ".*lintrc": "json",
+    ".env.*": "dotenv",
+    ".htaccess_*": "apacheconf",
+    ".php_cs.dist": "php",
+    "*.inc": "php",
+    "*.yml": "yaml"
+  },
+  "files.autoGuessEncoding": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.watcherExclude": {
+    "**/.cocoapods/**": true,
+    "**/.fvm": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.rvm/**": true,
+    "**/Dropbox/**": true,
+    "**/GoogleDrive/**": true,
+    "**/Library/**": true,
+    "**/node_modules/**": true,
+    "**/Pictures/**": true,
+    "**/templates_c/**": true,
+    "**/vendor/**": true
+  },
+  "git.autofetch": true,
+  "git.branchPrefix": "feature/",
+  "git.confirmSync": false,
+  "git.detectWorktrees": false,
+  "git.suggestSmartCommit": false,
+  "gitlens.ai.model": "vscode",
+  "gitPrefix.pattern": ".*?/([A-Z_]*?-[0-9]*)(.*)",
+  "gitPrefix.replacement": "'fix: ('+ p1 + p1.replace(/.*/g, '') + ')'",
+  "gitPrefix.replacementIsFunction": true,
+  "hediet.vscode-drawio.resizeImages": null,
+  "hediet.vscode-drawio.theme": "kennedy",
+  "html.format.contentUnformatted": "pre, code, textarea, title, h1, h2, h3, h4, h5, h6, p",
+  "html.format.extraLiners": "",
+  "html.format.unformatted": null,
+  "html.format.wrapLineLength": 0,
+  "intelephense.diagnostics.undefinedClassConstants": false,
+  "intelephense.diagnostics.undefinedConstants": false,
+  "intelephense.diagnostics.undefinedFunctions": false,
+  "intelephense.diagnostics.undefinedMethods": false,
+  "intelephense.diagnostics.undefinedProperties": false,
+  "intelephense.diagnostics.undefinedTypes": false,
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/vendor/**",
+    "**/tempfiles/**",
+    "**/templates_c/**"
+  ],
+  "json.schemaDownload.trustedDomains": {
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://raw.githubusercontent.com/": true,
+    "https://schemastore.azurewebsites.net/": true,
+    "https://www.schemastore.org/": true
+  },
+  "mdb.mcp.server": "autoStartDisabled",
+  "playwright.reuseBrowser": false,
+  "remote.autoForwardPortsSource": "hybrid",
+  "scm.repositories.selectionMode": "single",
+  "scss.validate": false,
+  "search.exclude": {
+    "**/.fvm": true,
+    "**/node_modules": true,
+    "**/templates_c": true
+  },
+  "search.smartCase": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "settingsSync.ignoredExtensions": [
+    "github.copilot-chat"
+  ],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "tsx"
+  },
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.lineHeight": 1.25,
+  "todo-tree.general.tags": [
+    "CHANGED",
+    "FIXME",
+    "NOTE",
+    "REVIEW",
+    "TODO",
+    "WARNING"
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "CHANGED": {
+      "foreground": "#FF00FF"
+    },
+    "FIXME": {
+      "foreground": "#008000"
+    },
+    "NOTE": {
+      "foreground": "#C0C0C0"
+    },
+    "REVIEW": {
+      "foreground": "#2C7CFF"
+    },
+    "TODO": {
+      "foreground": "#FF5F17"
+    },
+    "WARNING": {
+      "foreground": "#FF0000"
+    }
+  },
+  "todo-tree.highlights.defaultHighlight": {
+    "fontWeight": "bold",
+    "icon": "checklist",
+    "iconColour": "#2C7CFF",
+    "type": "text"
+  },
+  "todo-tree.ripgrep.ripgrep": "/opt/homebrew/bin/rg",
+  "update.showReleaseNotes": false,
+  "window.title": "${activeEditorMedium}${separator}${rootName}",
+  "workbench.colorCustomizations": {
+    "editorCursor.foreground": "#f00058",
+    "terminalCursor.foreground": "#efff0b"
+  },
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.editor.customLabels.patterns": {
+    "**/{page,layout,template,route,actions,hooks,components,utils,types}.{js,ts,jsx,tsx}": "${dirname}/${filename}.${extname} .../${dirname(1)}",
+    "**/index.*": "${dirname} .../${dirname(1)}"
+  },
+  "workbench.editor.empty.hint": "hidden",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.labelFormat": "short",
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.reduceMotion": "on",
+  "workbench.startupEditor": "none",
+  "workbench.tree.indent": 18,
+  "workbench.tree.renderIndentGuides": "always",
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ]
+}

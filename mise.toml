@@ -84,6 +84,10 @@
 "~/.claude/rules" = { source = "claude/rules", mode = "symlink" }
 "~/.claude/scripts" = { source = "claude/scripts", mode = "symlink" }
 "~/.claude/assets" = { source = "claude/assets", mode = "symlink" }
+# VSCode の User ディレクトリは動的ファイル (globalStorage 等) と共存するため git 管理対象だけを個別 symlink する
+# Settings Sync とは二重管理になるため、settings/keybindings は Sync 対象から外す運用 (README 参照)
+"~/Library/Application Support/Code/User/settings.json" = { source = "vscode/settings.json", mode = "symlink" }
+"~/Library/Application Support/Code/User/keybindings.json" = { source = "vscode/keybindings.json", mode = "symlink" }
 
 # 値は基本的に現在の Mac の `defaults read` から取得したものを反映。
 # mise が非対応の項目 (array / dict / -currentHost / sudo 系 / killall) は

@@ -1,0 +1,13 @@
+[
+  {
+    "key": "cmd+9",
+    // "key": "ctrl+[BracketLeft]", // Windows/Linuxの場合はこちら
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+9",
+    "command": "workbench.action.terminal.focus",
+    "when": "editorFocus"
+  }
+]
