@@ -45,6 +45,14 @@ App Store アプリは無料でも Apple アカウントへのサインインと
 - [RunCat Neo](https://apps.apple.com/app/id6757801838)
 - [Xcode](https://apps.apple.com/app/id497799835)
 
+### Raycast 設定 (手動インポート)
+
+Raycast は設定を暗号化 SQLite で保持しておりプレーンテキストでの宣言管理ができないため、`Export Settings & Data` コマンドのエクスポート (`raycast/Raycast.rayconfig`) をコミットして管理する。
+
+- 新規 Mac: `mise bootstrap` 完了後 (Raycast は cask で導入済み)、`open raycast/Raycast.rayconfig` を実行してインポートする。
+  エクスポート時に設定したパスフレーズの入力が必要 (リポジトリには含めない)。
+- 設定変更時: Raycast で `Export Settings & Data` を実行し、出力ファイルで `raycast/Raycast.rayconfig` を上書きしてコミットする。
+
 ## Daily operations
 
 すべての変更は `mise.toml` / `homebrew/Brewfile` / 各設定ファイルの編集 → `mise bootstrap` の流れで行う。
@@ -90,6 +98,7 @@ dotfile は symlink でリポジトリ実体に直結しているため、リポ
 ├── zsh/                  # zshrc / zprofile / zsh_functions
 ├── starship/             # starship.toml
 ├── ghostty/              # ghostty config
+├── raycast/              # Raycast 設定のエクスポート (暗号化 .rayconfig。手動インポート)
 ├── editorconfig/         # editorconfig
 ├── mise/
 │   └── global.toml       # mise グローバル設定 (~/.config/mise/config.toml へ symlink)
