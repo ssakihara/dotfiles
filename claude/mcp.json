@@ -21,7 +21,7 @@
       ],
       "env": {
         "PREFIX": "backlog_",
-        "ENABLE_TOOLSETS": "project,issue,wiki"
+        "ENABLE_TOOLSETS": "project,issue,wiki,document"
       }
     },
     "pms": {
