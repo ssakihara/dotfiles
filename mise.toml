@@ -6,7 +6,6 @@
 [bootstrap.brew.taps]
 "coderabbitai/tap" = "https://github.com/coderabbitai/homebrew-tap.git"
 "hashicorp/tap" = "https://github.com/hashicorp/homebrew-tap.git"
-"leoafarias/fvm" = "https://github.com/leoafarias/homebrew-fvm.git"
 
 [bootstrap.packages]
 # --- formulae ---
@@ -26,8 +25,6 @@
 "brew:git" = "latest"
 "brew:git-delta" = "latest"
 "brew:git-filter-repo" = "latest"
-"brew:helm" = "latest"
-"brew:hey" = "latest"
 "brew:icu4c@76" = "latest"
 "brew:jq" = "latest"
 "brew:k6" = "latest"
@@ -36,23 +33,20 @@
 "brew:libmagic" = "latest"
 "brew:libpq" = "latest"
 "brew:mise" = "latest"
-"brew:neovim" = "latest"
-"brew:nkf" = "latest"
 "brew:openjdk@21" = "latest"
 "brew:pkgconf" = "latest"
 "brew:python@3.12" = "latest"
 "brew:rbenv" = "latest"
+"brew:ripgrep" = "latest"
 "brew:ruby-build" = "latest"
 "brew:starship" = "latest"
-"brew:the_silver_searcher" = "latest"
+"brew:terminal-notifier" = "latest"
 "brew:uv" = "latest"
 "brew:watch" = "latest"
-"brew:yazi" = "latest"
 "brew:yq" = "latest"
 "brew:zplug" = "latest"
 "brew:coderabbitai/tap/git-gtr" = "latest"
 "brew:hashicorp/tap/terraform" = "latest"
-"brew:leoafarias/fvm/fvm" = "latest"
 # App Store アプリは宣言管理しない (無料でも要サインインで自動化できないため手動インストール。README 参照)
 
 # source はこの mise.toml があるディレクトリ (リポジトリルート) 基準で解決される

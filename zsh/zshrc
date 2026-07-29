@@ -39,8 +39,6 @@ alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
 alias grm="git branch --merged | grep -v master | xargs git branch -d"
 alias grmm="git branch --merged | grep -v main | xargs git branch -d"
-alias flutter="fvm flutter"
-alias dart="fvm dart"
 alias claude='claude --mcp-config="$HOME/.claude/mcp.json"'
 alias aclaude="claude --enable-auto-mode"
 alias cclaude="ccr code"
@@ -74,14 +72,6 @@ function ghq-fzf() {
 }
 zle -N ghq-fzf
 bindkey '^g' ghq-fzf
-
-function y() {
-  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-  command yazi "$@" --cwd-file="$tmp"
-  IFS= read -r -d '' cwd < "$tmp"
-  [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
-  rm -f -- "$tmp"
-}
 
 rm() {
   # 1. 引数からオプション（-rfなど）を除去してファイル名だけを抽出

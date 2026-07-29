@@ -114,7 +114,6 @@
   "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
     "**/.cocoapods/**": true,
-    "**/.fvm": true,
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/.rvm/**": true,
@@ -166,7 +165,6 @@
   "scm.repositories.selectionMode": "single",
   "scss.validate": false,
   "search.exclude": {
-    "**/.fvm": true,
     "**/node_modules": true,
     "**/templates_c": true
   },
