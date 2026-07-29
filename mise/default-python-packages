@@ -2,3 +2,7 @@
 # (mise settings: python.default_packages_file のデフォルト参照先)
 # gcloud compute ssh の NumPy 警告対策 (CLOUDSDK_PYTHON が mise の Python を参照)
 numpy
+# PDF のテキスト・テーブル抽出 (ライブラリ + CLI)
+pdfplumber
+# PDF の画像変換 (poppler が必要。brew:poppler は mise.toml で宣言)
+pdf2image

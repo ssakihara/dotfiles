@@ -35,6 +35,7 @@
 "brew:mise" = "latest"
 "brew:openjdk@21" = "latest"
 "brew:pkgconf" = "latest"
+"brew:poppler" = "latest"
 "brew:python@3.12" = "latest"
 "brew:rbenv" = "latest"
 "brew:ripgrep" = "latest"
