@@ -22,6 +22,13 @@ symbol = "🌱 "
 [nodejs]
 format = "nodejs [$version](bold green) "
 
+# starship に pnpm モジュールがないため custom で代替する
+# pnpm --version は約280ms かかるため mise 経由(約20ms)を優先する
+[custom.pnpm]
+command = 'v=$(mise current pnpm 2>/dev/null); [ -n "$v" ] || v=$(pnpm --version 2>/dev/null); echo "$v"'
+detect_files = ["pnpm-lock.yaml"]
+format = "pnpm [v$output](bold yellow) "
+
 [php]
 disabled = true
 
