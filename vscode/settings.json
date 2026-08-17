@@ -130,7 +130,6 @@
   "git.confirmSync": false,
   "git.detectWorktrees": false,
   "git.suggestSmartCommit": false,
-  "gitlens.ai.model": "vscode",
   "gitPrefix.pattern": ".*?/([A-Z_]*?-[0-9]*)(.*)",
   "gitPrefix.replacement": "'fix: ('+ p1 + p1.replace(/.*/g, '') + ')'",
   "gitPrefix.replacementIsFunction": true,
