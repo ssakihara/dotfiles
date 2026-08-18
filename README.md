@@ -129,7 +129,7 @@ gh skill install kepano/obsidian-skills skills/obsidian-markdown --agent claude-
 
 ## Notes
 
-- 言語ランタイム (Node.js / Ruby / Python) は `mise` / `rbenv` / `uv` で管理する。
+- 言語ランタイム (Node.js / Python) は `mise` / `uv` で管理する。
   mise のグローバルツールは `mise/global.toml` の `[tools]` で宣言する。
 - リポジトリ側のグローバル設定を `mise/config.toml` ではなく `global.toml` と命名しているのは、mise がリポジトリ内の `mise/config.toml` をローカル設定として auto-discovery してしまうため。
 - cask を `[bootstrap.packages]` ではなく Brewfile で管理しているのは、mise (2026.7.5 時点) の cask 実装が brew でインストール済みの cask を認識できず、installer 型 cask にも非対応のため。
