@@ -1,71 +1,19 @@
-# Nuxt 4 包括的ガイド
+# Nuxt 4 チーム固有ガイド
 
-Nuxt 4の詳細なパターン、API、ベストプラクティス。
+公式ドキュメントにある一般的な API 仕様・パターンは本ファイルに記載しない。
+必要な場合は **WebFetch ツール**で https://nuxt.com/llms.txt から該当ドキュメントの URL を特定し、同じく WebFetch で取得して参照すること（curl 等のシェルコマンドは使わない）。
+本ファイルには**公式にない、または公式と異なるチーム固有パターンのみ**を記載する。
 
-## データ取得
+## サーバーAPIバリデーション
 
-### useFetch（推奨）
+agents/coder.md の「サーバーAPIバリデーション（CRITICAL）」が正である。
 
-SSR対応のデータ取得。
+公式ドキュメントの例には `readValidatedBody` / `getValidatedRouterParams` / `.parse()` を使うものがあるが、**チームでは使用禁止**。
+`readBody` / `getQuery` / `getRouterParams` + Zod の `safeParse` + `createError` で統一する。
 
-```typescript
-// 基本形
-const { data, status, error, refresh } = await useFetch('/api/users')
+## Composables（useState パターン）
 
-// オプション付き
-const { data } = await useFetch('/api/users', {
-  query: { page: 1, limit: 10 },
-  pick: ['id', 'name'],           // フィールド選択
-  transform: (data) => data.items, // 変換
-  default: () => [],               // デフォルト値
-  lazy: true,                      // 遅延ロード
-  server: false,                   // クライアントのみ
-  watch: [page],                   // リアクティブ監視
-})
-```
-
-### useAsyncData（細粒度）
-
-カスタムフェッチロジック。
-
-```typescript
-const { data } = await useAsyncData(
-  'users',
-  () => fetchUsersFromCustomAPI(),
-  { getCachedData: (key) => nuxtApp.payload.data[key] }
-)
-```
-
-### $fetch（クライアント側）
-
-イベントハンドラや非SSR処理。
-
-```typescript
-async function submitForm() {
-  const result = await $fetch('/api/submit', {
-    method: 'POST',
-    body: formData.value
-  })
-}
-```
-
-### アンチパターン
-
-```typescript
-// ❌ ライフサイクルフック内でuseFetch
-onMounted(async () => {
-  const { data } = await useFetch('/api/data')
-})
-
-// ❌ グローバルref（SSR非安全）
-const globalState = ref(0)  // リクエスト間で共有される
-
-// ✓ 正しい使い方
-const { data } = await useFetch('/api/data')
-const state = useState('key', () => null)
-```
-
-## Composables
+状態は `useState` で持ち、外部には `readonly` で公開する。
 
 ```typescript
 // composables/use-user.ts
@@ -85,69 +33,9 @@ export function useUser() {
 }
 ```
 
-## ページ
+## DBユーティリティ（Prisma シングルトン）
 
-```vue
-<script setup lang="ts">
-const route = useRoute()
-const userId = computed(() => route.params.id as string)
-
-definePageMeta({
-  layout: 'default',
-  middleware: ['auth'],
-  validate: async (route) => /^\d+$/.test(route.params.id)
-})
-
-useSeoMeta({
-  title: () => `User ${user.value?.name}`,
-  description: () => user.value?.bio
-})
-
-const { data: user } = await useFetch<User>(
-  () => `/api/users/${userId.value}`
-)
-</script>
-
-<template>
-  <div v-if="user">
-    <h1>{{ user.name }}</h1>
-  </div>
-</template>
-```
-
-## サーバーAPI（Nitro）
-
-### Zod + h3 によるバリデーション
-
-```typescript
-// server/entry/user-schema.ts
-import { z } from 'zod'
-
-export const userIdParamSchema = z.object({
-  id: z.coerce.number().int().positive()
-})
-
-export const createUserSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).max(100)
-})
-
-export type CreateUserInput = z.infer<typeof createUserSchema>
-```
-
-```typescript
-// server/api/users/[id].get.ts
-import { userIdParamSchema } from '~/server/entry/user-schema'
-
-export default defineEventHandler(async (event) => {
-  const { id } = await getValidatedRouterParams(event, userIdParamSchema.parse)
-  const user = await db.user.findUnique({ where: { id } })
-  if (!user) throw createError({ statusCode: 404 })
-  return user
-})
-```
-
-### DBユーティリティ
+開発時のホットリロードで PrismaClient が増殖しないよう、globalThis に保持する。
 
 ```typescript
 // server/utils/db.ts
@@ -162,101 +50,4 @@ export const db = globalThis.prisma ?? new PrismaClient()
 if (process.env.NODE_ENV !== 'production') {
   globalThis.prisma = db
 }
-```
-
-## 設定
-
-```typescript
-// nuxt.config.ts
-export default defineNuxtConfig({
-  typescript: { strict: true, typeCheck: true },
-
-  runtimeConfig: {
-    apiSecret: process.env.API_SECRET,  // サーバーのみ
-    public: {
-      apiBase: '/api'  // クライアントアクセス可能
-    }
-  },
-
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt'],
-
-  compatibilityDate: '2024-11-01'  // Nuxt 4で必須
-})
-```
-
-## ミドルウェア
-
-```typescript
-// middleware/auth.ts
-export default defineNuxtRouteMiddleware((to) => {
-  const { isLoggedIn } = useUser()
-  if (!isLoggedIn.value) {
-    return navigateTo('/login', { redirectCode: 302 })
-  }
-})
-```
-
-## エラーハンドリング
-
-```typescript
-// クライアント側
-const { data, error } = await useFetch('/api/users')
-
-if (error.value) {
-  throw createError({
-    statusCode: error.value.statusCode,
-    fatal: true
-  })
-}
-
-// error.vue
-<script setup lang="ts">
-const props = defineProps<{ error: NuxtError }>()
-const handleError = () => clearError({ redirect: '/' })
-</script>
-
-<template>
-  <div>
-    <h1>{{ error.statusCode }}</h1>
-    <button @click="handleError">ホーム</button>
-  </div>
-</template>
-```
-
-## ユーティリティ
-
-```typescript
-// ランタイム設定
-const config = useRuntimeConfig()
-console.log(config.apiSecret)  // サーバーのみ
-console.log(config.public.apiBase)  // どこでも使用可能
-
-// Cookie
-const token = useCookie<string>('auth-token', {
-  maxAge: 60 * 60 * 24 * 7,
-  secure: true,
-  httpOnly: false
-})
-
-// データキャッシュ
-clearNuxtData('users')
-await refreshNuxtData('users')
-```
-
-## NuxtLink
-
-```vue
-<template>
-  <!-- 基本 -->
-  <NuxtLink to="/about">About</NuxtLink>
-
-  <!-- 外部リンク -->
-  <NuxtLink to="https://example.com" external>External</NuxtLink>
-
-  <!-- プリフェッチなし -->
-  <NuxtLink to="/heavy" :prefetch="false">Heavy</NuxtLink>
-
-  <!-- アクティブクラス -->
-  <NuxtLink to="/users" active-class="text-primary">Users</NuxtLink>
-</template>
 ```
