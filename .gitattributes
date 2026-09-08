@@ -1,0 +1,2 @@
+# Orca が自動注入する hooks キーをコミット対象から除外する (filter 定義は mise bootstrap で適用)
+claude/settings.json filter=strip-claude-hooks
