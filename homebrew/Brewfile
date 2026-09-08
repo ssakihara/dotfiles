@@ -1,7 +1,10 @@
 # GUI アプリ (cask) と VSCode 拡張機能は brew bundle で管理する。
 # mise 2026.7.5 の [bootstrap.packages] は cask を brew に委譲せず自前実装で
 # 再インストールしようとし、installer 型 cask (gcloud-cli) も非対応のため。
-# formulae / tap は mise.toml の [bootstrap.*] 側で管理する。
+# formulae / formula 用 tap は mise.toml の [bootstrap.*] 側で管理する。
+# cask 専用 tap のみこのファイルで宣言する。
+tap "stablyai/orca"
+
 cask "appcleaner"
 cask "bitwarden"
 cask "copilot-cli"
@@ -14,6 +17,7 @@ cask "ghostty"
 cask "google-japanese-ime"
 cask "obsidian"
 cask "raycast"
+cask "stablyai/orca/orca", trusted: true
 cask "visual-studio-code"
 
 # VSCode 拡張機能 (エクスポート: code --list-extensions | sort -f)
@@ -66,6 +70,7 @@ vscode "oderwat.indent-rainbow"
 vscode "pkief.material-icon-theme"
 vscode "prisma.prisma"
 vscode "redhat.vscode-yaml"
+vscode "richie5um2.vscode-sort-json"
 vscode "romanpeshkov.vscode-text-tables"
 vscode "satokaz.vscode-bs-ctrlchar-remover"
 vscode "shardulm94.trailing-spaces"
