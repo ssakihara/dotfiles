@@ -33,30 +33,6 @@
     ],
     "defaultMode": "auto"
   },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -subtitle '確認待ち' -message 'Claude Codeが許可を求めています' -sound Glass -contentImage ~/.claude/assets/claudecode-color.png"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -subtitle '処理終了' -message 'タスクが完了しました' -sound Hero -contentImage ~/.claude/assets/claudecode-color.png"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/statusline.mjs"
