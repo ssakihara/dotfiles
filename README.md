@@ -50,7 +50,7 @@ App Store アプリは無料でも Apple アカウントへのサインインと
 Raycast は設定を暗号化 SQLite で保持しておりプレーンテキストでの宣言管理ができないため、`Export Settings & Data` コマンドのエクスポート (`raycast/Raycast.rayconfig`) をコミットして管理する。
 
 - 新規 Mac: `mise bootstrap` 完了後 (Raycast は cask で導入済み)、`open raycast/Raycast.rayconfig` を実行してインポートする。
-  エクスポート時に設定したパスフレーズの入力が必要 (リポジトリには含めない)。
+エクスポート時に設定したパスフレーズの入力が必要 (リポジトリには含めない)。
 - 設定変更時: Raycast で `Export Settings & Data` を実行し、出力ファイルで `raycast/Raycast.rayconfig` を上書きしてコミットする。
 
 ### VSCode 設定
@@ -120,18 +120,30 @@ dotfile は symlink でリポジトリ実体に直結しているため、リポ
 ## Skills
 
 ```sh
-gh skill install vercel-labs/agent-browser skills/agent-browser --agent claude-code --scope user
+gh skill install anthropics/skills pdf --agent claude-code --scope user
 gh skill install cli/cli skills/gh --agent claude-code --scope user
+gh skill install github/gh-stack gh-stack --agent claude-code --scope user
 gh skill install kepano/obsidian-skills skills/obsidian-bases --agent claude-code --scope user
 gh skill install kepano/obsidian-skills skills/obsidian-cli --agent claude-code --scope user
 gh skill install kepano/obsidian-skills skills/obsidian-markdown --agent claude-code --scope user
+gh skill install mattpocock/skills productivity/grill-me --agent claude-code --scope user
+gh skill install obra/superpowers brainstorming --agent claude-code --scope user
+gh skill install stablyai/orca skills/orca-cli --agent claude-code --scope user
+gh skill install vercel-labs/agent-browser skills/agent-browser --agent claude-code --scope user
+```
+
+インストール済みスキルの確認:
+
+```sh
+gh skill list --agent claude-code --scope user
 ```
 
 ## Notes
 
 - 言語ランタイム (Node.js / Python) は `mise` / `uv` で管理する。
-  mise のグローバルツールは `mise/global.toml` の `[tools]` で宣言する。
+mise のグローバルツールは `mise/global.toml` の `[tools]` で宣言する。
 - リポジトリ側のグローバル設定を `mise/config.toml` ではなく `global.toml` と命名しているのは、mise がリポジトリ内の `mise/config.toml` をローカル設定として auto-discovery してしまうため。
 - cask を `[bootstrap.packages]` ではなく Brewfile で管理しているのは、mise (2026.7.5 時点) の cask 実装が brew でインストール済みの cask を認識できず、installer 型 cask にも非対応のため。
 - `[bootstrap.macos.defaults]` の値は現在の Mac の `defaults read` から取得したものを反映している。
-  mise で宣言できない設定 (array / dict / `-currentHost` / sudo が必要なもの) は `scripts/macos-extra.sh` に集約している。
+mise で宣言できない設定 (array / dict / `-currentHost` / sudo が必要なもの) は `scripts/macos-extra.sh` に集約している。
+
