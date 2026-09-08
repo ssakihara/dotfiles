@@ -33,10 +33,6 @@
     ],
     "defaultMode": "auto"
   },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/scripts/statusline.mjs"
-  },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
     "typescript-lsp@claude-plugins-official": true,
