@@ -1,0 +1,2 @@
+# Orca が settings.json 書き換え時に作成するバックアップ (symlink 経由でリポジトリ内に生成される)
+claude/settings.json.bak

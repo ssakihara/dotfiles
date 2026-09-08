@@ -220,10 +220,10 @@ run = """
 #!/bin/bash
 set -euo pipefail
 
-# claude/settings.json に Orca が自動注入する hooks キーをコミット対象から除外する
-# (.gitattributes の filter=strip-claude-hooks と対になる。filter 定義はローカル設定のため毎回適用)
+# claude/settings.json に Orca が自動注入するキー (hooks / statusLine) をコミット対象から除外する
+# (.gitattributes の filter=strip-orca-keys と対になる。filter 定義はローカル設定のため毎回適用)
 # required は付けない: bootstrap 前のフレッシュクローンで checkout が失敗するため (jq 不在時は警告付き素通し)
-git config filter.strip-claude-hooks.clean 'jq --indent 2 "del(.hooks)"'
+git config filter.strip-orca-keys.clean 'jq --indent 2 "del(.hooks, .statusLine)"'
 
 # ~/.ssh ディレクトリと鍵の権限を正規化し、id_ed25519 が未生成なら作成する
 mkdir -p ~/.ssh
