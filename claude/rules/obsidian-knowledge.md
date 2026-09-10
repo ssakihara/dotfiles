@@ -16,7 +16,18 @@ obsidian search:context query="検索キーワード"
 
 設計判断・ハマりポイント解決・ユーザーの好み検知・環境の知見・タスク完了時・タスク中断時など、再利用価値のある情報は**すべて書く**こと。
 
-タイミングの詳細一覧・セルフチェックリスト・ADRフォーマット・タグ規約は references/obsidian-knowledge-detail.md を参照
+タイミングの詳細一覧・セルフチェックリストは references/obsidian-knowledge-detail.md を参照
+
+## 必須: ノートフォーマット
+
+すべてのノートに YAML フロントマター（`type` / `status` / `project` / `date` / `summary`）を付けること。
+本文は結論を先頭に書き（逆ピラミッド）、種別ごとのテンプレートに従うこと。
+
+- `type` は `design-decision`（ADR形式） / `troubleshooting` / `runbook` / `til` / `handover` の5種別
+- `summary` は結論1行。検索結果からノートを判別するために必須
+- 知見が無効になったと気づいたら `status` を `outdated` / `superseded` に更新する
+
+フロントマターの詳細・種別ごとのセクション構成・タグ規約は references/obsidian-knowledge-detail.md を参照
 
 ## IMPORTANT: ディレクトリ構造
 
@@ -35,5 +46,9 @@ pathパラメータは必ず `ディレクトリ名/ノート名.md` の**1階�
 - ❌ `path="設計メモ.md"` ← ディレクトリ指定がない
 
 プロジェクト名の判定:
-1. 現在の作業ディレクトリのリポジトリ名を使用する
-2. リポジトリ外の場合やプロジェクト横断的な知見は `general/` を使用する
+1. git 管理下では**リポジトリ名**を使用する。
+   `basename -s .git "$(git remote get-url origin)"` で判定する（worktree や clone 先のディレクトリ名に依存させない。SSH / HTTPS どちらのURL形式でも動作する）。
+2. リモート未設定の場合はメインワークツリーのディレクトリ名を使用する。
+   `basename "$(git worktree list --porcelain | head -1 | sed 's/^worktree //')"` で取得する。
+3. git 管理外の場合は作業ディレクトリ名を使用する。
+4. プロジェクト横断的な知見は `general/` を使用する。
