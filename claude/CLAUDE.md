@@ -10,6 +10,10 @@ rules/agents.md のエージェント選択ルールに必ず従うこと。
 
 rules/commit-message.md のコミットメッセージ規約に必ず従うこと。
 
+## IMPORTANT: PR作成規約
+
+rules/pull-request.md の PR 作成規約に必ず従うこと。
+
 ## IMPORTANT: 文章記述規約
 
 rules/writing.md の文章記述規約に必ず従うこと。
