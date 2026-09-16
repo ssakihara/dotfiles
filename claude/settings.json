@@ -25,9 +25,10 @@
       "Read(~/.claude/skills/**)"
     ],
     "deny": [
-      "Read(./.env)",
+      "Read(**/.env)",
       "Read(**/*.env)",
       "Read(**/.env.*)",
+      "Edit(**/.env)",
       "Bash(curl:*)",
       "Edit(/etc/**)"
     ],
