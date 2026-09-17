@@ -5,18 +5,55 @@
 PR 作成時は必ず自分をアサインし、GitHub Copilot をレビュワーに設定すること。
 
 - アサイン: `gh pr create` に `--assignee @me` を付与する
-- レビュワー: `gh pr create` は `@copilot` を解決できないため、作成後に `gh pr edit --add-reviewer "@copilot"` で追加する
+- レビュワー: Copilot は `gh` のサブコマンドでは設定できないため、GraphQL の `requestReviews` で追加する
 
 ```sh
 gh pr create --base <base> --assignee @me --title "..." --body "..."
-gh pr edit --add-reviewer "@copilot"
 ```
 
 `gh pr edit` は引数を省略すると現在のブランチの PR を対象にする。
-別の PR を対象にする場合は `gh pr edit <番号> --add-assignee @me --add-reviewer "@copilot"` のように番号を指定する。
-アサインやレビュワーが漏れた既存 PR に気づいた場合も同様に補うこと。
+アサインが漏れた既存 PR に気づいた場合は `gh pr edit <番号> --add-assignee @me` で補うこと。
 
-なお `@copilot` は GitHub Enterprise Server では利用できない。
+### Copilot のレビュワー追加（IMPORTANT）
+
+`gh pr edit --add-reviewer "@copilot"` は **PR の URL を出力して成功したように見えるが、実際には追加されない**。
+REST API の `requested_reviewers` に `copilot-pull-request-reviewer[bot]` を渡しても HTTP 200 で無視される。
+必ず以下の GraphQL ミューテーションを使うこと。
+
+```sh
+OWNER=<owner>; REPO=<repo>; NUM=<PR番号>
+
+BOT_ID=$(gh api 'users/copilot-pull-request-reviewer[bot]' --jq '.node_id')
+PR_ID=$(gh api "repos/$OWNER/$REPO/pulls/$NUM" --jq '.node_id')
+
+gh api graphql -f query="
+mutation {
+  requestReviews(input: { pullRequestId: \"$PR_ID\", botIds: [\"$BOT_ID\"], union: true }) {
+    pullRequest { reviewRequests(first: 10) { nodes { requestedReviewer { __typename ... on Bot { login } } } } }
+  }
+}"
+```
+
+`union: true` を省略すると既存のレビュワーが置き換えられるため必ず付けること。
+
+### 追加結果の確認
+
+Bot へのレビュー依頼は REST API の `requested_reviewers` にも `gh pr view --json reviewRequests` にも現れない。
+上記ミューテーションのレスポンス、または以下の GraphQL クエリで確認すること。
+
+```sh
+gh api graphql -f query="query {
+  repository(owner: \"$OWNER\", name: \"$REPO\") {
+    pullRequest(number: $NUM) {
+      reviewRequests(first: 10) { nodes { requestedReviewer { __typename ... on Bot { login } ... on User { login } } } }
+    }
+  }
+}"
+```
+
+`requestedReviewer.login` が `copilot-pull-request-reviewer` であれば成功。
+
+なお Copilot レビュワーは GitHub Enterprise Server では利用できない。
 
 ## タイトルと本文
 
