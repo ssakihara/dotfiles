@@ -336,11 +336,11 @@ type Status = 'active' | 'inactive'
 ### Vitest 基本
 
 ```typescript
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { createUser } from './user-service'
 
 describe('createUser', () => {
-  it('should create a valid user', async () => {
+  test('should create a valid user', async () => {
     const result = await createUser({ name: 'Alice', email: 'alice@example.com' })
     expect(result.ok).toBe(true)
     if (result.ok) {
@@ -348,7 +348,7 @@ describe('createUser', () => {
     }
   })
 
-  it('should return error for invalid email', async () => {
+  test('should return error for invalid email', async () => {
     const result = await createUser({ name: 'Alice', email: 'invalid' })
     expect(result.ok).toBe(false)
   })
@@ -358,7 +358,7 @@ describe('createUser', () => {
 ### モック
 
 ```typescript
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 // 依存性のモック
 const mockRepo: UserRepository = {
@@ -374,7 +374,7 @@ const mockLogger: Logger = {
 describe('UserService', () => {
   const service = createUserService({ userRepo: mockRepo, logger: mockLogger })
 
-  it('should return NOT_FOUND when user does not exist', async () => {
+  test('should return NOT_FOUND when user does not exist', async () => {
     vi.mocked(mockRepo.findById).mockResolvedValue(null)
     const result = await service.getUser('123')
     expect(result).toEqual({ ok: false, error: 'NOT_FOUND' })
@@ -385,9 +385,9 @@ describe('UserService', () => {
 ### 型テスト
 
 ```typescript
-import { assertType, expectTypeOf, it } from 'vitest'
+import { expectTypeOf, test } from 'vitest'
 
-it('should infer correct types', () => {
+test('should infer correct types', () => {
   expectTypeOf(createUserId('abc')).toEqualTypeOf<UserId>()
   expectTypeOf(ok(42)).toEqualTypeOf<Result<number, never>>()
 })

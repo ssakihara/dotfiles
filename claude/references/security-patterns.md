@@ -10,7 +10,7 @@ const query = `SELECT * FROM users WHERE id = ${userId}`
 await db.query(query)
 
 // ✓ パラメータ化クエリ
-await db.query('SELECT * FROM users WHERE id = $1', [userId])
+await db.query('SELECT id, name FROM users WHERE id = $1', [userId])
 
 // ✓ ORM（Prisma）
 await db.user.findUnique({ where: { id: userId } })
@@ -193,7 +193,13 @@ const envSchema = z.object({
   REDIS_URL: z.string().url().optional()
 })
 
-export const env = envSchema.parse(process.env)
+const result = envSchema.safeParse(process.env)
+if (!result.success) {
+  // 値そのものはログに出さず、欠落・不正なキー名だけを示す
+  throw new Error(`Invalid env: ${Object.keys(result.error.flatten().fieldErrors).join(', ')}`)
+}
+
+export const env = result.data
 ```
 
 ## 一般的な脆弱性
@@ -213,7 +219,8 @@ export const env = envSchema.parse(process.env)
 export default defineEventHandler((event) => {
   setHeader(event, 'X-Content-Type-Options', 'nosniff')
   setHeader(event, 'X-Frame-Options', 'DENY')
-  setHeader(event, 'X-XSS-Protection', '1; mode=block')
+  // XSS Auditor は廃止済みで、1; mode=block は逆に脆弱性の原因になるため無効化する
+  setHeader(event, 'X-XSS-Protection', '0')
   setHeader(event, 'Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
   setHeader(event, 'Content-Security-Policy', "default-src 'self'")
 

@@ -103,7 +103,7 @@ async function getUser(id: string) {
 }
 
 // 明示的無効化
-async function updateUser(id: string, data: any) {
+async function updateUser(id: string, data: Prisma.UserUpdateInput) {
   const user = await db.user.update({ where: { id }, data })
   await redis.del(`user:${id}:profile`)
   await redis.del(`user:${id}:permissions`)
