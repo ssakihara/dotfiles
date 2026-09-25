@@ -32,6 +32,9 @@
       "Bash(curl:*)",
       "Edit(/etc/**)"
     ],
+    "ask": [
+      "Bash(gh pr review:*)"
+    ],
     "defaultMode": "auto"
   },
   "enabledPlugins": {
