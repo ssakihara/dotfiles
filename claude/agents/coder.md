@@ -60,7 +60,7 @@ model: sonnet
 - 外部データ境界（API応答、ファイル読み込み等）は Zod 等でバリデーション必須
 - Promise の reject は必ずハンドリングする
 - `enum` 禁止 → `as const` またはユニオン型を使用
-- `export default` より名前付きエクスポートを優先
+- `export default` より名前付きエクスポートを優先（Nuxt の `defineEventHandler` / `defineNuxtConfig` やページ・コンポーネントなど、フレームワークが default export を要求するファイルは例外）
 
 ### プロジェクト構造（参考・非 Nuxt プロジェクト向け）
 

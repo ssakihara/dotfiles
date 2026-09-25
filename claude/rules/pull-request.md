@@ -24,7 +24,7 @@ REST API の `requested_reviewers` に `copilot-pull-request-reviewer[bot]` を�
 OWNER=<owner>; REPO=<repo>; NUM=<PR番号>
 
 BOT_ID=$(gh api 'users/copilot-pull-request-reviewer[bot]' --jq '.node_id')
-PR_ID=$(gh api "repos/$OWNER/$REPO/pulls/$NUM" --jq '.node_id')
+PR_ID=$(gh pr view "$NUM" --repo "$OWNER/$REPO" --json id --jq '.id')
 
 gh api graphql -f query="
 mutation {
