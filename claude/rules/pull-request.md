@@ -5,7 +5,7 @@
 PR 作成時は必ず自分をアサインし、GitHub Copilot をレビュワーに設定すること。
 
 - アサイン: `gh pr create` に `--assignee @me` を付与する
-- レビュワー: Copilot は `gh` のサブコマンドでは設定できないため、GraphQL の `requestReviews` で追加する
+- レビュワー: Copilot は `gh` のサブコマンドでは設定できないため、`add-copilot-reviewer.sh` で追加する
 
 ```sh
 gh pr create --base <base> --assignee @me --title "..." --body "..."
@@ -16,42 +16,19 @@ gh pr create --base <base> --assignee @me --title "..." --body "..."
 
 ### Copilot のレビュワー追加（IMPORTANT）
 
-`gh pr edit --add-reviewer "@copilot"` は **PR の URL を出力して成功したように見えるが、実際には追加されない**。
-REST API の `requested_reviewers` に `copilot-pull-request-reviewer[bot]` を渡しても HTTP 200 で無視される。
-必ず以下の GraphQL ミューテーションを使うこと。
+PR を作成したら、必ず以下のスクリプトで Copilot を追加すること。
 
 ```sh
-OWNER=<owner>; REPO=<repo>; NUM=<PR番号>
-
-BOT_ID=$(gh api 'users/copilot-pull-request-reviewer[bot]' --jq '.node_id')
-PR_ID=$(gh pr view "$NUM" --repo "$OWNER/$REPO" --json id --jq '.id')
-
-gh api graphql -f query="
-mutation {
-  requestReviews(input: { pullRequestId: \"$PR_ID\", botIds: [\"$BOT_ID\"], union: true }) {
-    pullRequest { reviewRequests(first: 10) { nodes { requestedReviewer { __typename ... on Bot { login } } } } }
-  }
-}"
+~/.claude/scripts/add-copilot-reviewer.sh [<PR番号> | <PR URL> | <ブランチ名>]
 ```
 
-`union: true` を省略すると既存のレビュワーが置き換えられるため必ず付けること。
+- 引数を省略すると現在のブランチの PR が対象になる
+- 別リポジトリの PR は URL で指定する
+- 追加できたかをスクリプト自身が確認し、失敗した場合は終了コード 1 を返す
 
-### 追加結果の確認
-
-Bot へのレビュー依頼は REST API の `requested_reviewers` にも `gh pr view --json reviewRequests` にも現れない。
-上記ミューテーションのレスポンス、または以下の GraphQL クエリで確認すること。
-
-```sh
-gh api graphql -f query="query {
-  repository(owner: \"$OWNER\", name: \"$REPO\") {
-    pullRequest(number: $NUM) {
-      reviewRequests(first: 10) { nodes { requestedReviewer { __typename ... on Bot { login } ... on User { login } } } }
-    }
-  }
-}"
-```
-
-`requestedReviewer.login` が `copilot-pull-request-reviewer` であれば成功。
+`gh pr edit --add-reviewer "@copilot"` と REST API の `requested_reviewers` は、成功したように見えるが実際には追加されないため使わないこと。
+スクリプトは GraphQL の `requestReviews` を `union: true` 付きで呼び出している（省略すると既存のレビュワーが置き換えられる）。
+Bot へのレビュー依頼は `gh pr view --json reviewRequests` には現れないので、確認はスクリプトの出力で行う。
 
 なお Copilot レビュワーは GitHub Enterprise Server では利用できない。
 
