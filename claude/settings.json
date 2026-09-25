@@ -22,7 +22,14 @@
       "Read(~/.claude/agents/**)",
       "Read(~/.claude/references/**)",
       "Read(~/.claude/rules/**)",
-      "Read(~/.claude/skills/**)"
+      "Read(~/.claude/skills/**)",
+      "Bash(obsidian search:context *)",
+      "Bash(gcloud run services describe *)",
+      "Bash(gcloud logging read *)",
+      "Bash(gcloud run revisions describe *)",
+      "Bash(gcloud run revisions list *)",
+      "mcp__pms__describe_table",
+      "mcp__claude_ai_Slack__slack_read_thread"
     ],
     "deny": [
       "Read(**/.env)",
