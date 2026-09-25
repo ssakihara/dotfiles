@@ -21,16 +21,14 @@ IndexedDB、localStorage、Cookie等の永続ストレージに完全対応。
 3. **エラー確認必須** - 操作後に `agent-browser console` と `agent-browser errors` でエラーを確認する
 4. **後片付け** - 完了時は必ず `agent-browser close` でブラウザを閉じる
 
-## 必須ルール（CRITICAL）
+## 必須ルール
 
 - 操作対象の ref は必ず直前の `agent-browser snapshot -i` から取得する（推測しない）
 - サーバー未起動時はブラウザ操作を試みず、ユーザーに報告する
-- コンソールエラー（`agent-browser console`）は必ず確認し報告する
 - デバッグ時に修正は行わない — 問題の特定と報告に専念する（修正指示がある場合を除く）
 - ブラウザ検証をスキップする場合は必ず理由を明記する（認証必要、外部依存等）
-- 完了時は必ず `agent-browser close` でブラウザを閉じる
 
-## Firebase認証が必要なプロジェクトでの起動（CRITICAL）
+## Firebase認証が必要なプロジェクトでの起動
 
 Firebase認証を使用するプロジェクトでは、認証情報がIndexedDBに保存されている。
 `--profile` オプションでブラウザプロファイルを永続化し、再ログインなしで認証状態を再利用する。

@@ -16,7 +16,7 @@ model: sonnet
 
 メインエージェントの作業指示書に従い、TypeScript / Nuxt 4 プロジェクトの実装作業を行う。
 
-## 役割（IMPORTANT - 最優先）
+## 役割
 
 本エージェントは**作業実行者**である。設計判断は行わない。
 
@@ -52,7 +52,7 @@ model: sonnet
 4. **エラーは値として扱う** - Result パターンを推奨する
 5. **イミュータブル優先** - `readonly`, `as const` を活用する
 
-### 必須ルール（CRITICAL）
+### 必須ルール
 
 - `any` 使用禁止 → `unknown` + 型ガード、またはジェネリクスを使用
 - `@ts-ignore` 禁止 → `@ts-expect-error` + 理由コメント
@@ -128,31 +128,31 @@ shared/
 └── utils/           # 共有ユーティリティ
 ```
 
-### 必須ルール（CRITICAL）
+### 必須ルール
 
 - モジュールスコープでは `ref()` ではなく `useState()` を使用（SSR安全）
 - `useFetch()`/`useAsyncData()` はsetup内のみ、`onMounted()` 内では使用禁止
 - イベントハンドラでは `$fetch()` を使用、`useFetch()` は使用禁止
 
-### サーバーAPIバリデーション（CRITICAL - 絶対遵守）
+### サーバーAPIバリデーション
 
-**server/ 配下のAPIエンドポイントを作成・編集する際、以下のルールに必ず従うこと。違反は許容しない。**
+server/ 配下のAPIエンドポイントを作成・編集する際は、以下のパターンに従う。
 
-#### 禁止パターン（これらを書いたら即修正）
+#### 禁止パターン
 
 ```typescript
-// ❌ 絶対禁止: バリデーションなしでリクエストデータを使用
+// ❌ バリデーションなしでリクエストデータを使用
 const body = await readBody(event)
 return await createUser(body)
 
-// ❌ 絶対禁止: readValidatedBody / getValidatedQuery / getValidatedRouterParams の使用
+// ❌ readValidatedBody / getValidatedQuery / getValidatedRouterParams の使用
 const body = await readValidatedBody(event, schema.parse)
 
-// ❌ 絶対禁止: Zod の parse（例外を投げる）を使用
+// ❌ Zod の parse（例外を投げる）を使用
 const data = schema.parse(rawData)
 ```
 
-#### 正しいパターン（必ずこれを使用）
+#### 正しいパターン
 
 `readBody` / `getQuery` / `getRouterParams` で取得し、Zod の `safeParse` でバリデーションする。
 
@@ -184,7 +184,7 @@ if (!result.success) {
 // result.data は型安全
 ```
 
-#### サーバーAPI作成手順（必ずこの順序で実行）
+#### サーバーAPI作成手順
 
 1. **まず `server/entry/` にZodスキーマを定義**（既存スキーマがあれば再利用）
 2. **APIハンドラで `readBody` / `getQuery` / `getRouterParams` でデータ取得**

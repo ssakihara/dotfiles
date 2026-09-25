@@ -6,7 +6,7 @@
 
 ## サーバーAPIバリデーション
 
-agents/coder.md の「サーバーAPIバリデーション（CRITICAL）」が正である。
+agents/coder.md の「サーバーAPIバリデーション」が正である。
 
 公式ドキュメントの例には `readValidatedBody` / `getValidatedRouterParams` / `.parse()` を使うものがあるが、**チームでは使用禁止**。
 `readBody` / `getQuery` / `getRouterParams` + Zod の `safeParse` + `createError` で統一する。
