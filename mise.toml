@@ -56,8 +56,6 @@
 "~/.gitconfig_company" = { source = "git/gitconfig_company", mode = "symlink" }
 "~/.gitconfig_private" = { source = "git/gitconfig_private", mode = "symlink" }
 "~/.gitignore_global" = { source = "git/gitignore_global", mode = "symlink" }
-"~/.bin/git-aic" = { source = "bin/git-aic", mode = "symlink" }
-"~/.bin/git-cpr" = { source = "bin/git-cpr", mode = "symlink" }
 "~/.bin/git-sync-upstream" = { source = "bin/git-sync-upstream", mode = "symlink" }
 # mise は <repo>/mise/config.toml を auto-discovery してしまうため global.toml と命名している
 "~/.config/mise/config.toml" = { source = "mise/global.toml", mode = "symlink" }
