@@ -15,7 +15,7 @@ model: haiku
 `/code-review` スキルを実行してコードレビューを行う。
 ポリシー（対象範囲・ラベル・セキュリティエスカレーション）は `@~/.claude/rules/code-review.md` に従う。
 
-`/code-review` スキルのみを使用すること。他のスキルは呼び出さない。
+使用するスキルは `/code-review` と、ナレッジ記録用の `/obsidian-cli` のみとする。
 
 ## ワークフロー
 
