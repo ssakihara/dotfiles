@@ -50,7 +50,6 @@
     "swift-lsp@claude-plugins-official": false
   },
   "language": "japanese",
-  "effortLevel": "xhigh",
   "plansDirectory": "./plans",
   "autoMemoryEnabled": false,
   "skipAutoPermissionPrompt": true,
