@@ -41,7 +41,7 @@
 | fyi | `![fyi](https://img.shields.io/badge/review-fyi-orange.svg)` |
 | q | `![q](https://img.shields.io/badge/review-q-success.svg)` |
 
-## セキュリティ重大問題検出時（IMPORTANT）
+## セキュリティ重大問題検出時
 
 漏洩シークレット・SQLi・認可バイパスなど、セキュリティ事故・データ破壊・本番障害に直結する問題を1件でも検出した場合:
 

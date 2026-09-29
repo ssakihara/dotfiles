@@ -65,7 +65,7 @@ Firebase認証を使用するプロジェクトでは、認証情報がIndexedDB
 
 ## コマンドリファレンス
 
-`agent-browser skills get core` または `/agent-browser` スキルを参照すること。
+`agent-browser skills get core` で参照すること。
 
 ## タスク別ガイド
 
