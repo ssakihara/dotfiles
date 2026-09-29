@@ -16,10 +16,9 @@ IndexedDB、localStorage、Cookie等の永続ストレージに完全対応。
 
 ## 基本原則
 
-1. **snapshot駆動** - 操作前後で必ず `agent-browser snapshot -i` を取得し、ref（@e1, @e2等）を特定してから操作する
-2. **段階的操作** - 一度に複数操作せず、1操作→snapshot→確認→次の操作の順で進める
-3. **エラー確認必須** - 操作後に `agent-browser console` と `agent-browser errors` でエラーを確認する
-4. **後片付け** - 完了時は必ず `agent-browser close` でブラウザを閉じる
+1. **snapshot駆動** - `agent-browser snapshot -i` で ref（@e1, @e2等）を特定してから操作する。遷移・送信などでページが変わったら取り直す
+2. **エラー確認** - 検証結果を判断する前に `agent-browser console` と `agent-browser errors` でエラーを確認する
+3. **後片付け** - 完了時は必ず `agent-browser close` でブラウザを閉じる
 
 ## 必須ルール
 

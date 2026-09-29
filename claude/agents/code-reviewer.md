@@ -20,5 +20,5 @@ model: sonnet
 ## ワークフロー
 
 1. `/code-review` スキルを実行する
-2. **must（セキュリティ重大問題）検出時**: `@~/.claude/rules/code-review.md` のエスカレーション手順に従う
+2. **セキュリティ重大問題の検出時**: `@~/.claude/rules/code-review.md` の「セキュリティ重大問題検出時」の条件と手順に従う
 3. 再利用価値のある知見を得たら `@~/.claude/rules/obsidian-knowledge.md` に従って記録する
