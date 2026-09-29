@@ -17,7 +17,15 @@ agents/coder.md の「サーバーAPIバリデーション」が正である。
 
 ```typescript
 // composables/use-user.ts
-export function useUser() {
+import type { ComputedRef, DeepReadonly, Ref } from 'vue'
+
+type UseUserReturn = {
+  user: Readonly<Ref<DeepReadonly<User> | null>>
+  isLoggedIn: ComputedRef<boolean>
+  login: (credentials: LoginCredentials) => Promise<void>
+}
+
+export function useUser(): UseUserReturn {
   const user = useState<User | null>('user', () => null)
   const isLoggedIn = computed(() => user.value !== null)
 
@@ -29,7 +37,7 @@ export function useUser() {
     user.value = data
   }
 
-  return { user: readonly(user), isLoggedIn, login, logout }
+  return { user: readonly(user), isLoggedIn, login }
 }
 ```
 
