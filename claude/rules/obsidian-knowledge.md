@@ -32,13 +32,13 @@ obsidian search:context query="検索キーワード"
 
 ## ディレクトリ構造
 
-**Vault直下にノートを作成することは禁止。** 必ず `プロジェクト名/` または `general/` ディレクトリ配下に作成すること。
+ノートは Vault 直下ではなく `プロジェクト名/` または `general/` ディレクトリ配下に作成する。
 
-**`obsidian create` の `name` パラメータにはスラッシュを含められない。** スラッシュを含めるとパース失敗し `Untitled` で作成されてしまう。
-ディレクトリ付きノートの作成には必ず **`path` パラメータ**を使い、**`.md` 拡張子を付ける**こと。
+`obsidian create` の `name` パラメータにスラッシュを含めるとパースに失敗し、`Untitled` で作成される。
+ディレクトリ付きノートは `path` パラメータで作成し、`.md` 拡張子を付ける。
 
-pathパラメータは必ず `ディレクトリ名/ノート名.md` の**1階層のみ**とすること（スラッシュはちょうど1つ）。
-**ノート名は英語・kebab-caseで命名すること。** ノートの内容（content）は日本語で記述する。
+`path` は `ディレクトリ名/ノート名.md` の1階層のみとする（スラッシュはちょうど1つ）。
+ノート名は英語の kebab-case、ノートの内容（content）は日本語で書く。
 
 - ✅ `path="payment-notification-service/api-design.md"`
 - ✅ `path="general/docker-tips.md"`

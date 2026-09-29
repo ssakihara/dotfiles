@@ -19,10 +19,7 @@ await db.user.findUnique({ where: { id: userId } })
 ### XSS（クロスサイトスクリプティング）
 
 ```vue
-<!-- ❌ 脆弱性あり -->
-<div>{{ userInput }}</div>
-
-<!-- ❌ v-htmlはサニタイズ必須 -->
+<!-- ❌ サニタイズせずに v-html へ渡す -->
 <div v-html="userInput"></div>
 
 <!-- ✓ 自動エスケープ（デフォルト） -->
