@@ -32,19 +32,15 @@ await db.user.findUnique({ where: { id: userId } })
 ### CSRF対策
 
 ```typescript
-// Nuxt 3/4 でCSRF保護
+// Nuxt 3/4 でCSRF保護（nuxt-csurf）
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@sidebase/nuxt-csrf']
+  modules: ['nuxt-csurf']
 })
 
-// サーバー側で検証
-import { validateCsrfToken } from '#imports'
-
-export default defineEventHandler(async (event) => {
-  await validateCsrfToken(event)
-  // 安全に処理続行
-})
+// サーバー側の検証はモジュールのミドルウェアが自動で行う
+// クライアントはトークンを付与する useCsrfFetch / $csrfFetch で送信する
+const { data } = await useCsrfFetch('/api/users', { method: 'POST', body })
 ```
 
 ### 認証/認可
@@ -109,17 +105,22 @@ export default defineEventHandler(async (event) => {
 ### レート制限
 
 ```typescript
-// Nitro レート制限
-import { defineRateLimiter } from '#imports'
-
-const limiter = defineRateLimiter({
-  interval: 60000,  // 1分
-  requests: 100     // 100リクエスト
-})
-
-export default defineEventHandler(async (event) => {
-  await limiter(event)
-  // レート制限後の処理
+// nuxt-security のレート制限
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['nuxt-security'],
+  security: {
+    rateLimiter: {
+      tokensPerInterval: 100, // 100リクエスト
+      interval: 60000,        // 1分
+    },
+  },
+  // ルート単位で上書きする場合
+  routeRules: {
+    '/api/auth/login': {
+      security: { rateLimiter: { tokensPerInterval: 5, interval: 60000 } },
+    },
+  },
 })
 ```
 

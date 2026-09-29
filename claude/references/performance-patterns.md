@@ -49,7 +49,8 @@ const users = await db.user.findMany({
 ### インデックス設計
 
 ```sql
--- 複合インデックスのカラム順序（選択性の高い順）
+-- 複合インデックスのカラム順序（等価条件のカラム → 範囲・ソートのカラム）
+-- WHERE status = ? ORDER BY created_at を想定
 CREATE INDEX idx_user_status_created ON users(status, created_at);
 
 -- カバリングインデックス（必要なカラムのみ）
@@ -134,9 +135,22 @@ const [user, posts, comments] = await Promise.all([
 const file = fs.readFileSync('large-file.json')
 const data = JSON.parse(file)
 
-// ✓ ストリームで処理
-const stream = fs.createReadStream('large-file.json')
-const data = await JSONStream.stream('*')
+// ✓ ストリームで処理（配列の要素を1件ずつ処理する）
+import { Writable } from 'node:stream'
+import { pipeline } from 'node:stream/promises'
+import JSONStream from 'JSONStream'
+
+await pipeline(
+  fs.createReadStream('large-file.json'),
+  JSONStream.parse('*'),
+  new Writable({
+    objectMode: true,
+    write(item, _encoding, callback) {
+      processItem(item)
+      callback()
+    },
+  }),
+)
 ```
 
 ## コネクションプール設定
