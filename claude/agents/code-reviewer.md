@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
   - Skill
-model: haiku
+model: sonnet
 ---
 
 # コードレビューエージェント
