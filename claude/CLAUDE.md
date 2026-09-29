@@ -1,6 +1,7 @@
 # Claude Code 設定
 
-以下の規約は rules/ 配下にあり、すべて適用する。
+以下の規約は rules/ 配下にある。
+セキュリティ・パフォーマンス・SQL フォーマットは frontmatter の `paths` に一致するファイルを扱うときだけ読み込まれる。
 
 - エージェント選択と作業指示書: rules/agents.md（設計はメインモデルが行う）
 - コミットメッセージ: rules/commit-message.md
@@ -12,4 +13,4 @@
 - コードレビュー: rules/code-review.md
 - セキュリティ: rules/security.md
 - パフォーマンス: rules/performance.md
-- SQL フォーマット: rules/sql-format.md（SQL を含むコードを書くとき）
+- SQL フォーマット: rules/sql-format.md

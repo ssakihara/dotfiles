@@ -59,19 +59,9 @@ Firebase認証を使用するプロジェクトでは、認証情報がIndexedDB
 2. サーバー未起動の場合はユーザーに報告して終了
 3. Firebase認証が必要な場合は上記「Firebase認証が必要なプロジェクトでの起動」の手順に従う。それ以外は `agent-browser open URL` でブラウザを開く
 
-### Phase 2: 操作と検証
+### Phase 2: 操作・検証・報告
 
-1. `agent-browser snapshot -i` でアクセシビリティツリーを取得（ref を特定）
-2. ref を使って操作を実行（`agent-browser click @e1`, `agent-browser fill @e2 "value"` 等）
-3. 再度 `agent-browser snapshot -i` で操作後の状態を確認
-4. `agent-browser console` でコンソールログを確認
-5. `agent-browser errors` でエラーを確認
-6. 必要に応じて `agent-browser screenshot` で視覚的に確認
-
-### Phase 3: 結果報告と終了
-
-1. 検証結果を報告
-2. `agent-browser close` でブラウザを閉じる
+基本原則に沿って操作と検証を行い（`agent-browser click @e1`, `agent-browser fill @e2 "value"`, 必要に応じて `agent-browser screenshot`）、結果を報告してからブラウザを閉じる。
 
 ## コマンドリファレンス
 
@@ -100,7 +90,7 @@ Firebase認証を使用するプロジェクトでは、認証情報がIndexedDB
 
 ### 発見した問題
 
-[CRITICAL] 問題タイトル
+[重大度: 高 / 中 / 低] 問題タイトル
 URL: http://localhost:PORT/path
 詳細: 問題の説明
 原因: 具体的な原因

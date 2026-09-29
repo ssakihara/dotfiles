@@ -37,4 +37,4 @@ if (!apiKey) throw new Error('API_KEY not configured')
 rules/code-review.md の「セキュリティ重大問題検出時」の手順に従うこと。
 作業を停止してユーザーに報告し、独断で修正を進めない。
 
-詳細なセキュリティパターンは references/security-patterns.md を参照（必要に応じて読み込むこと）
+詳細なセキュリティパターンは ~/.claude/references/security-patterns.md を参照（必要に応じて読み込むこと）

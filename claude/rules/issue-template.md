@@ -18,4 +18,4 @@ Backlog 課題・GitHub Issue を作成する際は、以下のルールに必�
   共有できるリンクがなければ関連情報は `- なし` とする
 - 解消済みの懸念点は「（解消済み）」と注記して残さず、懸念点から削除する
 
-テンプレート本文と記載ガイドラインは references/issue-template.md を参照
+テンプレート本文と記載ガイドラインは ~/.claude/references/issue-template.md を参照

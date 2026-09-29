@@ -36,4 +36,4 @@ paths:
 - **コネクションプール**: 適切に設定
 - **タイムアウト**: 外部サービス接続に必須
 
-詳細なテクニックは references/performance-patterns.md を参照（必要に応じて読み込むこと）
+詳細なテクニックは ~/.claude/references/performance-patterns.md を参照（必要に応じて読み込むこと）

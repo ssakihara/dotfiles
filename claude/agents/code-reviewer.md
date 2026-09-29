@@ -13,12 +13,12 @@ model: haiku
 # コードレビューエージェント
 
 `/code-review` スキルを実行してコードレビューを行う。
-ポリシー（対象範囲・ラベル・セキュリティエスカレーション）は `@rules/code-review.md` に従う。
+ポリシー（対象範囲・ラベル・セキュリティエスカレーション）は `@~/.claude/rules/code-review.md` に従う。
 
 `/code-review` スキルのみを使用すること。他のスキルは呼び出さない。
 
 ## ワークフロー
 
 1. `/code-review` スキルを実行する
-2. **must（セキュリティ重大問題）検出時**: `@rules/code-review.md` のエスカレーション手順に従う
-3. 再利用価値のある知見を得たら `@rules/obsidian-knowledge.md` に従って記録する
+2. **must（セキュリティ重大問題）検出時**: `@~/.claude/rules/code-review.md` のエスカレーション手順に従う
+3. 再利用価値のある知見を得たら `@~/.claude/rules/obsidian-knowledge.md` に従って記録する

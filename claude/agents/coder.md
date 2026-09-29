@@ -46,7 +46,7 @@ model: sonnet
 
 ### 基本原則
 
-1. **strict mode必須** - `tsconfig.json` で `strict: true` を有効にする
+1. **strict mode前提** - `strict: true` で型エラーが出ないように書く（`tsconfig.json` の変更は指示書にある場合のみ）
 2. **any禁止** - `unknown` + 型ガード、またはジェネリクスを使用する
 3. **エクスポート関数に明示的戻り値型** - 公開APIの型を明確にする
 4. **エラーは値として扱う** - Result パターンを推奨する
@@ -54,7 +54,6 @@ model: sonnet
 
 ### 必須ルール
 
-- `any` 使用禁止 → `unknown` + 型ガード、またはジェネリクスを使用
 - `@ts-ignore` 禁止 → `@ts-expect-error` + 理由コメント
 - 非nullアサーション `!` はランタイムガード後のみ使用可
 - 外部データ境界（API応答、ファイル読み込み等）は Zod 等でバリデーション必須
@@ -88,7 +87,7 @@ package.json
 | 定数 | kebab-case | `http-status.ts` |
 | ユーティリティ | kebab-case | `string-utils.ts` |
 
-包括的なパターンと例は @references/typescript-guide.md を参照
+包括的なパターンと例は @~/.claude/references/typescript-guide.md を参照
 
 ## Nuxt 4 規約（指示書で Nuxt プロジェクトと明示された場合に適用。明示がなければ nuxt.config.ts の有無で判定）
 
@@ -116,7 +115,7 @@ app/
 └── utils/
 
 server/
-├── api/             # APIエンドポイント（kebab-case.filename.http.ts）
+├── api/             # APIエンドポイント（<kebab-case>.<HTTPメソッド>.ts）
 ├── services/        # ビジネスロジック
 ├── repositories/    # DB操作
 ├── entry/           # スキーマ/バリデーション定義
@@ -184,12 +183,8 @@ if (!result.success) {
 // result.data は型安全
 ```
 
-#### サーバーAPI作成手順
-
-1. **まず `server/entry/` にZodスキーマを定義**（既存スキーマがあれば再利用）
-2. **APIハンドラで `readBody` / `getQuery` / `getRouterParams` でデータ取得**
-3. **Zod の `safeParse` でバリデーションし、失敗時は `createError` で 400 を返す**
-4. **`readValidatedBody` / `getValidatedQuery` / `getValidatedRouterParams` / `.parse()` が含まれていないことを確認**
+Zod スキーマは `server/entry/` に定義する（既存スキーマがあれば再利用）。
+完了前に `readValidatedBody` / `getValidatedQuery` / `getValidatedRouterParams` / `.parse()` が残っていないことを確認する。
 
 #### スキーマ定義例（server/entry/）
 
@@ -236,4 +231,4 @@ export default defineEventHandler(async (event) => {
 | `server/services/` | kebab-case | `user-service.ts` |
 | `server/entry/` | kebab-case | `user-schema.ts` |
 
-チーム固有のパターン（Composables 設計・DB ユーティリティ等）は @references/nuxt4-guide.md を参照
+チーム固有のパターン（Composables 設計・DB ユーティリティ等）は @~/.claude/references/nuxt4-guide.md を参照

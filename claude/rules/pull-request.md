@@ -1,6 +1,6 @@
 # PR 作成規約
 
-## アサインとレビュワー（IMPORTANT）
+## アサインとレビュワー
 
 PR 作成時は必ず自分をアサインし、GitHub Copilot をレビュワーに設定すること。
 
@@ -14,7 +14,7 @@ gh pr create --base <base> --assignee @me --title "..." --body "..."
 `gh pr edit` は引数を省略すると現在のブランチの PR を対象にする。
 アサインが漏れた既存 PR に気づいた場合は `gh pr edit <番号> --add-assignee @me` で補うこと。
 
-### Copilot のレビュワー追加（IMPORTANT）
+### Copilot のレビュワー追加
 
 PR を作成したら、必ず以下のスクリプトで Copilot を追加すること。
 
