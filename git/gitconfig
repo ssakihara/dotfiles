@@ -21,9 +21,10 @@
     ignorecase = false
 [merge]
     ff = false
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 [diff]
     colorMoved = default
+    algorithm = histogram
 [fetch]
     prune = true
 [pull]
