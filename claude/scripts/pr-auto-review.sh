@@ -19,6 +19,7 @@ readonly STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pr-auto-review"
 # 1行1PR で「URL,レビュー済みの HEAD SHA」。初回に存在した PR は SHA の代わりに IGNORED
 readonly SEEN_FILE="$STATE_DIR/seen.csv"
 readonly REPOS_DIR="$STATE_DIR/repos"
+readonly CLONE_RETENTION_DAYS=30
 # claude の cwd。PR 内の .claude/ (hooks 等) や CLAUDE.md を読み込ませないため、PR の外の空ディレクトリにする
 readonly SANDBOX_DIR="$STATE_DIR/sandbox"
 # claude のツール呼び出しを含むやりとり全体。スキルを読んだかの確認やデバッグに使う
@@ -121,10 +122,18 @@ cleanup_stale_files() {
     find "$TRANSCRIPTS_DIR" -name '*.jsonl' -mtime "+$TRANSCRIPT_RETENTION_DAYS" -delete
   fi
   for clone in "$REPOS_DIR"/*/*; do
-    if [ -d "$clone/.git" ]; then
-      git -C "$clone" worktree prune
+    [ -d "$clone/.git" ] || continue
+    # レビューのたびに fetch するので、FETCH_HEAD の更新日時を最後に使った日時とみなす
+    if [ -n "$(find "$clone/.git/FETCH_HEAD" -mtime "+$CLONE_RETENTION_DAYS" 2>/dev/null)" ]; then
+      log "${CLONE_RETENTION_DAYS}日以上使っていない clone を削除: $clone"
+      rm -rf "$clone"
+      continue
     fi
+    git -C "$clone" worktree prune
   done
+  if [ -d "$REPOS_DIR" ]; then
+    find "$REPOS_DIR" -mindepth 1 -maxdepth 1 -type d -empty -delete
+  fi
 }
 
 build_prompt() {
