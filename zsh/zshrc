@@ -37,11 +37,7 @@ alias d="docker"
 alias m="mkdir"
 alias r="source ~/.zshrc && echo 'zshrc reload'"
 alias g="git"
-alias grm="git branch --merged | grep -v master | xargs git branch -d"
-alias grmm="git branch --merged | grep -v main | xargs git branch -d"
 alias claude='claude --mcp-config="$HOME/.claude/mcp.json"'
-alias aclaude="claude --enable-auto-mode"
-alias cclaude="ccr code"
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'
@@ -72,6 +68,15 @@ function ghq-fzf() {
 }
 zle -N ghq-fzf
 bindkey '^g' ghq-fzf
+
+# リモートで削除済み (upstream が gone) のローカルブランチを削除する
+# squash merge されたブランチは -d では消せないため -D を使う
+function grm() {
+  git fetch --prune || return 1
+  git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads \
+    | awk '$2 == "[gone]" { print $1 }' \
+    | xargs git branch -D
+}
 
 rm() {
   # 1. 引数からオプション（-rfなど）を除去してファイル名だけを抽出
