@@ -14,8 +14,8 @@ readonly MAX_DIFF_BYTES=300000
 readonly SEARCH_QUALIFIERS=(user-review-requested:@me archived:false -is:draft)
 
 readonly STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pr-auto-review"
-# 1行1PR で「URL<TAB>レビュー済みの HEAD SHA」。初回に存在した PR は SHA の代わりに IGNORED
-readonly SEEN_FILE="$STATE_DIR/seen.tsv"
+# 1行1PR で「URL,レビュー済みの HEAD SHA」。初回に存在した PR は SHA の代わりに IGNORED
+readonly SEEN_FILE="$STATE_DIR/seen.csv"
 readonly REPOS_DIR="$STATE_DIR/repos"
 # claude の cwd。PR 内の .claude/ (hooks 等) や CLAUDE.md を読み込ませないため、PR の外の空ディレクトリにする
 readonly SANDBOX_DIR="$STATE_DIR/sandbox"
@@ -73,14 +73,14 @@ number_of() {
 }
 
 seen_value() {
-  awk -F'\t' -v url="$1" '$1 == url { print $2 }' "$SEEN_FILE"
+  awk -F, -v url="$1" '$1 == url { print $2 }' "$SEEN_FILE"
 }
 
 record_seen() {
   local tmp
   tmp=$(mktemp "$STATE_DIR/seen.XXXXXX")
-  awk -F'\t' -v url="$1" '$1 != url' "$SEEN_FILE" >"$tmp"
-  printf '%s\t%s\n' "$1" "$2" >>"$tmp"
+  awk -F, -v url="$1" '$1 != url' "$SEEN_FILE" >"$tmp"
+  printf '%s,%s\n' "$1" "$2" >>"$tmp"
   mv "$tmp" "$SEEN_FILE"
 }
 
@@ -244,7 +244,7 @@ run() {
   if [ ! -f "$SEEN_FILE" ]; then
     # 初回は既存の依頼をレビューしない。途中で止まっても初回扱いが残るよう、全件書いてから配置する
     tmp=$(mktemp "$STATE_DIR/seen.XXXXXX")
-    grep . <<<"$urls" | awk '{ print $0 "\tIGNORED" }' >"$tmp" || true
+    grep . <<<"$urls" | awk '{ print $0 ",IGNORED" }' >"$tmp" || true
     mv "$tmp" "$SEEN_FILE"
     log "初回実行のため既存の依頼 $(grep -c . "$SEEN_FILE" || true) 件を無視リストに記録"
     return
