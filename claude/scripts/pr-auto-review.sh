@@ -6,6 +6,8 @@
 #   pr-auto-review.sh install       launchd に登録する / uninstall で解除する
 # 初回の run では既存の依頼をレビューせず、無視リストに記録するだけで終わる。
 set -euo pipefail
+# clone や transcript に private リポジトリのコードが残るため、自分以外から読めないようにする
+umask 077
 
 readonly LABEL='com.ssakihara.pr-auto-review'
 readonly RUN_MINUTES=(0 15 30 45)
@@ -19,6 +21,9 @@ readonly SEEN_FILE="$STATE_DIR/seen.csv"
 readonly REPOS_DIR="$STATE_DIR/repos"
 # claude の cwd。PR 内の .claude/ (hooks 等) や CLAUDE.md を読み込ませないため、PR の外の空ディレクトリにする
 readonly SANDBOX_DIR="$STATE_DIR/sandbox"
+# claude のツール呼び出しを含むやりとり全体。スキルを読んだかの確認やデバッグに使う
+readonly TRANSCRIPTS_DIR="$STATE_DIR/transcripts"
+readonly TRANSCRIPT_RETENTION_DAYS=30
 readonly LOCK_DIR="$STATE_DIR/lock"
 readonly PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 readonly LOG_FILE="$HOME/Library/Logs/pr-auto-review.log"
@@ -109,9 +114,12 @@ acquire_lock() {
   echo $$ >"$LOCK_DIR/pid"
 }
 
-cleanup_stale_worktrees() {
+cleanup_stale_files() {
   local clone
   find "$STATE_DIR" -maxdepth 1 -name 'worktree.*' -mmin +60 -exec rm -rf {} +
+  if [ -d "$TRANSCRIPTS_DIR" ]; then
+    find "$TRANSCRIPTS_DIR" -name '*.jsonl' -mtime "+$TRANSCRIPT_RETENTION_DAYS" -delete
+  fi
   for clone in "$REPOS_DIR"/*/*; do
     if [ -d "$clone/.git" ]; then
       git -C "$clone" worktree prune
@@ -172,7 +180,7 @@ post_review() {
 }
 
 review_pr() {
-  local url=$1 sha=${2:-} repo number pr base clone worktree diff result
+  local url=$1 sha=${2:-} repo number pr base clone worktree diff transcript result skill
   if ! [[ "$url" =~ $PR_URL_PATTERN ]]; then
     echo "PR の URL ではない: $url" >&2
     return 1
@@ -209,11 +217,13 @@ review_pr() {
   fi
 
   log "レビュー開始: $url ($sha)"
-  mkdir -p "$SANDBOX_DIR"
+  mkdir -p "$SANDBOX_DIR" "$TRANSCRIPTS_DIR"
+  transcript="$TRANSCRIPTS_DIR/${repo//\//_}-$number-$sha.jsonl"
   # PR 内の設定・skill・MCP を読み込まず、PR 内の指示で外部操作されないよう読み取り系ツールだけを渡す
-  result=$(cd "$SANDBOX_DIR" && "$CLAUDE_BIN" -p "$(build_prompt "$url" "$worktree")" \
+  if ! (cd "$SANDBOX_DIR" && "$CLAUDE_BIN" -p "$(build_prompt "$url" "$worktree")" \
     --model "$CLAUDE_MODEL" \
-    --output-format json \
+    --output-format stream-json \
+    --verbose \
     --json-schema "$REVIEW_SCHEMA" \
     --tools 'Read,Grep,Glob' \
     --add-dir "$worktree" \
@@ -222,10 +232,22 @@ review_pr() {
     --permission-mode dontAsk \
     --strict-mcp-config \
     --no-session-persistence \
-    <<<"$diff" | jq -ce '.structured_output // error("structured_output がない")')
+    <<<"$diff" >"$transcript"); then
+    log "claude が異常終了した: $transcript"
+    return 1
+  fi
+  if ! result=$(jq -ce 'select(.type == "result") | .structured_output // error("structured_output がない")' "$transcript"); then
+    log "レビュー結果を取り出せなかった: $transcript"
+    return 1
+  fi
+  # symlink 経由などでパス表記が変わっても判定できるよう、末尾だけで照合する
+  skill=$(jq -rs '
+    [.[] | select(.type == "assistant") | .message.content[]?
+      | select(.type == "tool_use" and .name == "Read" and (.input.file_path | endswith("/code-review/SKILL.md")))]
+    | if length > 0 then "read" else "not read" end' "$transcript")
 
   post_review "$repo" "$number" "$sha" "$result"
-  log "下書きを投稿: $url ($(jq -r '.verdict' <<<"$result"))"
+  log "下書きを投稿: $url ($(jq -r '.verdict' <<<"$result"), skill: $skill)"
   notify 'PR 自動レビュー完了' "$repo#$number: $(jq -r '.verdict' <<<"$result")"
 }
 
@@ -237,7 +259,7 @@ run() {
     return
   fi
   trap 'rm -rf "$LOCK_DIR"' EXIT
-  cleanup_stale_worktrees
+  cleanup_stale_files
 
   urls=$(list_requested_prs)
 
