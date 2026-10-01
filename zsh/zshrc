@@ -35,7 +35,7 @@ alias ..3="cd ../../.."
 alias c="pbcopy"
 alias d="docker"
 alias m="mkdir"
-alias r="source ~/.zshrc && echo 'zshrc reload'"
+alias r="exec zsh"
 alias g="git"
 alias claude='claude --mcp-config="$HOME/.claude/mcp.json"'
 alias -g A='| awk'
