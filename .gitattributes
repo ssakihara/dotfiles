@@ -1,2 +1,2 @@
-# Orca が自動注入するキー (hooks / statusLine) をコミット対象から除外する (filter 定義は mise bootstrap で適用)
-claude/settings.json filter=strip-orca-keys
+# Orca が自動注入するキー (hooks / statusLine) と autoMode.environment をコミット対象から除外する (filter 定義は mise bootstrap で適用)
+claude/settings.json filter=strip-local-keys

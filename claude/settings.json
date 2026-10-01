@@ -57,8 +57,7 @@
     "soft_deny": [
       "$defaults",
       "Bash(gcloud secrets delete:*) — protect Secret Manager entries from deletion given gcloud secrets usage in this project"
-    ],
-    "environment": []
+    ]
   },
   "voiceEnabled": true
 }
