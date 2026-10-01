@@ -6,19 +6,15 @@
     path = ~/.gitconfig_private
 [user]
     useConfigOnly = true
-[color]
-    diff = auto
-    status = auto
-    branch = auto
 [push]
     default = current
     autoSetupRemote = true
 [core]
     precomposeunicode = true
     quotepath = false
-    editor = vim -c \"set fenc=utf-8\"
+    editor = vim
+    pager = delta
     excludesfile = ~/.gitignore_global
-    ignorecase = false
 [merge]
     ff = false
     conflictstyle = zdiff3
@@ -38,11 +34,6 @@
     cm = commit -m
     p = pull
     w = worktree
-[pager]
-    diff = delta
-    log = delta
-    reflog = delta
-    show = delta
 [delta]
     plus-style = "syntax #012800"
     minus-style = "syntax #340001"
