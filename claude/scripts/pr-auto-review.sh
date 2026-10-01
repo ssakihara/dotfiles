@@ -8,7 +8,7 @@
 set -euo pipefail
 
 readonly LABEL='com.ssakihara.pr-auto-review'
-readonly INTERVAL_SECONDS=900
+readonly RUN_MINUTES=(0 15 30 45)
 readonly MAX_REVIEWS_PER_RUN=3
 readonly MAX_DIFF_BYTES=300000
 readonly SEARCH_QUALIFIERS=(user-review-requested:@me archived:false -is:draft)
@@ -304,8 +304,12 @@ install() {
     <key>PATH</key>
     <string>$HOME/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
-  <key>StartInterval</key>
-  <integer>$INTERVAL_SECONDS</integer>
+  <key>StartCalendarInterval</key>
+  <array>
+$(for minute in "${RUN_MINUTES[@]}"; do
+    printf '    <dict><key>Minute</key><integer>%s</integer></dict>\n' "$minute"
+  done)
+  </array>
   <key>RunAtLoad</key>
   <true/>
   <key>StandardOutPath</key>
