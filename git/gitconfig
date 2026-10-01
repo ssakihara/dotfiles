@@ -24,6 +24,8 @@
     conflictstyle = diff3
 [diff]
     colorMoved = default
+[fetch]
+    prune = true
 [pull]
     ff = only
 [init]
