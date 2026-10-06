@@ -7,7 +7,6 @@ tap "stablyai/orca"
 
 cask "appcleaner"
 cask "bitwarden"
-cask "copilot-cli"
 cask "docker-desktop"
 cask "font-hack-nerd-font"
 cask "font-hackgen"
