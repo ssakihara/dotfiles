@@ -1,29 +1,5 @@
 {
   "mcpServers": {
-    "backlog": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "--pull",
-        "always",
-        "-i",
-        "--rm",
-        "-e",
-        "BACKLOG_DOMAIN",
-        "-e",
-        "BACKLOG_API_KEY",
-        "-e",
-        "PREFIX",
-        "-e",
-        "ENABLE_TOOLSETS",
-        "ghcr.io/nulab/backlog-mcp-server"
-      ],
-      "env": {
-        "PREFIX": "backlog_",
-        "ENABLE_TOOLSETS": "project,issue,wiki,document"
-      }
-    },
     "pms": {
       "type": "stdio",
       "command": "docker",

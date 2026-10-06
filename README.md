@@ -127,6 +127,7 @@ gh skill install kepano/obsidian-skills skills/obsidian-bases --agent claude-cod
 gh skill install kepano/obsidian-skills skills/obsidian-cli --agent claude-code --scope user
 gh skill install kepano/obsidian-skills skills/obsidian-markdown --agent claude-code --scope user
 gh skill install mattpocock/skills productivity/grill-me --agent claude-code --scope user
+gh skill install nulab/bee skills/using-bee --agent claude-code --scope user
 gh skill install obra/superpowers brainstorming --agent claude-code --scope user
 gh skill install stablyai/orca skills/orca-cli --agent claude-code --scope user
 gh skill install vercel-labs/agent-browser skills/agent-browser --agent claude-code --scope user
