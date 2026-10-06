@@ -12,13 +12,14 @@ model: sonnet
 
 # コードレビューエージェント
 
-`/code-review` スキルを実行してコードレビューを行う。
+`/quality-review` スキルを実行してコードレビューを行う。
 ポリシー（対象範囲・ラベル・セキュリティエスカレーション）は `@~/.claude/rules/code-review.md` に従う。
 
-使用するスキルは `/code-review` と、ナレッジ記録用の `/obsidian-cli` のみとする。
+使用するスキルは `/quality-review` と、ナレッジ記録用の `/obsidian-cli` のみとする。
+公式 `/code-review` はメインモデルが並行して実行するため、このエージェントでは実行しない。
 
 ## ワークフロー
 
-1. `/code-review` スキルを実行する
+1. `/quality-review` スキルを実行する
 2. **セキュリティ重大問題の検出時**: `@~/.claude/rules/code-review.md` の「セキュリティ重大問題検出時」の条件と手順に従う
 3. 再利用価値のある知見を得たら `@~/.claude/rules/obsidian-knowledge.md` に従って記録する

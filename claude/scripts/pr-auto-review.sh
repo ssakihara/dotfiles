@@ -33,7 +33,7 @@ readonly CLAUDE_MODEL='sonnet'
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 readonly SCRIPT_PATH
 readonly PR_URL_PATTERN='^https://github\.com/[A-Za-z0-9-]+/[A-Za-z0-9_.-]+/pull/[0-9]+$'
-readonly REVIEW_SKILL_DIR="$HOME/.claude/skills/code-review"
+readonly REVIEW_SKILL_DIR="$HOME/.claude/skills/quality-review"
 
 readonly REVIEW_SCHEMA='{
   "type": "object",
@@ -252,7 +252,7 @@ review_pr() {
   # symlink 経由などでパス表記が変わっても判定できるよう、末尾だけで照合する
   skill=$(jq -rs '
     [.[] | select(.type == "assistant") | .message.content[]?
-      | select(.type == "tool_use" and .name == "Read" and (.input.file_path | endswith("/code-review/SKILL.md")))]
+      | select(.type == "tool_use" and .name == "Read" and (.input.file_path | endswith("/quality-review/SKILL.md")))]
     | if length > 0 then "read" else "not read" end' "$transcript")
 
   post_review "$repo" "$number" "$sha" "$result"
