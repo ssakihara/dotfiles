@@ -74,6 +74,9 @@
 "~/.claude/rules" = { source = "claude/rules", mode = "symlink" }
 "~/.claude/scripts" = { source = "claude/scripts", mode = "symlink" }
 "~/.claude/assets" = { source = "claude/assets", mode = "symlink" }
+# ~/.claude/skills には gh skill で入れたスキルも置かれるため、スキル単位で symlink する
+"~/.claude/skills/e2e-testing" = { source = "claude/skills/e2e-testing", mode = "symlink" }
+"~/.claude/skills/quality-review" = { source = "claude/skills/quality-review", mode = "symlink" }
 # VSCode の User ディレクトリは動的ファイル (globalStorage 等) と共存するため git 管理対象だけを個別 symlink する
 # Settings Sync とは二重管理になるため、settings/keybindings は Sync 対象から外す運用 (README 参照)
 "~/Library/Application Support/Code/User/settings.json" = { source = "vscode/settings.json", mode = "symlink" }
