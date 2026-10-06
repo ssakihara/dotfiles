@@ -29,7 +29,7 @@
       "Bash(gcloud run revisions describe *)",
       "Bash(gcloud run revisions list *)",
       "mcp__pms__describe_table",
-      "mcp__claude_ai_Slack__slack_read_thread"
+      "mcp__pms__query"
     ],
     "deny": [
       "Read(**/.env)",
