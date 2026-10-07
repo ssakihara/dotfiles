@@ -14,3 +14,4 @@
 - セキュリティ: rules/security.md
 - パフォーマンス: rules/performance.md
 - SQL フォーマット: rules/sql-format.md
+- ローカル DB アクセス (psql): rules/database.md

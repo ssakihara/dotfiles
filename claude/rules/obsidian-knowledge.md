@@ -40,10 +40,10 @@ obsidian search:context query="検索キーワード"
 `path` は `ディレクトリ名/ノート名.md` の1階層のみとする（スラッシュはちょうど1つ）。
 ノート名は英語の kebab-case、ノートの内容（content）は日本語で書く。
 
-- ✅ `path="payment-notification-service/api-design.md"`
+- ✅ `path="my-web-app/api-design.md"`
 - ✅ `path="general/docker-tips.md"`
 - ❌ `name="project-a/api-design"` ← nameにスラッシュを含めるとUntitledになる
-- ❌ `path="payment-notification-service/設計メモ.md"` ← 日本語のノート名は禁止
+- ❌ `path="my-web-app/設計メモ.md"` ← 日本語のノート名は禁止
 - ❌ `path="設計メモ.md"` ← ディレクトリ指定がない
 
 プロジェクト名の判定:
