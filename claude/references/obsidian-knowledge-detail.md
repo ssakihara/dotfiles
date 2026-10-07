@@ -43,10 +43,10 @@
 ---
 type: troubleshooting
 status: active
-project: axelzero-purchase
+project: my-web-app
 date: 2026-08-18
-summary: 3DS失敗後の再試行で決済成功してもセッションが failure のまま残る
-tags: [payment, 3dsecure, incident]
+summary: Nuxt の useFetch は SSR 時に cookie を転送しないため、認証 API が 401 になる
+tags: [nuxt, ssr, api-quirk]
 ---
 ```
 
