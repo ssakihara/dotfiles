@@ -36,7 +36,6 @@ alias d="docker"
 alias m="mkdir"
 alias r="exec zsh"
 alias g="git"
-alias claude='claude --mcp-config="$HOME/.claude/mcp.json"'
 alias -g A='| awk'
 alias -g C='| pbcopy'
 alias -g G='| grep --color=auto'

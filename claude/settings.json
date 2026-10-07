@@ -27,9 +27,7 @@
       "Bash(gcloud run services describe *)",
       "Bash(gcloud logging read *)",
       "Bash(gcloud run revisions describe *)",
-      "Bash(gcloud run revisions list *)",
-      "mcp__pms__describe_table",
-      "mcp__pms__query"
+      "Bash(gcloud run revisions list *)"
     ],
     "deny": [
       "Read(**/.env)",

@@ -54,6 +54,7 @@
 "~/.gitconfig_private" = { source = "git/gitconfig_private", mode = "symlink" }
 "~/.gitignore_global" = { source = "git/gitignore_global", mode = "symlink" }
 "~/.bin/git-sync-upstream" = { source = "bin/git-sync-upstream", mode = "symlink" }
+"~/.pg_service.conf" = { source = "postgres/pg_service.conf", mode = "symlink" }
 # mise は <repo>/mise/config.toml を auto-discovery してしまうため global.toml と命名している
 "~/.config/mise/config.toml" = { source = "mise/global.toml", mode = "symlink" }
 "~/.default-python-packages" = { source = "mise/default-python-packages", mode = "symlink" }
@@ -64,7 +65,6 @@
 # (history.jsonl / sessions/ / projects/ などの動的書き込みと共存させるため)
 "~/.claude/CLAUDE.md" = { source = "claude/CLAUDE.md", mode = "symlink" }
 "~/.claude/settings.json" = { source = "claude/settings.json", mode = "symlink" }
-"~/.claude/mcp.json" = { source = "claude/mcp.json", mode = "symlink" }
 "~/.claude/keybindings.json" = { source = "claude/keybindings.json", mode = "symlink" }
 "~/.claude/agents" = { source = "claude/agents", mode = "symlink" }
 "~/.claude/references" = { source = "claude/references", mode = "symlink" }
