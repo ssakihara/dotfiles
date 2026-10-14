@@ -2,10 +2,9 @@
 pipx.uvx = true
 
 [tools]
-node = "24.13.1"
+node = "24"
 "npm:@antfu/ni" = "latest"
-"npm:@musistudio/claude-code-router" = "latest"
 "npm:@nulab/bee" = "latest"
 "npm:firebase-tools" = "latest"
-pnpm = "latest"
+pnpm = "11"
 python = "3.14"
