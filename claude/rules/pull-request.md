@@ -32,6 +32,26 @@ Bot へのレビュー依頼は `gh pr view --json reviewRequests` には現れ�
 
 なお Copilot レビュワーは GitHub Enterprise Server では利用できない。
 
+## ラベル
+
+リポジトリにラベル `claude-review` がある場合は、PR に付与すること。
+ない場合は付与せず、ラベルを新規作成もしない。
+
+PR 作成前に、以下のコマンドで存在を確認する。
+`--search` は部分一致のため、`jq` で名前の完全一致を判定している。
+
+```sh
+gh label list --search claude-review --json name --jq '.[] | select(.name == "claude-review") | .name'
+```
+
+出力があれば `gh pr create` に `--label claude-review` を付ける。
+
+```sh
+gh pr create --base <base> --assignee @me --label claude-review --title "..." --body "..."
+```
+
+既存 PR に付け忘れた場合は `gh pr edit <番号> --add-label claude-review` で補うこと。
+
 ## タイトルと本文
 
 シンプルで分かりやすく、簡潔に書くこと。
