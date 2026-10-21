@@ -44,8 +44,7 @@
   },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": false
+    "typescript-lsp@claude-plugins-official": true
   },
   "language": "japanese",
   "plansDirectory": "./plans",
@@ -57,5 +56,6 @@
       "Bash(gcloud secrets delete:*) — protect Secret Manager entries from deletion given gcloud secrets usage in this project"
     ]
   },
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "theme": "dark"
 }
