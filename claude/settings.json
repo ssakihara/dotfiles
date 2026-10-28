@@ -35,7 +35,9 @@
       "Read(**/.env.*)",
       "Edit(**/.env)",
       "Bash(curl:*)",
-      "Edit(/etc/**)"
+      "Edit(/etc/**)",
+      "Read(~/Downloads/**)",
+      "Edit(~/Downloads/**)"
     ],
     "ask": [
       "Bash(gh pr review:*)"
