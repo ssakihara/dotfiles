@@ -17,6 +17,7 @@ cask "ghostty"
 cask "google-japanese-ime"
 cask "obsidian"
 cask "raycast"
+cask "ssakihara/tap/sayu", trusted: true
 cask "ssakihara/tap/snapdock", trusted: true
 cask "stablyai/orca/orca", trusted: true
 cask "visual-studio-code"
