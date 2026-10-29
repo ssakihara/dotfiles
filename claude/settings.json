@@ -51,6 +51,7 @@
   "language": "japanese",
   "plansDirectory": "./plans",
   "autoMemoryEnabled": false,
+  "theme": "dark",
   "skipAutoPermissionPrompt": true,
   "autoMode": {
     "soft_deny": [
@@ -59,5 +60,5 @@
     ]
   },
   "voiceEnabled": true,
-  "theme": "dark"
+  "agentPushNotifEnabled": true
 }
