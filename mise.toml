@@ -175,6 +175,8 @@ USBMouseStopsTrackpad = 0
 
 [bootstrap.macos.defaults."com.apple.screencapture"]
 type = "jpg"
+show-thumbnail = false
+disable-shadow = true
 
 [bootstrap.macos.defaults."com.apple.menuextra.clock"]
 ShowSeconds = true

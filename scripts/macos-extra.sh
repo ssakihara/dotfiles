@@ -7,6 +7,11 @@ set -euo pipefail
 # Terminal の文字エンコーディング (array 型のため mise 非対応)
 defaults write com.apple.terminal StringEncodings -array 4
 
+# スクリーンショットの保存先 ($HOME の展開が必要なため mise 非対応)
+# 存在しないフォルダを指定するとデスクトップに保存されるため、先に作成する
+mkdir -p "$HOME/SnapDock"
+defaults write com.apple.screencapture location -string "$HOME/SnapDock"
+
 # ByHost 領域 (-currentHost) は mise 非対応
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
